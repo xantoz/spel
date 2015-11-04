@@ -150,7 +150,7 @@ public:
         return true;
     }
 
-    const std::list<Actor*> getActors()
+    const std::list<Actor*> &getActors()
     {
         return actors;
     }
