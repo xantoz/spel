@@ -93,18 +93,17 @@ private:
     Room *room;
     
 public:
-    bool go(std::string direction)
+    void go(std::string direction)
     {
         // TODO: use exceptions instead of returning false?
         
         Room *nroom = room->getExit(direction);
         if (nroom == nullptr)
-            return false;
+        {
+            // TODO: throw exception
+        }
         room->removeActor(this);
         nroom->addActor(this);                              // this sets room to nroom
-        // room = nroom;
-
-        return true;
     }
 
     Room *getRoom()
@@ -151,7 +150,12 @@ public:
         return true;
     }
 
-    friend void main_loop();
+    const std::list<Actor*> getActors()
+    {
+        return actors;
+    }
+
+    // friend void main_loop();
 };
 
 
