@@ -1,0 +1,116 @@
+hash-tabell foer actions?
+maste anvanda medlemsfunktionspekar-syntax
+
+ska ha lambda-funktion
+
+
+ha rum med en lista av exits associerade med straengar
+
+
+class Attack{}
+
+class FireAttack : public Attack{}
+
+class Actor {
+    // Room *room;
+    list<Item*> items;
+    int hitpoints;
+    virtual act();
+    virtual be_attacked(Actor &a);
+    void die()
+    {
+        cout << this->name << "died." << endl;
+        if (items.size() == 0) return;
+        Room *room = *find_if(
+            [&](const Room &room) {
+                return room.actors.find(this) != room.actors.end()
+            }
+            ROOMS.begin(),
+            ROOMS.end())
+        for (auto it = l.begin(); it != l.begin(); ++it)
+        {
+            cout << name << " dropped " << (*it)->name << endl;
+            room->add_item(*it);
+            it.remove();
+        }
+        // for (Item *i: this->items)
+        // {
+        //     cout << name << " dropped " << i->name << endl;
+        //     this->room->add_item(i);
+        //     this->items.remove(i);
+        // }
+    }
+
+    virtual ~Actor()
+    {
+        for (Item *i: items)
+        {
+            delete i;
+        }
+    }
+    
+}
+
+
+vector<Actor*> actors;
+void remove(Actor *a)
+{
+   actors.remove(a);
+   delete a;
+}
+
+class Troll : public Actor {
+    
+}
+
+class Player : public Actor {
+private:
+    vector<Item*> items;
+    
+public:
+    void attack(Actor &a) {
+        a.be_attacked(*this);
+        if (a.is_dead())
+            remove(a);
+    }
+
+    void pick_up(Item *i)
+    {
+        this->item.push_back(i);
+        i->owner->remove_item(i);
+    }
+    
+};
+
+
+class ItemOwner 
+{
+    virtual bool remove_item(Item* i) =0;
+    virtual bool add_item(Item *i) =0;
+}
+
+
+class Item 
+{
+    Room/Actor* owner;
+}
+
+
+Room *church = new Room(name="church", description="this is a church. it is damp.",
+               make_tuple("east", forest), make_tuple("north", well));
+
+
+              
+
+class Room : public GameObject {
+      String name;
+      string description;
+      vector<Item*> items;
+      unordered_map<string, Room*> exits;
+      Actor<Actor*> actors;
+}
+
+
+vector<Room*> rooms;
+for (Room *r: rooms)
+    r->update();
