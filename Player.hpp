@@ -3,7 +3,6 @@
 
 #include "Actor.hpp"
 #include "Item.hpp"
-#include <iostream>
 
 class Player : public Actor
 {
