@@ -10,11 +10,9 @@
 class Room : public ItemOwner 
 {
 private:
-    std::string name;
-    std::string description;
-    
     std::map<std::string, Room*> exits;
     std::list<Actor*> actors;
+    
 public:
     Room *getExit(std::string direction) const
     {
