@@ -15,7 +15,8 @@ protected:
 public:
     virtual std::string getDescription() const;
     const std::string &getName() const;
-    
+
+    virtual ~GameObject();
 };
     
 

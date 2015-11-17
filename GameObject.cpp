@@ -14,3 +14,7 @@ const std::string &GameObject::getName() const
     return name;
 }
 
+GameObject::~GameObject()
+{
+}
+}

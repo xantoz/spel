@@ -1,7 +1,8 @@
 #include "ItemOwner.hpp"
 #include <iostream>
+#include <algorithm>
 
-bool can_carry(const Item* item) const
+bool ItemOwner::can_carry(const Item* item) const
 {
     return true;
 }
@@ -13,7 +14,7 @@ ItemOwner::ItemOwner()
 
 bool ItemOwner::addItem(Item *i)
 {
-    // TODO: or use exception
+    // TODO: or use exception?
     if (!this->can_carry(i))
         return false;
                 
