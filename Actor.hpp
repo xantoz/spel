@@ -1,9 +1,10 @@
 #ifndef ACTOR_HPP
 #define ACTOR_HPP
 
-#include "Item.hpp"
+#include "ItemOwner.hpp"
 #include <string>
 
+class Room;                                                 // solve circular reference
 class Actor : public ItemOwner 
 {
 private:
@@ -11,6 +12,7 @@ private:
     
 public:
     void go(std::string direction);
+    Room *getRoom() const;
 
     friend class Room;
 };

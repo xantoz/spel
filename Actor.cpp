@@ -1,4 +1,5 @@
 #include "Actor.hpp"
+#include "Room.hpp"
 
 void Actor::go(std::string direction)
 {
@@ -13,7 +14,7 @@ void Actor::go(std::string direction)
     nroom->addActor(this);                              // this sets room to nroom
 }
 
-Room *Actor::getroom()
+Room *Actor::getRoom() const
 {
     return room;
 }

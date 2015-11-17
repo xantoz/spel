@@ -12,5 +12,3 @@ unsigned Item::getWeight() const
 {
     return weight;
 }
-
-

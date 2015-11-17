@@ -1,14 +1,16 @@
 #include "Room.hpp"
+#include <algorithm>
 
 
 
-Room::Room *getExit(std::string direction) const
+Room *Room::getExit(std::string direction) const
 {
     // TODO: or use exceptions instead to signal non-existant exits
 
-    if (exits.find(direction) == exits.end())
-        return nullptr;
-    return exits.at(direction);
+    auto it = exits.find(direction);
+    if (it == exits.end())
+        return nullptr; // TODO: instead throw exception here?
+    return it->second;
 }
 
 void Room::addActor(Actor *a)
@@ -16,7 +18,7 @@ void Room::addActor(Actor *a)
     actors.push_front(a);
     // we're friends with the actors guild
     if (a->room == nullptr)
-        a->room->remove_actor(a);
+        a->room->removeActor(a);
     a->room = this;
 }
 
@@ -28,14 +30,10 @@ void Room::removeActor(Actor *a)
         // TODO: THROW EXCEPTION
     }
     actors.erase(it);
-    return true;
 }
 
-const std::list<Actor*> & Room::getActors()
+const std::list<Actor*> &Room::getActors()
 {
     return actors;
 }
 
-// friend void main_loop();
-
-#endif 

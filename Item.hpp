@@ -4,7 +4,7 @@
 // #include "ItemOwner.hpp"
 #include "GameObject.hpp"
 
-class ItemOwner;
+class ItemOwner;                                            // solve circular reference
 class Item : public GameObject
 {
 private:
