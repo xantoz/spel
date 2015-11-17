@@ -1,9 +1,15 @@
 #include "GameObject.hpp"
-std::string GameObject::getDescription()
+
+GameObject::GameObject()
+{
+}
+
+std::string GameObject::getDescription() const
 {
     return description;
 }
-std::string GameObject::getName()
+
+const std::string &GameObject::getName() const
 {
     return name;
 }

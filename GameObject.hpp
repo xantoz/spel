@@ -12,10 +12,10 @@ private:
 protected:
     GameObject();
 public:
-    virtual std::string getDescription();
-    std::string getName();
+    virtual std::string getDescription() const;
+    const std::string &getName() const;
     
-}
+};
     
 
 #endif
