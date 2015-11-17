@@ -2,9 +2,10 @@
 #define ITEMOWNER_HPP
 
 #include "Item.hpp"
+#include "GameObject.hpp"
 #include <list>
 
-class ItemOwner 
+class ItemOwner : public GameObject
 {
 protected:
     std::list<Item*> items;
@@ -14,7 +15,7 @@ protected:
     ItemOwner(); // ItemOwners shouldn't be instantiatable
 
 public:
-    bool add_item(Item *i);
+    bool addItem(Item *i);
     void removeItem(Item* i);
         
     virtual ~ItemOwner();

@@ -2,8 +2,9 @@
 #define ITEM_HPP
 
 #include "ItemOwner.hpp"
+#include "GameObject.hpp"
 
-class Item
+class Item : public GameObject
 {
 private:
     ItemOwner *owner;

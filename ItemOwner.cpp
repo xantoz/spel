@@ -11,7 +11,7 @@ ItemOwner::ItemOwner()
 {
 }
 
-bool ItemOwner::add_item(Item *i)
+bool ItemOwner::addItem(Item *i)
 {
     // TODO: or use exception
     if (!this->can_carry(i))
