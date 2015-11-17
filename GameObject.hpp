@@ -1,5 +1,8 @@
 #ifndef GAMEOBJECT_HPP
 #define GAMEOBJECT_HPP
+
+#include <string>
+
 class GameObject 
 {
 private:
