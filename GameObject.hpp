@@ -6,11 +6,12 @@
 class GameObject 
 {
 private:
-    std::string description;
     std::string name;
+    std::string description;
     
 protected:
     GameObject();
+    GameObject(const std::string &name, const std::string &description);
 public:
     virtual std::string getDescription() const;
     const std::string &getName() const;

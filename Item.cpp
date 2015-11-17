@@ -1,17 +1,11 @@
 #include "Item.hpp"
+#include "ItemOwner.hpp"
 
-Item::Item(std::string nam, std::string descriptio, unsigned weigh); : owner(nullptr), name(nam), description(descriptio), weight(weigh)
+Item::Item(std::string name, std::string description, unsigned w) :
+    GameObject(name, description),
+    owner(nullptr),
+    weight(w)
 {
-}
-
-const std::string &Item::getName() const
-{
-    return name;
-}
-
-const std::string &Item::getDescription() const
-{
-    return description;
 }
 
 unsigned Item::getWeight() const
