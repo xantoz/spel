@@ -12,24 +12,11 @@ private:
     unsigned weight;
 public:
 
-    Item(std::string nam, std::string descriptio, unsigned weigh) : owner(nullptr), name(nam), description(descriptio), weight(weigh)
-    {
-    }
-
-    const std::string& getName() const
-    {
-        return name;
-    }
-
-    const std::string& getDescription() const
-    {
-        return description;
-    }
-
-    unsigned getWeight() const
-    {
-        return weight;
-    }
+    Item(std::string name, std::string description, unsigned weight);
+    
+    const std::string& getName() const;
+    const std::string& getDescription() const;
+    unsigned getWeight() const;
 
     friend class ItemOwner;
 };
