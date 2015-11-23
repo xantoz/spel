@@ -38,6 +38,15 @@ void ItemOwner::removeItem(Item *i)
     items.erase(it);
 }
 
+Item *ItemOwner::getItem(const std::string &name)
+{
+    return std::find(items.begin(), items.end(),
+                     [&](Item *) {
+                         return item->getName() == name;
+                     });
+}
+
+
 ItemOwner::~ItemOwner()
 {
     std::cerr << "ItemOwner destructor" << std::endl;

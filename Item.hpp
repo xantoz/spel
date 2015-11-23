@@ -15,6 +15,8 @@ public:
     Item(std::string name, std::string description, unsigned weight);
     unsigned getWeight() const;
 
+    virtual const std::string &use();
+
     friend class ItemOwner;
 };
 

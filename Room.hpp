@@ -14,6 +14,8 @@ private:
     std::list<Actor*> actors;
     
 public:
+    Room(const std::string &name, const std::string &description, ...);
+    
     Room *getExit(std::string direction) const;
     void addActor(Actor *a);
     void removeActor(Actor *a);

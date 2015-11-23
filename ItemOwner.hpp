@@ -17,6 +17,8 @@ protected:
 public:
     bool addItem(Item *i);
     void removeItem(Item* i);
+
+    Item *getItem(const std::string &name);
         
     virtual ~ItemOwner();
 };

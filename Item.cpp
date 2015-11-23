@@ -12,3 +12,10 @@ unsigned Item::getWeight() const
 {
     return weight;
 }
+
+const std::string &use()
+{
+    return "This item is useless.";
+}
+
+

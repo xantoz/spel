@@ -1,6 +1,11 @@
 #include "Room.hpp"
 #include <algorithm>
+#include <cstdarg>
 
+Room::Room(const std::string &name, const std::string &description) : GameObject(name, description)
+{
+    
+}
 
 
 Room *Room::getExit(std::string direction) const

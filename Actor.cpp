@@ -14,6 +14,12 @@ void Actor::go(std::string direction)
     nroom->addActor(this);                              // this sets room to nroom
 }
 
+const std::string &use(const std::string &itemName)
+{
+    return this->getItem(itemName)->use();
+}
+
+
 Room *Actor::getRoom() const
 {
     return room;
