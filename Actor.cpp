@@ -1,5 +1,6 @@
 #include "Actor.hpp"
 #include "Room.hpp"
+#include "exceptions.hpp"
 
 void Actor::go(std::string direction)
 {
@@ -10,7 +11,7 @@ void Actor::go(std::string direction)
     nroom->addActor(this);                              // this sets room to nroom
 }
 
-const std::string &use(const std::string &itemName)
+const std::string &Actor::use(const std::string &itemName)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)

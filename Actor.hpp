@@ -13,6 +13,7 @@ private:
 public:
     void go(std::string direction);
     Room *getRoom() const;
+    const std::string &use(const std::string &itemName);
 
     friend class Room;
 };
