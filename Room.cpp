@@ -10,12 +10,14 @@ Room::Room(const std::string &name, const std::string &description, ...) : ItemO
 
     char *exit_str;
     Room *exit_room;
-    do 
+    exit_str  = va_arg(list, char*);
+    exit_room = va_arg(list, Room*);
+    while(exit_str != NULL)
     {
+        exits[std::string(exit_str)] = exit_room;
         exit_str  = va_arg(list, char*);
         exit_room = va_arg(list, Room*);
-        exits[std::string(exit_str)] = exit_room;
-    } while(exit_str != NULL);
+    }
 }
 
 
