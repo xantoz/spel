@@ -21,7 +21,7 @@ Room::Room(const std::string &name, const std::string &description, ...) : ItemO
 }
 
 
-Room *Room::getExit(std::string direction) const
+Room *Room::getExit(const std::string &direction) const
 {
     // TODO: or use exceptions instead to signal non-existant exits
 
@@ -29,6 +29,11 @@ Room *Room::getExit(std::string direction) const
     if (it == exits.end())
         return nullptr; // TODO: instead throw exception here?
     return it->second;
+}
+
+void Room::setExit(const std::string &direction, Room *room)
+{
+    exits[direction] = room;
 }
 
 void Room::addActor(Actor *a)
