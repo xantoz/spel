@@ -1,4 +1,5 @@
 #include "Room.hpp"
+#include "exceptions.hpp"
 #include <algorithm>
 #include <stdarg.h>
 
@@ -23,11 +24,9 @@ Room::Room(const std::string &name, const std::string &description, ...) : ItemO
 
 Room *Room::getExit(const std::string &direction) const
 {
-    // TODO: or use exceptions instead to signal non-existant exits
-
     auto it = exits.find(direction);
     if (it == exits.end())
-        return nullptr; // TODO: instead throw exception here?
+        return nullptr; 
     return it->second;
 }
 
@@ -50,7 +49,7 @@ void Room::removeActor(Actor *a)
     auto it = std::find(actors.begin(), actors.end(), a);
     if (it == actors.end())
     {
-        // TODO: THROW EXCEPTION
+        throw NoSuchActorException();
     }
     actors.erase(it);
 }
@@ -59,4 +58,3 @@ const std::list<Actor*> &Room::getActors()
 {
     return actors;
 }
-

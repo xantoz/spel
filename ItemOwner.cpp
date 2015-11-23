@@ -17,7 +17,6 @@ ItemOwner::ItemOwner(const std::string &name, const std::string &description) : 
 
 bool ItemOwner::addItem(Item *i)
 {
-    // TODO: or use exception?
     if (!this->can_carry(i))
         return false;
                 
@@ -31,22 +30,24 @@ bool ItemOwner::addItem(Item *i)
 
 void ItemOwner::removeItem(Item *i)
 {
-    // TODO: instead of returning bool throw exception when it doesn't exist
-        
     auto it = std::find(items.begin(), items.end(), i);
     if (it == items.end())
     {
-        // TODO: THROW NoSuchItemException EXCEPTION
+        throw NoSuchItemException();
     }
     items.erase(it);
 }
 
 Item *ItemOwner::getItem(const std::string &name)
 {
-    return std::find(items.begin(), items.end(),
-                     [&](Item *) {
-                         return item->getName() == name;
-                     });
+    auto it = std::find(items.begin(), items.end(),
+                        [&](Item *) {
+                            return item->getName() == name;
+                        });
+    if (it == items.end())
+        return nullptr;
+    else
+        return *it;
 }
 
 

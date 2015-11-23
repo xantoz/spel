@@ -16,9 +16,11 @@ protected:
     ItemOwner(const std::string name, const std::string description);
 
 public:
+    /// Returns false if unable to add item
     bool addItem(Item *i);
+    /// throws NoSuchItemException if Item doesn't exist
     void removeItem(Item* i);
-
+    /// Returns nullptr when item doesn't exist
     Item *getItem(const std::string &name);
         
     virtual ~ItemOwner();

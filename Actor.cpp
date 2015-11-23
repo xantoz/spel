@@ -3,20 +3,19 @@
 
 void Actor::go(std::string direction)
 {
-    // TODO: use exceptions instead of returning false?
-        
     Room *nroom = room->getExit(direction);
     if (nroom == nullptr)
-    {
-        // TODO: throw exception
-    }
+        throw NoSuchExitException();
     room->removeActor(this);
     nroom->addActor(this);                              // this sets room to nroom
 }
 
 const std::string &use(const std::string &itemName)
 {
-    return this->getItem(itemName)->use();
+    Item *item = this->getItem(itemName);
+    if (item == nullptr)
+        throw NoSuchItemException();
+    return item->use();
 }
 
 

@@ -15,11 +15,15 @@ private:
     
 public:
     Room(const std::string &name, const std::string &description, ...);
-    
-    Room *getExit(const std::string &direction) const;
+
+    /// Returns nullptr for non-existant exits
+    Room *getExit(const std::string &direction) const; 
     void setExit(const std::string &direction, Room *room);
+
+    /// Throws NoSuchActorException for non-existant actors
+    void removeActor(Actor *a);           
     void addActor(Actor *a);
-    void removeActor(Actor *a);
+
     const std::list<Actor*> &getActors();
 
     // friend void main_loop();
