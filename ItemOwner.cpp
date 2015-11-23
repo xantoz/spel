@@ -1,4 +1,5 @@
 #include "ItemOwner.hpp"
+#include "exceptions.hpp"
 #include <iostream>
 #include <algorithm>
 
@@ -40,14 +41,11 @@ void ItemOwner::removeItem(Item *i)
 
 Item *ItemOwner::getItem(const std::string &name)
 {
-    auto it = std::find(items.begin(), items.end(),
-                        [&](Item *) {
-                            return item->getName() == name;
-                        });
-    if (it == items.end())
-        return nullptr;
-    else
-        return *it;
+    auto it = std::find_if(items.begin(), items.end(),
+                           [&](Item *item) {
+                               return item->getName() == name;
+                           });
+    return (it == items.end()) ? nullptr : *it;
 }
 
 
