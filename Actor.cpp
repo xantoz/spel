@@ -11,7 +11,7 @@ void Actor::go(std::string direction)
     nroom->addActor(this);                              // this sets room to nroom
 }
 
-const std::string &Actor::use(const std::string &itemName)
+std::string Actor::use(const std::string &itemName)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)
