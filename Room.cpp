@@ -1,10 +1,21 @@
 #include "Room.hpp"
 #include <algorithm>
-#include <cstdarg>
+#include <stdarg.h>
 
-Room::Room(const std::string &name, const std::string &description) : GameObject(name, description)
+Room::Room(const std::string &name, const std::string &description, ...) : ItemOwner(name, description)
 {
-    
+    va_list list;
+
+    va_start(list, description);
+
+    char *exit_str;
+    Room *exit_room;
+    do 
+    {
+        exit_str  = va_arg(list, char*);
+        exit_room = va_arg(list, Room*);
+        exits[std::string(exit_str)] = exit_room;
+    } while(exit_str != NULL);
 }
 
 

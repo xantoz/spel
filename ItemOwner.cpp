@@ -7,8 +7,11 @@ bool ItemOwner::can_carry(const Item* item) const
     return true;
 }
 
-
 ItemOwner::ItemOwner()
+{
+}
+
+ItemOwner::ItemOwner(const std::string &name, const std::string &description) : GameObject(name, description)
 {
 }
 

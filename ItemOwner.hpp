@@ -13,6 +13,7 @@ protected:
     virtual bool can_carry(const Item* item) const;
 
     ItemOwner(); // ItemOwners shouldn't be instantiatable
+    ItemOwner(const std::string name, const std::string description);
 
 public:
     bool addItem(Item *i);
