@@ -12,9 +12,7 @@ int main(int argc, char** argv)
     Room* kitchen = new Room("Kitchen", "This is the kitchen");
     Room* first = new Room("My room", "This is my room", "Kitchen", kitchen);
     std::string str;
-    
-    char* arg;
-    Player* player = new Player();;
+    Player* player = new Player("nils", "it's you");;
     first->addActor(player);
 
     cout << player->getRoom()->getName() << endl;
@@ -26,7 +24,7 @@ int main(int argc, char** argv)
         size_t first_non_space_index = str.find_first_not_of(' ');
         std::string command = str.substr(first_non_space_index, space_index);
         first_non_space_index = str.find_first_not_of(' ', space_index);
-        std::string arg = str.substr(first_non_space_index,str.length);
+        std::string arg = str.substr(first_non_space_index,str.length());
 
         if (command == "go")
         {
