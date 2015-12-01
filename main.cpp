@@ -10,13 +10,15 @@ using namespace std;
 int main(int argc, char** argv)
 {
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
-    Room* first = new Room("My room", "This is my room", "Kitchen", kitchen, nullptr);
-    std::string str;
+    Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
+    kitchen->addExit("east", first);
+    
     Player* player = new Player("nils", "it's you");
     first->addActor(player);
 
     cout << player->getRoom()->getName() << endl;
     cout << player->getRoom()->getDescription() << endl;
+    std::string str;
     while(!cin.eof())
     {
         std::getline(cin,str);

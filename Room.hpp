@@ -27,6 +27,8 @@ public:
     void removeActor(Actor *a);
     void addActor(Actor *a);
 
+    virtual std::string getDescription() const override;
+
     const std::list<Actor*> &getActors();
 
     // friend void main_loop();

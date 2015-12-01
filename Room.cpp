@@ -80,6 +80,16 @@ void Room::removeActor(Actor *a)
     actors.erase(it);
 }
 
+std::string Room::getDescription() const
+{
+    std::string desc = GameObject::getDescription();
+    desc += "\n\nObvious Exits are:";
+    for (auto &exit: exits)
+        desc += " " + exit.first;
+
+    return desc;
+}
+
 const std::list<Actor*> &Room::getActors()
 {
     return actors;
