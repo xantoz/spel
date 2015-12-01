@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 {
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
-    kitchen->addExit("east", first);
+    kitchen->setExit("east", first);
     
     Player* player = new Player("nils", "it's you");
     first->addActor(player);
