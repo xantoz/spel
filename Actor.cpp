@@ -2,6 +2,17 @@
 #include "Room.hpp"
 #include "exceptions.hpp"
 
+Actor::Actor(const std::string &name, const std::string &description) :
+    ItemOwner(name, description)
+{
+}
+
+Actor::~Actor()
+{
+    if (room != nullptr)
+        room->removeActor(this);
+}
+
 void Actor::go(std::string direction)
 {
     Room *nroom = room->getExit(direction);

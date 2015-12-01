@@ -15,13 +15,16 @@ private:
     
 public:
     Room(const std::string &name, const std::string &description, ...);
+    virtual ~Room() override;
 
     /// Returns nullptr for non-existant exits
     Room *getExit(const std::string &direction) const; 
     void setExit(const std::string &direction, Room *room);
+    void removeExit(const std::string &direction);
+    void removeExit(const Room *room);
 
     /// Throws NoSuchActorException for non-existant actors
-    void removeActor(Actor *a);           
+    void removeActor(Actor *a);
     void addActor(Actor *a);
 
     const std::list<Actor*> &getActors();

@@ -2,6 +2,7 @@
 #include "exceptions.hpp"
 #include <algorithm>
 #include <stdarg.h>
+#include <iostream>
 
 Room::Room(const std::string &name, const std::string &description, ...) : ItemOwner(name, description)
 {
@@ -21,6 +22,17 @@ Room::Room(const std::string &name, const std::string &description, ...) : ItemO
     }
 }
 
+Room::~Room()
+{
+    std::cerr << "Room destructor" << std::endl;
+
+    for (auto const &exit: exits)
+        exit.second->removeExit(this);
+    
+    for (Actor *actor: actors)
+        delete actor;
+}
+
 
 Room *Room::getExit(const std::string &direction) const
 {
@@ -33,6 +45,20 @@ Room *Room::getExit(const std::string &direction) const
 void Room::setExit(const std::string &direction, Room *room)
 {
     exits[direction] = room;
+}
+
+void Room::removeExit(const std::string &direction)
+{
+    exits.erase(direction);
+}
+
+void Room::removeExit(const Room *room)
+{
+    std::map<std::string, Room*>::iterator
+        it = std::find_if(exits.begin(), exits.end(),
+                          [&](const std::pair<std::string, Room*> &item) -> bool { return item.second == room; });
+    if (it != exits.end())
+        exits.erase(it);
 }
 
 void Room::addActor(Actor *a)

@@ -8,14 +8,21 @@ Item::Item(std::string name, std::string description, unsigned w) :
 {
 }
 
+Item::~Item()
+{
+    if (owner != nullptr)
+        owner->removeItem(this);
+}
+
 unsigned Item::getWeight() const
 {
     return weight;
 }
 
-std::string use()
+std::string Item::use()
 {
-    return "This item is useless.";
+    static std::string asdf = "This item is useless.";
+    return asdf;
 }
 
 

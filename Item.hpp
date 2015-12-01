@@ -13,10 +13,12 @@ private:
 public:
 
     Item(std::string name, std::string description, unsigned weight);
+    virtual ~Item() override;
+    
     unsigned getWeight() const;
-
+    
     virtual std::string use();
-
+    
     friend class ItemOwner;
 };
 

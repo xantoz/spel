@@ -1,5 +1,11 @@
 #include "Player.hpp"
 
+Player::Player(const std::string &name, const std::string &description) :
+    Actor(name, description)
+{
+}
+
+
 bool Player::can_carry(const Item *i) const
 {
 	unsigned total_weight = 0;
