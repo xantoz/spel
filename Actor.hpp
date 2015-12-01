@@ -10,6 +10,7 @@ class Actor : public ItemOwner
 private:
     Room *room;
 
+    
 public:
     void go(std::string direction);
     Room *getRoom() const;
