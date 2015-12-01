@@ -11,7 +11,8 @@ int main(int argc, char** argv)
 {
     Room* kitchen = new Room("Kitchen", "This is the kitchen");
     Room* first = new Room("My room", "This is my room", "Kitchen", kitchen);
-    char str[256];
+    std::string str;
+    
     char* arg;
     Player* player = new Player();;
     first->addActor(player);
@@ -20,25 +21,27 @@ int main(int argc, char** argv)
     cout << player->getRoom()->getDescription() << endl;
     while(true)
     {
-        fgets(str, 256, stdin);
-        arg = NULL;
-        for(char* c = str; *c !='\0'; ++c)
-        {
-            if(*c == ' ')
-            {
-                *c = 0;
-                arg = c+1;
-                break;
-            }
+        std::getline(cin,str);
+        size_t space_index = str.find_first_of(' ');
+        size_t first_non_space_index = str.find_first_not_of(' ');
+        std::string command = str.substr(first_non_space_index, space_index);
+        first_non_space_index = str.find_first_not_of(' ', space_index);
+        std::string arg = str.substr(first_non_space_index,str.length);
 
-        }
-
-        if (strcmp(str, "go") == 0)
+        if (command == "go")
         {
             player->go(arg);
             cout << player->getRoom()->getName() << endl;
             cout << player->getRoom()->getDescription() << endl;
         }
+        else if(command == "look")
+        {
+            cout << player->getRoom()->getDescription() << endl;
+        }
+        else if(command == "use")
+        {
+        }
+        
         else
         {
             cout << "What are ye doing, LOL" << endl;
