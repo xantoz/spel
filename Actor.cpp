@@ -34,3 +34,13 @@ Room *Actor::getRoom() const
 {
     return room;
 }
+
+unsigned Actor::getStrength() const
+{
+    return strength;
+}
+
+void Actor::setStrength(unsigned str)
+{
+    strength = str;
+}

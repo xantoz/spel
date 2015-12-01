@@ -9,6 +9,8 @@ class Actor : public ItemOwner
 {
 private:
     Room *room;
+protected:
+    unsigned strength;
 public:
     Actor(const std::string &name, const std::string &description);
     virtual ~Actor() override;
@@ -16,6 +18,10 @@ public:
     void go(std::string direction);
     Room *getRoom() const;
     std::string use(const std::string &itemName);
+
+    unsigned getStrength() const;
+    void setStrength(unsigned str);
+
 
     friend class Room;
 };

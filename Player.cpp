@@ -14,3 +14,7 @@ bool Player::can_carry(const Item *i) const
     
     return (total_weight > strength*magisk_konstant);
 }
+
+
+
+

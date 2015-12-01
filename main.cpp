@@ -21,6 +21,7 @@ int main(int argc, char** argv)
     std::string str;
     while(!cin.eof())
     {
+        cout << "\n> ";
         std::getline(cin,str);
         size_t first_non_space_index = str.find_first_not_of(' ');
         first_non_space_index = (first_non_space_index != string::npos) ? first_non_space_index : 0;

@@ -7,7 +7,6 @@
 class Player : public Actor
 {
 private:
-    unsigned strength;
     const static unsigned magisk_konstant = 10;
 protected:
     virtual bool can_carry(const Item *i) const override;
