@@ -18,8 +18,7 @@ void Actor::go(std::string direction)
     Room *nroom = room->getExit(direction);
     if (nroom == nullptr)
         throw NoSuchExitException();
-    room->removeActor(this);
-    nroom->addActor(this);                              // this sets room to nroom
+    nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
 std::string Actor::use(const std::string &itemName)
