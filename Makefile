@@ -9,6 +9,8 @@ CXXFLAGS = -std=c++11 -g -Wall -pedantic
 
 
 # %.o: %.cpp
-# 	g++ -std=c++0x -g -Wall $*.cpp 
+# 	g++ -std=c++0x -g -Wall $*.cpp
+
+main.cpp: exceptions.hpp
 
 main: main.o ItemOwner.o Room.o Player.o Actor.o GameObject.o Item.o 

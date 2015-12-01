@@ -1,3 +1,4 @@
+#include "exceptions.hpp"
 #include "Room.hpp"
 #include "Player.hpp"
 
@@ -21,41 +22,54 @@ int main(int argc, char** argv)
     std::string str;
     while(!cin.eof())
     {
-        cout << "\n> ";
-        std::getline(cin,str);
-        size_t first_non_space_index = str.find_first_not_of(' ');
-        first_non_space_index = (first_non_space_index != string::npos) ? first_non_space_index : 0;
-        size_t space_index = str.find_first_of(' ', first_non_space_index);
-        space_index = (space_index != string::npos) ? space_index : str.length();
-        std::string command = str.substr(first_non_space_index, space_index);
-        std::string arg = "";
-        if (space_index != str.length())
+        try 
         {
-            size_t arg_first_non_space_index = str.find_first_not_of(' ', space_index);
-            arg = str.substr(arg_first_non_space_index, str.length());
-        }
-
-        if (command == "go")
-        {
-            if (arg == "")
+            cout << "\n> ";
+            std::getline(cin,str);
+            size_t first_non_space_index = str.find_first_not_of(' ');
+            first_non_space_index = (first_non_space_index != string::npos) ? first_non_space_index : 0;
+            size_t space_index = str.find_first_of(' ', first_non_space_index);
+            space_index = (space_index != string::npos) ? space_index : str.length();
+            std::string command = str.substr(first_non_space_index, space_index);
+            std::string arg = "";
+            if (space_index != str.length())
             {
-                cout << "Where did you want to go, you said?" << endl;
-                continue;
+                size_t arg_first_non_space_index = str.find_first_not_of(' ', space_index);
+                arg = str.substr(arg_first_non_space_index, str.length());
             }
-            player->go(arg);
-            cout << player->getRoom()->getName() << endl;
-            cout << player->getRoom()->getDescription() << endl;
+
+            if (command == "go")
+            {
+                if (arg == "")
+                {
+                    cout << "Where did you want to go, you said?" << endl;
+                    continue;
+                }
+                player->go(arg);
+                cout << player->getRoom()->getName() << endl;
+                cout << player->getRoom()->getDescription() << endl;
+            }
+            else if(command == "look")
+            {
+                cout << player->getRoom()->getDescription() << endl;
+            }
+            else if(command == "use")
+            {
+                if (arg == "")
+                {
+                    cout << "What do you want to use?" << endl;
+                    continue;
+                }
+                cout << player->use(arg) << endl;
+            }
+            else
+            {
+                cout << "What are ye doing, LOL" << endl;
+            }
         }
-        else if(command == "look")
+        catch (const GameException &e)
         {
-            cout << player->getRoom()->getDescription() << endl;
-        }
-        else if(command == "use")
-        {
-        }
-        else
-        {
-            cout << "What are ye doing, LOL" << endl;
+            cout << e.what() << endl;
         }
     }
     

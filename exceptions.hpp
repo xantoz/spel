@@ -3,30 +3,39 @@
 
 #include <exception>
 
-class NoSuchItemException : public std::exception
+class GameException : public std::exception
 {
-  public:
+public:
     virtual const char* what() const throw() override
     {
-        return "No such item";
+        return "Generic Game Exception.";
     }
 };
 
-class NoSuchExitException : public std::exception
+class NoSuchItemException : public GameException
 {
   public:
     virtual const char* what() const throw() override
     {
-        return "No such exit";
+        return "No such item.";
     }
 };
 
-class NoSuchActorException : public std::exception
+class NoSuchExitException : public GameException
 {
   public:
     virtual const char* what() const throw() override
     {
-        return "No such actor";
+        return "No such exit.";
+    }
+};
+
+class NoSuchActorException : public GameException
+{
+  public:
+    virtual const char* what() const throw() override
+    {
+        return "No such actor.";
     }
 };
 
