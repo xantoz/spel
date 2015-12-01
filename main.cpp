@@ -9,10 +9,10 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    Room* kitchen = new Room("Kitchen", "This is the kitchen");
-    Room* first = new Room("My room", "This is my room", "Kitchen", kitchen);
+    Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
+    Room* first = new Room("My room", "This is my room", "Kitchen", kitchen, nullptr);
     std::string str;
-    Player* player = new Player("nils", "it's you");;
+    Player* player = new Player("nils", "it's you");
     first->addActor(player);
 
     cout << player->getRoom()->getName() << endl;

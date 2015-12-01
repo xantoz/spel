@@ -65,7 +65,7 @@ void Room::addActor(Actor *a)
 {
     actors.push_front(a);
     // we're friends with the actors guild
-    if (a->room == nullptr)
+    if (a->room != nullptr)
         a->room->removeActor(a);
     a->room = this;
 }
