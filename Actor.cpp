@@ -1,6 +1,7 @@
 #include "Actor.hpp"
 #include "Room.hpp"
 #include "exceptions.hpp"
+#include <iostream>
 
 Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description)
@@ -9,6 +10,8 @@ Actor::Actor(const std::string &name, const std::string &description) :
 
 Actor::~Actor()
 {
+    std::cerr << "Actor<" << getName() << "> destructor" << std::endl;
+    
     if (room != nullptr)
         room->removeActor(this);
 }

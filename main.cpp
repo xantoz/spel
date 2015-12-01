@@ -6,6 +6,8 @@
 #include <cstdio>
 #include <iostream>
 
+#include <boost/algorithm/string/trim_all.hpp>
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -25,18 +27,12 @@ int main(int argc, char** argv)
         try 
         {
             cout << "\n> ";
-            std::getline(cin,str);
-            size_t first_non_space_index = str.find_first_not_of(' ');
-            first_non_space_index = (first_non_space_index != string::npos) ? first_non_space_index : 0;
-            size_t space_index = str.find_first_of(' ', first_non_space_index);
-            space_index = (space_index != string::npos) ? space_index : str.length();
-            std::string command = str.substr(first_non_space_index, space_index);
-            std::string arg = "";
-            if (space_index != str.length())
-            {
-                size_t arg_first_non_space_index = str.find_first_not_of(' ', space_index);
-                arg = str.substr(arg_first_non_space_index, str.length());
-            }
+            getline(cin, str);
+            boost::trim_all(str);
+
+            size_t first_space = str.find_first_of(' ');
+            string command = str.substr(0, first_space);
+            string arg = str.substr(first_space + 1);
 
             if (command == "go")
             {
@@ -72,8 +68,9 @@ int main(int argc, char** argv)
             cout << e.what() << endl;
         }
     }
-    
-        
+
+    delete kitchen;
+    delete first;
         
     return 0;
     

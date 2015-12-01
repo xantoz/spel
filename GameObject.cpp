@@ -1,4 +1,5 @@
 #include "GameObject.hpp"
+#include <iostream>
 
 GameObject::GameObject()
 {
@@ -25,4 +26,5 @@ const std::string &GameObject::getName() const
 
 GameObject::~GameObject()
 {
+    std::cerr << "GameObject<" << name << "> destructor" << std::endl;
 }

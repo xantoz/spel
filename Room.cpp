@@ -24,7 +24,7 @@ Room::Room(const std::string &name, const std::string &description, ...) : ItemO
 
 Room::~Room()
 {
-    std::cerr << "Room destructor" << std::endl;
+    std::cerr << "Room<" << getName() << "> destructor" << std::endl;
 
     for (auto const &exit: exits)
         exit.second->removeExit(this);
