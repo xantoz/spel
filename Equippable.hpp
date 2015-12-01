@@ -1,7 +1,9 @@
-#include "Item.hpp"
-#include "Stats.hpp"
 #ifndef EQUIPPABLE_HPP
 #define EQUIPPABLE_HPP
+
+#include "Item.hpp"
+#include "Stats.hpp"
+
 class Equippable : public Item 
 {
 public:
@@ -9,7 +11,6 @@ public:
     
 private:
     const Stats stats;
-    
     
 };
 #endif
