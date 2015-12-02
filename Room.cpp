@@ -33,8 +33,6 @@ Room::~Room()
     // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
     while (actors.size() != 0)
         delete actors.front();
-    
-    std::cerr << "lollerskates" << std::endl;
 }
 
 

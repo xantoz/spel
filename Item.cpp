@@ -1,5 +1,6 @@
 #include "Item.hpp"
 #include "ItemOwner.hpp"
+#include <iostream>
 
 Item::Item(std::string name, std::string description, unsigned w) :
     GameObject(name, description),
@@ -10,6 +11,8 @@ Item::Item(std::string name, std::string description, unsigned w) :
 
 Item::~Item()
 {
+    std::cerr << "Item<" << getName() << "> destructor" << std::endl;
+    
     if (owner != nullptr)
         owner->removeItem(this);
 }

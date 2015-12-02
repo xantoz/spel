@@ -51,7 +51,7 @@ Item *ItemOwner::getItem(const std::string &name)
 
 ItemOwner::~ItemOwner()
 {
-    std::cerr << "ItemOwner destructor" << std::endl;
+    std::cerr << "ItemOwner<" << getName() << "> destructor" << std::endl;
         
     for (Item *i: items)
         delete i;
