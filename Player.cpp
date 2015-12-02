@@ -8,7 +8,7 @@ Player::Player(const std::string &name, const std::string &description) :
 
 Player::~Player()
 {
-    std::cerr << "Player destructor" << std::endl;
+    std::cerr << "Player<" << getName() << "> destructor" << std::endl;
 }
 
 bool Player::can_carry(const Item *i) const

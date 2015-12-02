@@ -4,7 +4,8 @@
 #include <stdarg.h>
 #include <iostream>
 
-Room::Room(const std::string &name, const std::string &description, ...) : ItemOwner(name, description)
+Room::Room(const std::string &name, const std::string &description, ...) :
+    ItemOwner(name, description)
 {
     va_list list;
 
@@ -29,8 +30,11 @@ Room::~Room()
     for (auto const &exit: exits)
         exit.second->removeExit(this);
     
-    for (Actor *actor: actors)
-        delete actor;
+    // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
+    while (actors.size() != 0)
+        delete actors.front();
+    
+    std::cerr << "lollerskates" << std::endl;
 }
 
 
@@ -49,6 +53,8 @@ void Room::setExit(const std::string &direction, Room *room)
 
 void Room::removeExit(const std::string &direction)
 {
+    if (exits.find(direction) == exits.end())
+        throw NoSuchExitException(); // TODO: possibly more severe than regular NoSuchExitException
     exits.erase(direction);
 }
 
@@ -57,8 +63,9 @@ void Room::removeExit(const Room *room)
     std::map<std::string, Room*>::iterator
         it = std::find_if(exits.begin(), exits.end(),
                           [&](const std::pair<std::string, Room*> &item) -> bool { return item.second == room; });
-    if (it != exits.end())
-        exits.erase(it);
+    if (it == exits.end())
+        throw NoSuchExitException(); // TODO: possibly more severe than regular NoSuchExitException
+    exits.erase(it);
 }
 
 void Room::addActor(Actor *a)
