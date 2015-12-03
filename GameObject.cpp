@@ -28,6 +28,7 @@ GameObject::~GameObject()
 {
     std::cerr << "GameObject<" << name << "> destructor" << std::endl;
 }
+
 std::ostream& operator<<(std::ostream &os, const GameObject& g)
 {
     os << g.getName() << " " << g.getDescription();

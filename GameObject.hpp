@@ -19,11 +19,8 @@ public:
     const std::string &getName() const;
 
     virtual ~GameObject();
-    std::ostream& operator<<(std::ostream &os, const GameObject& g){
-        os << g.getName() << " " << g.getDescription();
-        return os;
-    }
 };
-    
+
+std::ostream& operator<<(std::ostream &os, const GameObject& g);
 
 #endif
