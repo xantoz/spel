@@ -2,41 +2,39 @@
 #define EXCEPTIONS_HPP
 
 #include <exception>
+#include <string>
 
 class GameException : public std::exception
 {
 public:
+    std::string wut;
+
+    GameException() : wut("Generic Game Exception.") {}
+    GameException(const std::string &lol) : wut(lol) {}
+        
     virtual const char* what() const throw() override
     {
-        return "Generic Game Exception.";
+        return wut.c_str();
     }
 };
+
 
 class NoSuchItemException : public GameException
 {
   public:
-    virtual const char* what() const throw() override
-    {
-        return "No such item.";
-    }
+    NoSuchItemException() : GameException("No Such Item.") {}
 };
 
 class NoSuchExitException : public GameException
 {
   public:
-    virtual const char* what() const throw() override
-    {
-        return "No such exit.";
-    }
+    NoSuchExitException() : GameException("No such exit.") {}
 };
 
 class NoSuchActorException : public GameException
 {
   public:
-    virtual const char* what() const throw() override
-    {
-        return "No such actor.";
-    }
+    NoSuchActorException() : GameException("No such actor.") {}
 };
 
 #endif /* EXCEPTIONS_HPP */
