@@ -42,13 +42,13 @@ void ItemOwner::removeItem(Item *i)
 Item *ItemOwner::getItem(const std::string &name)
 {
     auto it = std::find_if(items.begin(), items.end(),
-                           [&](Item *item) {
+                           [&](const Item *item) {
                                return item->getName() == name;
                            });
     return (it == items.end()) ? nullptr : *it;
 }
 
-const std::list<Item*> &getItems() const
+const std::list<Item*> &ItemOwner::getItems() const
 {
     return items;
 }
