@@ -85,6 +85,20 @@ void Room::removeActor(Actor *a)
     actors.erase(it);
 }
 
+Actor *Room::getActor(const std::string &actor)
+{
+    auto it = std::find_if(actors.begin(), actors.end(),
+                           [&](const Actor *a) { return a->getName() == actor });
+    return (it == actors.end()) ? nullptr : *it;
+}
+
+
+const std::list<Actor*> &Room::getActors()
+{
+    return actors;
+}
+
+
 std::string Room::getDescription() const
 {
     std::string desc = GameObject::getDescription();
@@ -95,7 +109,3 @@ std::string Room::getDescription() const
     return desc;
 }
 
-const std::list<Actor*> &Room::getActors()
-{
-    return actors;
-}

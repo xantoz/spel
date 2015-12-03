@@ -3,6 +3,7 @@
 
 #include "Actor.hpp"
 #include "Item.hpp"
+#include <string>
 
 class Player : public Actor
 {
@@ -13,6 +14,9 @@ protected:
 public:
     Player(const std::string &name, const std::string &description);
     ~Player();
+
+    std::string look() const;
+    std::string look(const std::string &actorOrItem) const;
 };
 
 #endif

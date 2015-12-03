@@ -27,6 +27,8 @@ public:
     
     const Stats &getStats() const;
 
+    virtual std::string getDescription() const override;
+
     friend class Room;
 };
 

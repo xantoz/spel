@@ -7,7 +7,7 @@
 
 class ItemOwner : public GameObject
 {
-private
+private:
     std::list<Item*> items;
     
 protected:

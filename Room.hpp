@@ -26,10 +26,11 @@ public:
     /// Throws NoSuchActorException for non-existant actors
     void removeActor(Actor *a);
     void addActor(Actor *a);
+    Actor *getActor(const std::string &actor);
+    const std::list<Actor*> &getActors();
 
     virtual std::string getDescription() const override;
 
-    const std::list<Actor*> &getActors();
 
     // friend void main_loop();
 };

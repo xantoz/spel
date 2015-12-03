@@ -62,3 +62,16 @@ const Stats &Actor::getStats() const
 {
     return stats;
 }
+
+std::string getDescription() const
+{
+    std::string ret = "";
+    ret += "Name: " + getName() + "\n\n";
+    ret += getBaseDescription();
+    ret += "STATS: <TODO>\n";
+    ret += "INVENTORY:";
+    for (Item *i: getItems())
+        ret += " " + i->getName();
+    ret += "\n";
+    return ret;
+}
