@@ -11,7 +11,7 @@ struct Stats
     Stats &operator+=(const Stats &s2);
     Stats &operator-=(const Stats &s2);
     Stats &operator+=(int scalar);
-    Stats &operator-=(int scaler);
+    Stats &operator-=(int scalar);
 };
 
 #endif    
