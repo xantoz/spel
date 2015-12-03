@@ -53,7 +53,7 @@ public:
     virtual std::string getDescription() const override;
 
     friend class Room;
-    friend class Item;
+    friend class Item; // KLUDGE: Needed so that Item can set the Armor etc. to nullptr in Item::~Item
 };
 
 #endif

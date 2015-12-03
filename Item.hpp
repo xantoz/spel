@@ -22,7 +22,7 @@ public:
     virtual std::string use();
     
     friend class ItemOwner;
-    friend class Actor; // needed to fipple ownership of items as they are equipped
+    friend class Actor; // KLUDGE: Needed to fipple ownership of items as they are unequipped in Actor::unequipX
 };
 
 #endif
