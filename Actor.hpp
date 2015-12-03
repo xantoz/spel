@@ -26,7 +26,6 @@ public:
     bool drop(const std::string &itemName); // returns true if manage to drop (can fail when naming non-existent item)
     
     const Stats &getStats() const;
-    // void setStats(const Stats &stats);
 
     friend class Room;
 };
