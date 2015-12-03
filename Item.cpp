@@ -50,17 +50,17 @@ Item::~Item()
             }
             else if (Sword *sword = dynamic_cast<Sword*>(this))
             {
-                if (actor->getSword() != sword) throw GameException("Item::~Item: Sword should be equipped but aren't.");
+                if (actor->getSword() != sword) throw GameException("Item::~Item: Sword should be equipped but isn't.");
                 actor->sword = nullptr;
             }
             else if (Armor *armor = dynamic_cast<Armor*>(this))
             {
-                if (actor->getArmor() != armor) throw GameException("Item::~Item: Armor should be equipped but aren't.");
+                if (actor->getArmor() != armor) throw GameException("Item::~Item: Armor should be equipped but isn't.");
                 actor->armor = nullptr;
             }
             else if (Shield *shield = dynamic_cast<Shield*>(this))
             {
-                if (actor->getShield() != shield) throw GameException("Item::~Item: Shield should be equipped but aren't.");
+                if (actor->getShield() != shield) throw GameException("Item::~Item: Shield should be equipped but isn't.");
                 actor->shield = nullptr;
             }
             else if (Shoes *shoes = dynamic_cast<Shoes*>(this))
