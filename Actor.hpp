@@ -22,8 +22,8 @@ public:
     void go(std::string direction);
     Room *getRoom() const;
     std::string use(const std::string &itemName);
-    std::string pickup(const std::string &itemName);
-    std::string drop(const std::string &itemName);
+    bool pickup(const std::string &itemName); // returns true if manage to pick up
+    bool drop(const std::string &itemName); // returns true if manage to drop (can fail when naming non-existent item)
     
     const Stats &getStats() const;
     // void setStats(const Stats &stats);

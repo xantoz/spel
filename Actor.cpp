@@ -26,7 +26,7 @@ void Actor::go(std::string direction)
 {
     Room *nroom = room->getExit(direction);
     if (nroom == nullptr)
-        throw NoSuchExitException();
+st        throw NoSuchExitException();
     nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
@@ -38,6 +38,21 @@ std::string Actor::use(const std::string &itemName)
     return item->use();
 }
 
+bool Actor::pickup(const std::string &itemName)
+{
+    if (room == nullptr) return false;
+    Item *i = room->getItem(itemName);
+    if (i == nullptr) return false;
+    return this->addItem(i);
+}
+
+bool Actor::drop(const std::string &itemName)
+{
+    if (room == nullptr) return false;
+    Item *i = this->getItem(itemName);
+    if (i == nullptr) return false;
+    return room->addItem(i);
+}
 
 Room *Actor::getRoom() const
 {
@@ -48,6 +63,8 @@ const Stats &getStats()
 {
     return stats;
 }
+
+
 
 // void setStats(const Stats &stats)
 // {
