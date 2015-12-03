@@ -23,24 +23,39 @@ Actor::~Actor()
 
 bool Actor::equipArmor(const std::string &name)
 {
-    return false;                                           // TODO
+    Armor *armor = dynamic_cast<Armor*>(this->getItem(name));
+    if (nullptr == armor) return false; // Either doesn't exist or isn't an armor
+    this->removeItem(armor);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    this->armor = armor;
+    return true;
 }
 
 bool Actor::equipShield(const std::string &name)
 {
-    return false;                                           // TODO
+    Shield *shield = dynamic_cast<Shield*>(this->getItem(name));
+    if (nullptr == shield) return false; // Either doesn't exist or isn't a shield
+    this->removeItem(shield);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    this->shield = shield;
+    return true;
 }
 
 bool Actor::equipSword(const std::string &name)
 {
-    return false;                                           // TODO
+    Sword *sword = dynamic_cast<Sword*>(this->getItem(name));
+    if (nullptr == sword) return false; // Either doesn't exist or isn't a sword
+    this->removeItem(sword);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    this->sword = sword;
+    return true;
 }
 
 bool Actor::equipShoes(const std::string &name)
 {
-    return false;                                           // TODO
+    Shoes *shoes = dynamic_cast<Shoes*>(this->getItem(name));
+    if (nullptr == shoes) return false; // Either doesn't exist or isn't a pair of shoes
+    this->removeItem(shoes); // remove from inventory (Note: this leaves the owner pointer intact)
+    this->shoes = shoes;
+    return true;
 }
-
 
 const Armor *Actor::getArmor() const { return armor; }
 const Shield *Actor::getShield() const { return shield; }

@@ -28,6 +28,7 @@ public:
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     virtual ~Actor() override;
 
+    
     bool equipArmor(const std::string &name);
     bool equipShield(const std::string &shield);
     bool equipSword(const std::string &sword);
@@ -48,6 +49,7 @@ public:
     virtual std::string getDescription() const override;
 
     friend class Room;
+    friend class Item;
 };
 
 #endif
