@@ -19,6 +19,12 @@ Actor::~Actor()
     
     if (room != nullptr)
         room->removeActor(this);
+
+    // Destruct any equipped items
+    if (armor != nullptr) delete armor;
+    if (shield != nullptr) delete shield;
+    if (sword != nullptr) delete sword;
+    if (shoes != nullptr) delete shoes;
 }
 
 bool Actor::equipArmor(const std::string &name)
