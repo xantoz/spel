@@ -4,8 +4,6 @@
 #include <iostream>
 #include <algorithm>
 
-// TODO: UNKLUDGE unequipX and equipX BY MAKING items protected again
-
 Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description)
 {
@@ -23,7 +21,7 @@ Actor::~Actor()
     if (room != nullptr)
         room->removeActor(this);
 
-    // Destruct any equipped items
+    // Destruct any equipped items (alternative solution: unequip all Equippables and let ItemOwner::~ItemOwner destruct them)
     if (armor != nullptr) delete armor;
     if (shield != nullptr) delete shield;
     if (sword != nullptr) delete sword;
@@ -45,7 +43,7 @@ bool Actor::equipShield(const std::string &name)
 {
     Shield *shield = dynamic_cast<Shield*>(this->getItem(name));
     if (nullptr == shield) return false; // Either doesn't exist or isn't a shield
-    unequipShield();               // ensure shield slot is empty
+    unequipShield();                     // ensure shield slot is empty
     items.erase(std::find(items.begin(), items.end(), shield));
     this->shield = shield;
     return true;
@@ -55,7 +53,7 @@ bool Actor::equipSword(const std::string &name)
 {
     Sword *sword = dynamic_cast<Sword*>(this->getItem(name));
     if (nullptr == sword) return false;                 // Either doesn't exist or isn't a sword
-    unequipSword();                               // make sure sword slot is empty
+    unequipSword();                                     // make sure sword slot is empty
     items.erase(std::find(items.begin(), items.end(), sword));
     this->sword = sword;
     return true;
