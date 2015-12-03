@@ -2,6 +2,9 @@
 #include "Room.hpp"
 #include "exceptions.hpp"
 #include <iostream>
+#include <algorithm>
+
+// TODO: UNKLUDGE unequipX and equipX BY MAKING items protected again
 
 Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description)
@@ -27,12 +30,13 @@ Actor::~Actor()
     if (shoes != nullptr) delete shoes;
 }
 
+
 bool Actor::equipArmor(const std::string &name)
 {
-    Armor *armor = dynamic_cast<Armor*>(this->getItem(name));
+    Armor *armor = dynamic_cast<Armor*>(getItem(name));
     if (nullptr == armor) return false; // Either doesn't exist or isn't an armor
     unequipArmor();                     // ensure armor slot is empty
-    this->removeItem(armor); // remove from inventory (Note: this leaves the owner pointer intact)
+    items.erase(std::find(items.begin(), items.end(), armor));
     this->armor = armor;
     return true;
 }
@@ -41,8 +45,8 @@ bool Actor::equipShield(const std::string &name)
 {
     Shield *shield = dynamic_cast<Shield*>(this->getItem(name));
     if (nullptr == shield) return false; // Either doesn't exist or isn't a shield
-    unequipShield();                     // ensure shield slot is empty
-    this->removeItem(shield); // remove from inventory (Note: this leaves the owner pointer intact)
+    unequipShield();               // ensure shield slot is empty
+    items.erase(std::find(items.begin(), items.end(), shield));
     this->shield = shield;
     return true;
 }
@@ -51,8 +55,8 @@ bool Actor::equipSword(const std::string &name)
 {
     Sword *sword = dynamic_cast<Sword*>(this->getItem(name));
     if (nullptr == sword) return false;                 // Either doesn't exist or isn't a sword
-    unequipSword();                                     // make sure sword slot is empty
-    this->removeItem(sword); // remove from inventory (Note: this leaves the owner pointer intact)
+    unequipSword();                               // make sure sword slot is empty
+    items.erase(std::find(items.begin(), items.end(), sword));
     this->sword = sword;
     return true;
 }
@@ -62,7 +66,7 @@ bool Actor::equipShoes(const std::string &name)
     Shoes *shoes = dynamic_cast<Shoes*>(this->getItem(name));
     if (nullptr == shoes) return false; // Either doesn't exist or isn't a pair of shoes
     unequipShoes();                     // ensure shoes slot is empty
-    this->removeItem(shoes); // remove from inventory (Note: this leaves the owner pointer intact)
+    items.erase(std::find(items.begin(), items.end(), shoes));
     this->shoes = shoes;
     return true;
 }
@@ -70,32 +74,28 @@ bool Actor::equipShoes(const std::string &name)
 void Actor::unequipArmor()
 {
     if (armor == nullptr) return;
-    armor->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
-    this->addItem(armor);
+    items.push_front(armor);
     armor = nullptr;
 }
 
 void Actor::unequipShield()
 {
     if (shield == nullptr) return;
-    shield->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
-    this->addItem(shield);
+    items.push_front(shield);
     shield = nullptr;
 }
 
 void Actor::unequipSword()
 {
     if (sword == nullptr) return;
-    sword->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
-    this->addItem(sword);
+    items.push_front(sword);
     sword = nullptr;
 }
 
 void Actor::unequipShoes()
 {
     if (shoes == nullptr) return;
-    shoes->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
-    this->addItem(shoes);
+    items.push_front(shoes);
     shoes = nullptr;
 }
 
@@ -103,7 +103,6 @@ const Armor *Actor::getArmor() const { return armor; }
 const Shield *Actor::getShield() const { return shield; }
 const Sword *Actor::getSword() const { return sword; }
 const Shoes *Actor::getShoes() const { return shoes; }
-
 
 void Actor::go(std::string direction)
 {
