@@ -48,10 +48,14 @@ Item *ItemOwner::getItem(const std::string &name)
     return (it == items.end()) ? nullptr : *it;
 }
 
+const std::list<Item*> &getItems() const
+{
+    return items;
+}
 
 ItemOwner::~ItemOwner()
 {
-    std::cerr << "ItemOwner destructor" << std::endl;
+    std::cerr << "ItemOwner<" << getName() << "> destructor" << std::endl;
         
     for (Item *i: items)
         delete i;

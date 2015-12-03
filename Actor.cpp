@@ -8,6 +8,11 @@ Actor::Actor(const std::string &name, const std::string &description) :
 {
 }
 
+Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
+    ItemOwner(name, description), stats(_stats)
+{
+}
+
 Actor::~Actor()
 {
     std::cerr << "Actor<" << getName() << "> destructor" << std::endl;
@@ -32,18 +37,41 @@ std::string Actor::use(const std::string &itemName)
     return item->use();
 }
 
+bool Actor::pickup(const std::string &itemName)
+{
+    if (room == nullptr) return false;
+    Item *i = room->getItem(itemName);
+    if (i == nullptr) return false;
+    return this->addItem(i);
+}
+
+bool Actor::drop(const std::string &itemName)
+{
+    if (room == nullptr) return false;
+    Item *i = this->getItem(itemName);
+    if (i == nullptr) return false;
+    return room->addItem(i);
+}
 
 Room *Actor::getRoom() const
 {
     return room;
 }
 
-unsigned Actor::getStrength() const
+const Stats &Actor::getStats() const
 {
-    return strength;
+    return stats;
 }
 
-void Actor::setStrength(unsigned str)
+std::string getDescription() const
 {
-    strength = str;
+    std::string ret = "";
+    ret += "Name: " + getName() + "\n\n";
+    ret += getBaseDescription();
+    ret += "STATS: <TODO>\n";
+    ret += "INVENTORY:";
+    for (Item *i: getItems())
+        ret += " " + i->getName();
+    ret += "\n";
+    return ret;
 }
