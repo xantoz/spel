@@ -31,7 +31,8 @@ bool Actor::equipArmor(const std::string &name)
 {
     Armor *armor = dynamic_cast<Armor*>(this->getItem(name));
     if (nullptr == armor) return false; // Either doesn't exist or isn't an armor
-    this->removeItem(armor);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    unequipArmor();                     // ensure armor slot is empty
+    this->removeItem(armor); // remove from inventory (Note: this leaves the owner pointer intact)
     this->armor = armor;
     return true;
 }
@@ -40,7 +41,8 @@ bool Actor::equipShield(const std::string &name)
 {
     Shield *shield = dynamic_cast<Shield*>(this->getItem(name));
     if (nullptr == shield) return false; // Either doesn't exist or isn't a shield
-    this->removeItem(shield);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    unequipShield();                     // ensure shield slot is empty
+    this->removeItem(shield); // remove from inventory (Note: this leaves the owner pointer intact)
     this->shield = shield;
     return true;
 }
@@ -48,8 +50,9 @@ bool Actor::equipShield(const std::string &name)
 bool Actor::equipSword(const std::string &name)
 {
     Sword *sword = dynamic_cast<Sword*>(this->getItem(name));
-    if (nullptr == sword) return false; // Either doesn't exist or isn't a sword
-    this->removeItem(sword);                 // remove from inventory (Note: this leaves the owner pointer intact)
+    if (nullptr == sword) return false;                 // Either doesn't exist or isn't a sword
+    unequipSword();                                     // make sure sword slot is empty
+    this->removeItem(sword); // remove from inventory (Note: this leaves the owner pointer intact)
     this->sword = sword;
     return true;
 }
@@ -58,9 +61,42 @@ bool Actor::equipShoes(const std::string &name)
 {
     Shoes *shoes = dynamic_cast<Shoes*>(this->getItem(name));
     if (nullptr == shoes) return false; // Either doesn't exist or isn't a pair of shoes
+    unequipShoes();                     // ensure shoes slot is empty
     this->removeItem(shoes); // remove from inventory (Note: this leaves the owner pointer intact)
     this->shoes = shoes;
     return true;
+}
+
+void Actor::unequipArmor()
+{
+    if (armor == nullptr) return;
+    armor->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
+    this->addItem(armor);
+    armor = nullptr;
+}
+
+void Actor::unequipShield()
+{
+    if (shield == nullptr) return;
+    shield->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
+    this->addItem(shield);
+    shield = nullptr;
+}
+
+void Actor::unequipSword()
+{
+    if (sword == nullptr) return;
+    sword->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
+    this->addItem(sword);
+    sword = nullptr;
+}
+
+void Actor::unequipShoes()
+{
+    if (shoes == nullptr) return;
+    shoes->owner = nullptr; // KLUDGE: this ensures we don't try to removeItem the item from ourselves when we addItem it to ourselves
+    this->addItem(shoes);
+    shoes = nullptr;
 }
 
 const Armor *Actor::getArmor() const { return armor; }

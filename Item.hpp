@@ -22,6 +22,7 @@ public:
     virtual std::string use();
     
     friend class ItemOwner;
+    friend class Actor; // needed to fipple ownership of items as they are equipped
 };
 
 #endif

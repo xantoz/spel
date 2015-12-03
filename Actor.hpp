@@ -33,6 +33,10 @@ public:
     bool equipShield(const std::string &shield);
     bool equipSword(const std::string &sword);
     bool equipShoes(const std::string &shoes);
+    void unequipArmor();
+    void unequipShield();
+    void unequipSword();
+    void unequipShoes();
     const Armor *getArmor() const;
     const Shield *getShield() const;
     const Sword *getSword() const;
