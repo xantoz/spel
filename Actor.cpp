@@ -42,10 +42,10 @@ bool Actor::equipShoes(const std::string &name)
 }
 
 
-Sword *Actor::getArmor() { return armor; }
-Shield *Actor::getShield() { return shield; }
-Sword *Actor::getSword() { return sword; }
-Shoes *Actor::getShoes() { return shoes; }
+const Armor *Actor::getArmor() const { return armor; }
+const Shield *Actor::getShield() const { return shield; }
+const Sword *Actor::getSword() const { return sword; }
+const Shoes *Actor::getShoes() const { return shoes; }
 
 
 void Actor::go(std::string direction)

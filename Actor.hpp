@@ -32,10 +32,10 @@ public:
     bool equipShield(const std::string &shield);
     bool equipSword(const std::string &sword);
     bool equipShoes(const std::string &shoes);
-    Armor *getArmor();
-    Shield *getShield();
-    Sword *getSword();
-    Shoes *getShoes();
+    const Armor *getArmor() const;
+    const Shield *getShield() const;
+    const Sword *getSword() const;
+    const Shoes *getShoes() const;
 
     void go(std::string direction);
     Room *getRoom() const;

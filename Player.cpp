@@ -15,7 +15,7 @@ Player::~Player()
 bool Player::can_carry(const Item *i) const
 {
 	unsigned total_weight = 0;
-    for(Item *i: items)
+    for(Item *i: getItems())
     	total_weight += i->getWeight();
     
     return (total_weight > stats.str*magisk_konstant);
