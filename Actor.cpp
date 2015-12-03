@@ -8,6 +8,12 @@ Actor::Actor(const std::string &name, const std::string &description) :
 {
 }
 
+Actor(const std::string &name, const std::string &description, const Stats &_stats) :
+    ItemOwner(name, description), stats(_stats)
+{
+}
+
+
 Actor::~Actor()
 {
     std::cerr << "Actor<" << getName() << "> destructor" << std::endl;
@@ -38,12 +44,13 @@ Room *Actor::getRoom() const
     return room;
 }
 
-unsigned Actor::getStrength() const
+const Stats &getStats()
 {
-    return strength;
+    return stats;
 }
 
-void Actor::setStrength(unsigned str)
-{
-    strength = str;
-}
+// void setStats(const Stats &stats)
+// {
+//     this->stats = stats;
+// }
+

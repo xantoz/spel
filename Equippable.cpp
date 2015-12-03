@@ -3,3 +3,9 @@ Equippable::Equippable(const std::string &name, const std::string &description, 
     Item(name, description), stats(s)
 {
 }
+
+const Stats &Equippable::getStats() const
+{
+    return stats;
+}
+

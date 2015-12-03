@@ -4,9 +4,19 @@
 
 Item::Item(std::string name, std::string description, unsigned w) :
     GameObject(name, description),
-    owner(nullptr),
+    weight(w),
+    owner(nullptr)
+
+{
+}
+
+
+Item::Item(std::string name, std::string description, unsigned w, ItemOwner *o) :
+    GameObject(name, description),
     weight(w)
 {
+    // this will set this->owner = o
+    o->addItem(this);                                       
 }
 
 Item::~Item()
@@ -20,6 +30,11 @@ Item::~Item()
 unsigned Item::getWeight() const
 {
     return weight;
+}
+
+ItemOwner *Item::getOwner() const
+{
+    return owner;
 }
 
 std::string Item::use()

@@ -8,14 +8,17 @@ class ItemOwner;                                            // solve circular re
 class Item : public GameObject
 {
 private:
-    ItemOwner *owner;
     unsigned weight;
+    ItemOwner *owner;
 public:
 
     Item(std::string name, std::string description, unsigned weight);
+    Item(std::string name, std::string description, unsigned weight, ItemOwner *owner);
     virtual ~Item() override;
+
     
     unsigned getWeight() const;
+    ItemOwner *getOwner() const;
     
     virtual std::string use();
     
