@@ -17,6 +17,17 @@ ItemOwner::ItemOwner(const std::string &name, const std::string &description) :
 {
 }
 
+ItemOwner::~ItemOwner()
+{
+    std::cerr << "ItemOwner<" << getName() << "> destructor" << std::endl;
+        
+
+    // items will remove themselves from the ItemOwner
+    while (items.size() != 0)
+        delete items.front();
+}
+
+
 bool ItemOwner::addItem(Item *i)
 {
     if (!this->can_carry(i))
@@ -54,11 +65,4 @@ const std::list<Item*> &ItemOwner::getItems() const
     return items;
 }
 
-ItemOwner::~ItemOwner()
-{
-    std::cerr << "ItemOwner<" << getName() << "> destructor" << std::endl;
-        
-    for (Item *i: items)
-        delete i;
-}
 
