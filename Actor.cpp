@@ -64,8 +64,6 @@ const Stats &getStats()
     return stats;
 }
 
-
-
 // void setStats(const Stats &stats)
 // {
 //     this->stats = stats;
