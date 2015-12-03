@@ -7,9 +7,10 @@
 
 class ItemOwner : public GameObject
 {
-protected:
+private
     std::list<Item*> items;
     
+protected:
     virtual bool can_carry(const Item* item) const;
 
     ItemOwner(); // ItemOwners shouldn't be instantiatable
@@ -22,6 +23,7 @@ public:
     void removeItem(Item* i);
     /// Returns nullptr when item doesn't exist
     Item *getItem(const std::string &name);
+    const std::list<Item*> &getItems() const;
         
     virtual ~ItemOwner();
 };
