@@ -3,6 +3,10 @@
 
 #include "ItemOwner.hpp"
 #include "Stats.hpp"
+#include "Armor.hpp"
+#include "Sword.hpp"
+#include "Shoes.hpp"
+#include "Shield.hpp"
 #include <string>
 
 class Room;                                                 // solve circular reference
@@ -13,12 +17,26 @@ private:
 
 protected:    
     Stats stats;
+
+    Armor *armor;
+    Shield *shield;
+    Sword *sword;
+    Shoes *shoes;
     
 public:
     Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     virtual ~Actor() override;
-    
+
+    bool equipArmor(const std::string &name);
+    bool equipShield(const std::string &shield);
+    bool equipSword(const std::string &sword);
+    bool equipShoes(const std::string &shoes);
+    Armor *getArmor();
+    Shield *getShield();
+    Sword *getSword();
+    Shoes *getShoes();
+
     void go(std::string direction);
     Room *getRoom() const;
     std::string use(const std::string &itemName);

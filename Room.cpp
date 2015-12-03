@@ -88,7 +88,7 @@ void Room::removeActor(Actor *a)
 Actor *Room::getActor(const std::string &actor)
 {
     auto it = std::find_if(actors.begin(), actors.end(),
-                           [&](const Actor *a) { return a->getName() == actor });
+                           [&](const Actor *a) { return a->getName() == actor; });
     return (it == actors.end()) ? nullptr : *it;
 }
 

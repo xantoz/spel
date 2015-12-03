@@ -21,6 +21,33 @@ Actor::~Actor()
         room->removeActor(this);
 }
 
+bool Actor::equipArmor(const std::string &name)
+{
+    return false;                                           // TODO
+}
+
+bool Actor::equipShield(const std::string &name)
+{
+    return false;                                           // TODO
+}
+
+bool Actor::equipSword(const std::string &name)
+{
+    return false;                                           // TODO
+}
+
+bool Actor::equipShoes(const std::string &name)
+{
+    return false;                                           // TODO
+}
+
+
+Sword *Actor::getArmor() { return armor; }
+Shield *Actor::getShield() { return shield; }
+Sword *Actor::getSword() { return sword; }
+Shoes *Actor::getShoes() { return shoes; }
+
+
 void Actor::go(std::string direction)
 {
     Room *nroom = room->getExit(direction);
@@ -63,7 +90,7 @@ const Stats &Actor::getStats() const
     return stats;
 }
 
-std::string getDescription() const
+std::string Actor::getDescription() const
 {
     std::string ret = "";
     ret += "Name: " + getName() + "\n\n";
@@ -75,3 +102,4 @@ std::string getDescription() const
     ret += "\n";
     return ret;
 }
+

@@ -12,7 +12,8 @@ ItemOwner::ItemOwner()
 {
 }
 
-ItemOwner::ItemOwner(const std::string &name, const std::string &description) : GameObject(name, description)
+ItemOwner::ItemOwner(const std::string &name, const std::string &description) :
+    GameObject(name, description)
 {
 }
 
