@@ -10,7 +10,7 @@ private:
     const Stats stats;
 
 public:
-    Equippable(const std::string &name, const std::string &description, const Stats &s);
+    Equippable(const std::string &name, const std::string &description, unsigned weight, const Stats &s);
 
     const Stats &getStats() const;
 };

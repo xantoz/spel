@@ -1,5 +1,6 @@
 #ifndef STATS_HPP
 #define STATS_HPP
+
 struct Stats
 {
     int maxhp, str, atk, def, spd, acc, eva;

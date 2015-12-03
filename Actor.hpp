@@ -2,7 +2,7 @@
 #define ACTOR_HPP
 
 #include "ItemOwner.hpp"
-#includ "Stats.hpp"
+#include "Stats.hpp"
 #include <string>
 
 class Room;                                                 // solve circular reference

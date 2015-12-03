@@ -6,7 +6,6 @@ Item::Item(std::string name, std::string description, unsigned w) :
     GameObject(name, description),
     weight(w),
     owner(nullptr)
-
 {
 }
 

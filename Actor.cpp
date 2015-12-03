@@ -8,11 +8,10 @@ Actor::Actor(const std::string &name, const std::string &description) :
 {
 }
 
-Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), stats(_stats)
-{
-}
-
+// Actor(const std::string &name, const std::string &description, const Stats &_stats) :
+//     ItemOwner(name, description), stats(_stats)
+// {
+// }
 
 Actor::~Actor()
 {
@@ -26,7 +25,7 @@ void Actor::go(std::string direction)
 {
     Room *nroom = room->getExit(direction);
     if (nroom == nullptr)
-st        throw NoSuchExitException();
+        throw NoSuchExitException();
     nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
@@ -59,7 +58,7 @@ Room *Actor::getRoom() const
     return room;
 }
 
-const Stats &getStats()
+const Actor::Stats &getStats()
 {
     return stats;
 }
