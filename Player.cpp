@@ -7,6 +7,11 @@ Player::Player(const std::string &name, const std::string &description) :
 {
 }
 
+Player::Player(const std::string &name, const std::string &description, const Stats &stats) :
+    Actor(name, description, stats)
+{
+}
+
 Player::~Player()
 {
     std::cerr << "Player<" << getName() << "> destructor" << std::endl;
@@ -18,7 +23,7 @@ bool Player::can_carry(const Item *i) const
     for(Item *i: getItems())
     	total_weight += i->getWeight();
     
-    return (total_weight > stats.str*magisk_konstant);
+    return (total_weight < stats.str*magisk_konstant);
 }
 
 
@@ -27,7 +32,7 @@ std::string Player::look() const
     std::string ret = "";
     
     if (getRoom() == nullptr) return ret;
-    ret += getRoom()->getName();
+    ret += getRoom()->getName() + "\n";
     ret += getRoom()->getDescription();
     return ret;
 }

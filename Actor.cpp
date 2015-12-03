@@ -84,7 +84,11 @@ bool Actor::pickup(const std::string &itemName)
     if (room == nullptr) return false;
     Item *i = room->getItem(itemName);
     if (i == nullptr) return false;
-    return this->addItem(i);
+    std::cerr << "itemsme" << i->getDescription() << std::endl;
+    bool res = this->addItem(i);
+    if (res == false)
+        std::cout << "Can't carry any more" << std::endl;
+    return res;
 }
 
 bool Actor::drop(const std::string &itemName)
@@ -109,8 +113,8 @@ std::string Actor::getDescription() const
 {
     std::string ret = "";
     ret += "Name: " + getName() + "\n\n";
-    ret += getBaseDescription();
-    ret += "STATS: <TODO>\n";
+    ret += getBaseDescription() + "\n\n";
+    ret += "STATS: " + stats.toString() + "\n";
     ret += "INVENTORY:";
     for (Item *i: getItems())
         ret += " " + i->getName();

@@ -1,4 +1,5 @@
 #include "Stats.hpp"
+#include <sstream>
 
 Stats Stats::operator-(const Stats &s2) const
 {
@@ -100,3 +101,15 @@ Stats &Stats::operator-=(int scalar)
     return *this;
 }
 
+std::string Stats::toString() const
+{
+    std::ostringstream os;
+    os << " MAXHP: " << maxhp
+       << " STR: " << str
+       << " ATK: " << atk
+       << " DEF: " << def
+       << " SPD: " << spd
+       << " ACC: " << acc
+       << " EVA: " << eva;
+    return os.str();
+}

@@ -1,6 +1,8 @@
 #include "exceptions.hpp"
 #include "Room.hpp"
 #include "Player.hpp"
+#include "Item.hpp"
+#include "Sword.hpp"
 
 #include <cstring>
 #include <cstdio>
@@ -15,8 +17,11 @@ int main(int argc, char** argv)
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
     kitchen->setExit("east", first);
-    
-    Player* player = new Player("nils", "it's you");
+    Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
+    kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
+
+    Stats nilsstats = { 20, 10, 10, 10, 10, 10 };
+    Player* player = new Player("nils", "it's you", nilsstats);
     first->addActor(player);
 
     cout << player->getRoom()->getName() << endl;
@@ -32,7 +37,9 @@ int main(int argc, char** argv)
 
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);
-            string arg = str.substr(first_space + 1);
+            string arg = (first_space == string::npos) ? "" : str.substr(first_space + 1);
+
+            // cout << "\"" << command << "\" \"" << arg << "\"" << endl;
 
             if (command == "go")
             {
@@ -45,11 +52,15 @@ int main(int argc, char** argv)
                 cout << player->getRoom()->getName() << endl;
                 cout << player->getRoom()->getDescription() << endl;
             }
-            else if(command == "look")
+            else if (command == "look")
             {
-                cout << player->getRoom()->getDescription() << endl;
+                // cout << player->getRoom()->getDescription() << endl;
+                if (arg == "")
+                    cout << player->look() << endl;
+                else
+                    cout << player->look(arg) << endl;
             }
-            else if(command == "use")
+            else if (command == "use")
             {
                 if (arg == "")
                 {
@@ -57,6 +68,30 @@ int main(int argc, char** argv)
                     continue;
                 }
                 cout << player->use(arg) << endl;
+            }
+            else if (command == "pickup")
+            {
+                if (arg == "")
+                {
+                    cout << "What did you want to pick up?" << endl;
+                    continue;
+                }
+                if (player->pickup(arg))
+                    cout << "Picked up " << arg << endl;
+                else 
+                    cout << "I don't see any such thing." << endl;
+            }
+            else if (command == "drop")
+            {
+                if (arg == "")
+                {
+                    cout << "What did you want to drop?" << endl;
+                    continue;
+                }
+                if (player->drop(arg))
+                    cout << "Dropped " << arg << endl;
+                else
+                    cout << "I'm not carrying anything like that." << endl;
             }
             else
             {

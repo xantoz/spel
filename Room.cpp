@@ -102,6 +102,13 @@ const std::list<Actor*> &Room::getActors()
 std::string Room::getDescription() const
 {
     std::string desc = GameObject::getDescription();
+    if (getItems().size() != 0)
+    {
+        desc += "\nYou see:";
+        for (Item *item: getItems())
+            desc += " " + item->getName();
+        desc += " on the floor.";
+    }
     desc += "\n\nObvious Exits are:";
     for (auto &exit: exits)
         desc += " " + exit.first;

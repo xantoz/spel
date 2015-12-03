@@ -1,6 +1,8 @@
 #ifndef STATS_HPP
 #define STATS_HPP
 
+#include <string>
+
 struct Stats
 {
     int maxhp, str, atk, def, spd, acc, eva;
@@ -12,6 +14,8 @@ struct Stats
     Stats &operator-=(const Stats &s2);
     Stats &operator+=(int scalar);
     Stats &operator-=(int scalar);
+
+    std::string toString() const;
 };
 
 #endif    
