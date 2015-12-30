@@ -22,12 +22,18 @@ protected:
     Shield *shield;
     Sword *sword;
     Shoes *shoes;
+    virtual void attackResponse(Actor* actor);
     
 public:
     Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     virtual ~Actor() override;
-
+    
+    
+    Stats getTotalStats() const;
+    void attack(Actor *actor);
+    bool attack(const std::string&);
+    void beAttacked(Actor* actor, unsigned int dmg);
     
     bool equipArmor(const std::string &name);
     bool equipShield(const std::string &shield);
@@ -41,7 +47,7 @@ public:
     const Shield *getShield() const;
     const Sword *getSword() const;
     const Shoes *getShoes() const;
-
+    
     void go(std::string direction);
     Room *getRoom() const;
     std::string use(const std::string &itemName);

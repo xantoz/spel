@@ -3,7 +3,7 @@
 #include "exceptions.hpp"
 #include <iostream>
 #include <algorithm>
-
+#include <cstdlib>
 Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description)
 {
@@ -152,11 +152,15 @@ std::string Actor::getDescription() const
     std::string ret = "";
     ret += "Name: " + getName() + "\n\n";
     ret += getBaseDescription() + "\n\n";
-    ret += "STATS: " + stats.toString() + "\n";
+    ret += "STATS: " + getTotalStats().toString() + "\n";
     ret += "INVENTORY:";
     if (items.size() > 0)
-        for (Item *i: getItems())
-            ret += " " + i->getName();
+    {
+        ret += items[0]->getName();
+        for (int i = 1; i < items.size(); ++i)
+            ret += ", " + items[i]->getName();
+    }
+    
     else
         ret += " EMPTY";
     ret += "\n";
@@ -167,3 +171,63 @@ std::string Actor::getDescription() const
     return ret;
 }
 
+Stats getTotalStats() const 
+{
+    Stats tot = stats;
+    if(sword != nullptr)
+        tot += sword.stats;
+    if(shield != nullptr)
+        tot += shield.stats;
+    if(armor != nullptr)
+        tot += armor.stats;
+    if(shoes != nullptr)
+        tot += shoes.stats;
+    return tot;
+}
+
+
+bool Actor::attack(const std::string &actorName)
+{
+    Actor* actor = room->getActor(actorName);
+    if (actor == nullptr)
+        return false;
+    attack(actor);
+    return true;
+}
+
+void Actor::attack(Actor *actor)
+{
+    Stats stats = getTotalStats();
+    double rval = (std::rand()/(double) RAND_MAX)*(1.2-0.8)+0.8;
+    unsigned int atk = (unsigned int)(stats.atk*rval);
+    actor->beAttacked(actor, atk);
+}
+void Actor::beAttacked(Actor *actor, unsigned int atk)
+{
+    Stats stats = getTotalStats();
+    int damage;
+    if(stats.def != 0)
+    {
+        damage = (int) (10*atk/(double)stats.def);
+        hp -= damage;
+    }
+    else 
+    {
+        damage = hp;
+        hp = 0;
+    }
+    std::cout << getName() << " took " << damage << " damage." << std::endl;
+    
+    if(hp <= 0)
+        die();
+    else 
+    {
+        attackResponse(actor);
+    }
+    return damage;
+}
+
+void Actor::attackResponse(Actor *actor)
+{
+    attack(actor);
+}
