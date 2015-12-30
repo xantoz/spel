@@ -40,7 +40,7 @@ Room::~Room()
         delete actors.front();
 }
 
-const std::list<Room*> getExits() const
+const std::map<std::string, Room*> &Room::getExits() const
 {
     return exits;
 }

@@ -20,7 +20,7 @@ public:
 
     /// Returns nullptr for non-existant exits
     Room *getExit(const std::string &direction) const;
-    constd std::list<Room*> getExits() const;
+    const std::map<std::string, Room*> &getExits() const;
     void setExit(const std::string &direction, Room *room);
     void removeExit(const std::string &direction);
     void removeExit(const Room *room);
