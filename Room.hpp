@@ -29,7 +29,7 @@ public:
     void removeActor(Actor *a);
     void addActor(Actor *a);
     Actor *getActor(const std::string &actor);
-    const std::list<Actor*> &getActors();
+    const std::list<Actor*> &getActors() const;
 
     virtual std::string getDescription() const override;
 

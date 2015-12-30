@@ -104,7 +104,7 @@ Actor *Room::getActor(const std::string &actor)
 }
 
 
-const std::list<Actor*> &Room::getActors()
+const std::list<Actor*> &Room::getActors() const
 {
     return actors;
 }
@@ -113,15 +113,29 @@ const std::list<Actor*> &Room::getActors()
 std::string Room::getDescription() const
 {
     std::string desc = GameObject::getDescription();
-    if (getItems().size() > 0)
+    if(getItems().size() > 0 || getActors().size() > 0)
     {
         desc += "\nYou see: ";
+    }
+    
+    if (getItems().size() > 0)
+    {
         auto it = getItems().begin();
         desc += (*it)->getName();
         ++it;
         for (; it != getItems().end(); ++it)
             desc += ", " + (*it)->getName();
         desc += " on the floor.";
+    }
+    if(getActors().size() > 0)
+    {
+        if(getItems().size() > 0)
+            desc += " and ";
+        auto it = getActors().begin();
+        desc += (*it)->getName();
+        ++it;
+        for (; it != getActors().end(); ++it)
+            desc += ", " + (*it)->getName();
     }
     desc += "\n\nObvious Exits are:";
     for (auto &exit: exits)

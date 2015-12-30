@@ -3,7 +3,7 @@
 #include "Player.hpp"
 #include "Item.hpp"
 #include "Sword.hpp"
-
+#include "Classes.hpp"
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -21,11 +21,11 @@ void enterBattleMode(Actor *actor)
     battleMode = true;
     opponent = actor;
     cout << "Entered battle with " << opponent->getName() << endl;
-    
+    cout << "Opponent has Stats: " << opponent->getStats().toString() << endl;
 }
 
 void exitBattleMode()
-{
+{   
     battleMode = false;
     opponent = nullptr;
     cout << "Exited battle" << endl;
@@ -202,12 +202,21 @@ void run(string arg)
     if (opponent->getTotalStats().spd > player->getTotalStats().spd)
     {
         int rval = std::rand()/(double)RAND_MAX;
-        if (rval > 0.25)
+        if (rval > 0.95)
         {
             exitBattleMode();
         }
+        else 
+        {
+            cout << "Could not run away" << endl;
+        }
+        
+            
     }
-    exitBattleMode();
+    else 
+    {
+        exitBattleMode();
+    }
 }    
 
 
@@ -226,9 +235,9 @@ int main(int argc, char** argv)
     cmds["drop"] = &drop;
     cmds["battle"] = &battle;
 
-    battleCmds["attack"];
-    battleCmds["use"];
-    battleCmds["run"];
+    battleCmds["attack"] = &attack;
+    battleCmds["use"] = &use;
+    battleCmds["run"] = &run;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
@@ -242,7 +251,9 @@ int main(int argc, char** argv)
     Stats nilsstats = { 20, 10, 10, 10, 10, 10 };
     player = new Player("nils", "it's you", nilsstats);
     first->addActor(player);
-
+    Troll* troll = new Troll("Troll1", "Bad troll", 2);
+    kitchen->addActor(troll);
+    
     cout << player->getRoom()->getName() << endl;
     cout << player->getRoom()->getDescription() << endl;
     string str;
@@ -260,9 +271,18 @@ int main(int argc, char** argv)
             if(battleMode)
             {
                 battleCmds.at(command)(arg);
+                
+                
+                if(opponent != nullptr && opponent->isDead())
+                {
+                    player->addStats((opponent->getStats())*0.1);
+                    delete opponent;
+                    exitBattleMode();
+                }
             }
             else 
             {
+                
                 cmds.at(command)(arg);
             }
             // cout << "\"" << command << "\" \"" << arg << "\"" << endl;

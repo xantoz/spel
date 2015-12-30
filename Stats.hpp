@@ -9,6 +9,7 @@ struct Stats
     Stats operator+(const Stats &s2) const;
     Stats operator-(const Stats &s2) const;
     Stats operator*(int scalar) const;
+    Stats operator*(double scalar) const;
     Stats operator/(int scalar) const;
     Stats &operator+=(const Stats &s2);
     Stats &operator-=(const Stats &s2);

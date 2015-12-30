@@ -1,34 +1,37 @@
 #ifndef CLASSES_HPP
 #define CLASSES_HPP
-class Troll : Actor 
+#include <string>
+#include "Actor.hpp"
+
+class Troll : public Actor 
 {
 public:
     Troll(const std::string &name, const std::string &description, int lvl);
     
 };
 
-class Dragon : Actor
+class Dragon : public Actor
 {
 public:
     Dragon(const std::string &name, const std::string &description, int lvl);
     
 };
 
-class Thief : Actor
+class Thief : public Actor
 {
 public:
     Thief(const std::string &name, const std::string &description, int lvl);
     
 };
 
-class Golem : Actor
+class Golem : public Actor
 {
 public:
     Golem(const std::string &name, const std::string &description, int lvl);
 };
 
 
-class Human : Actor
+class Human : public Actor
 {
 public:
     Human(const std::string &name, const std::string &description, const std::string &text);

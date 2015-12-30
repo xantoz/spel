@@ -40,6 +40,20 @@ Stats Stats::operator*(int scalar) const
     return s;
 }
 
+Stats Stats::operator*(double scalar) const
+{
+    Stats s;
+    s.maxhp = (int) (maxhp * scalar);
+    s.str = (int) (str * scalar);
+    s.atk = (int) (atk * scalar);
+    s.def = (int) (def * scalar);
+    s.spd = (int) (spd * scalar);
+    s.acc = (int) (acc * scalar);
+    s.eva = (int) (eva * scalar);
+    return s;
+}
+
+
 Stats Stats::operator/(int scalar) const
 {
     Stats s;

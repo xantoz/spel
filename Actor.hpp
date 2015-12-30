@@ -14,12 +14,11 @@ class Actor : public ItemOwner
 {
 private:
     Room *room;
-
 protected:    
     Stats stats;
 
     int hp;
-
+    bool dead;
     Armor *armor;
     Shield *shield;
     Sword *sword;
@@ -27,7 +26,7 @@ protected:
     virtual void attackResponse(Actor *actor);
     
 public:
-    // Actor(const std::string &name, const std::string &description);
+    Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     virtual ~Actor() override;
     
@@ -61,7 +60,7 @@ public:
     virtual std::string getDescription() const override;
 
     virtual void die();
-
+    bool isDead();
     friend class Room;
 };
 

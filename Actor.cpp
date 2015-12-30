@@ -4,18 +4,20 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
-
+#include <sstream>
 // IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
 // unequipped. Item's destructor will otherwise explode.
 
-// Actor::Actor(const std::string &name, const std::string &description) :
-//     ItemOwner(name, description)
-// {
-// }
+Actor::Actor(const std::string &name, const std::string &description) :
+     ItemOwner(name, description)
+{
+    
+}
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
     ItemOwner(name, description), stats(_stats), hp(_stats.maxhp)
 {
+    dead = false;
 }
 
 Actor::~Actor()
@@ -153,28 +155,29 @@ const Stats &Actor::getStats() const
 
 std::string Actor::getDescription() const
 {
-    std::string ret = "";
-    ret += "Name: " + getName() + "\n\n";
-    ret += getBaseDescription() + "\n\n";
-    ret += "STATS: " + getTotalStats().toString() + "\n";
-    ret += "INVENTORY:";
+    std::ostringstream ret;
+    ret << "Name: " << getName() << "\n";
+    ret << "HP: " << hp << "/" << getStats().maxhp << "\n\n";
+    ret << getBaseDescription() << "\n\n";
+    ret << "STATS: " << getTotalStats().toString() << "\n";
+    ret << "INVENTORY:";
     if (items.size() > 0)
     {
         auto it = items.begin();
-        ret += (*it)->getName();
+        ret << (*it)->getName();
         ++it;
         for (; it != items.end(); ++it)
-            ret += ", " + (*it)->getName();
+            ret << ", " << (*it)->getName();
     }
     
     else
-        ret += " EMPTY";
-    ret += "\n";
-    ret += "SWORD: "  + ((sword)  ? sword->getName()  : "NONE")
-        + " SHIELD: " + ((shield) ? shield->getName() : "NONE")
-        + " ARMOR: "  + ((armor)  ? armor->getName()  : "NONE")
-        + " SHOES: "  + ((shoes)  ? shoes->getName()  : "NONE");
-    return ret;
+        ret << " EMPTY";
+    ret << "\n";
+    ret << "SWORD: "  << ((sword)  ? sword->getName()  : "NONE")
+        << " SHIELD: " << ((shield) ? shield->getName() : "NONE")
+        << " ARMOR: "  << ((armor)  ? armor->getName()  : "NONE")
+        << " SHOES: "  << ((shoes)  ? shoes->getName()  : "NONE");
+    return ret.str();
 }
 
 Stats Actor::getTotalStats() const 
@@ -206,7 +209,7 @@ void Actor::attack(Actor *actor)
     Stats stats = getTotalStats();
     double rval = (std::rand()/(double) RAND_MAX)*(1.2-0.8)+0.8;
     unsigned int atk = (unsigned int)(stats.atk*rval);
-    actor->beAttacked(actor, atk);
+    actor->beAttacked(this, atk);
 }
 
 void Actor::beAttacked(Actor *actor, unsigned int atk)
@@ -215,7 +218,7 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
     int damage;
     if(stats.def != 0)
     {
-        damage = (int) (10*atk/(double)stats.def);
+        damage = (int) (2*atk/(double)stats.def);
         hp -= damage;
     }
     else 
@@ -241,5 +244,10 @@ void Actor::attackResponse(Actor *actor)
 void Actor::die()
 {
     std::cout << getName() << " died." << std::endl;
-    delete this;
+    dead = true;
 }
+bool Actor::isDead()
+{
+    return dead;
+}
+
