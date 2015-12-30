@@ -70,6 +70,42 @@ void drop(string arg)
         cout << "I'm not carrying anything like that." << endl;
 }
 
+void equip(string arg)
+{
+    boost::trim_all(arg);
+    size_t first_space = arg.find_first_of(' ');
+    if (first_space == string::npos)
+    {
+        cout << "What did you want to equip?" << endl;
+        return;
+    }
+    string type = arg.substr(0, first_space);
+    string what = arg.substr(first_space + 1);
+    if (type == "sword")
+    {
+        player->equipSword(what);
+    }
+    else if ("shield" == type)
+    {
+        player->equipShield(what);
+    }
+    else if ("shoes" == type)
+    {
+        player->equipShoes(what);
+    }
+    else if ("armor" == type)
+    {
+        player->equipArmor(what);
+    }
+    else
+    {
+        cout << "There's no " << type << " kind of equipment in this world." << endl;
+        return;
+    }
+
+    cout << "Equipped " << arg << "." << endl;
+}
+
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)> > map;
@@ -77,11 +113,16 @@ int main(int argc, char** argv)
     map["look"] = &look;
     map["use"] = &use;
     map["pickup"] = &pickup;
+    map["get"] = &pickup;
+    map["equip"] = &equip;
     map["drop"] = &drop;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
     kitchen->setExit("east", first);
+    
+    Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
+    first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
 
