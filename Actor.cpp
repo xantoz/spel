@@ -4,13 +4,17 @@
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
-Actor::Actor(const std::string &name, const std::string &description) :
-    ItemOwner(name, description)
-{
-}
+
+// IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
+// unequipped. Item's destructor will otherwise explode.
+
+// Actor::Actor(const std::string &name, const std::string &description) :
+//     ItemOwner(name, description)
+// {
+// }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), stats(_stats)
+    ItemOwner(name, description), stats(_stats), hp(_stats.maxhp)
 {
 }
 
@@ -21,11 +25,11 @@ Actor::~Actor()
     if (room != nullptr)
         room->removeActor(this);
 
-    // Destruct any equipped items (alternative solution: unequip all Equippables and let ItemOwner::~ItemOwner destruct them)
-    if (armor != nullptr) delete armor;
-    if (shield != nullptr) delete shield;
-    if (sword != nullptr) delete sword;
-    if (shoes != nullptr) delete shoes;
+    // Make sure to unequip everything so that the ItemOwner destructor will find everything in  items as it expects
+    unequipSword();
+    unequipShield();
+    unequipArmor();
+    unequipShoes();
 }
 
 
@@ -156,9 +160,11 @@ std::string Actor::getDescription() const
     ret += "INVENTORY:";
     if (items.size() > 0)
     {
-        ret += items[0]->getName();
-        for (int i = 1; i < items.size(); ++i)
-            ret += ", " + items[i]->getName();
+        auto it = items.begin();
+        ret += (*it)->getName();
+        ++it;
+        for (; it != items.end(); ++it)
+            ret += ", " + (*it)->getName();
     }
     
     else
@@ -171,17 +177,17 @@ std::string Actor::getDescription() const
     return ret;
 }
 
-Stats getTotalStats() const 
+Stats Actor::getTotalStats() const 
 {
     Stats tot = stats;
     if(sword != nullptr)
-        tot += sword.stats;
+        tot += sword->getStats();
     if(shield != nullptr)
-        tot += shield.stats;
+        tot += shield->getStats();
     if(armor != nullptr)
-        tot += armor.stats;
+        tot += armor->getStats();
     if(shoes != nullptr)
-        tot += shoes.stats;
+        tot += shoes->getStats();
     return tot;
 }
 
@@ -202,6 +208,7 @@ void Actor::attack(Actor *actor)
     unsigned int atk = (unsigned int)(stats.atk*rval);
     actor->beAttacked(actor, atk);
 }
+
 void Actor::beAttacked(Actor *actor, unsigned int atk)
 {
     Stats stats = getTotalStats();
@@ -224,10 +231,15 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
     {
         attackResponse(actor);
     }
-    return damage;
 }
 
 void Actor::attackResponse(Actor *actor)
 {
     attack(actor);
+}
+
+void Actor::die()
+{
+    std::cout << getName() << " died." << std::endl;
+    delete this;
 }

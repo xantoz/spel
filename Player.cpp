@@ -2,10 +2,10 @@
 #include "Room.hpp"
 #include <iostream>
 
-Player::Player(const std::string &name, const std::string &description) :
-    Actor(name, description)
-{
-}
+// Player::Player(const std::string &name, const std::string &description) :
+//     Actor(name, description)
+// {
+// }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats) :
     Actor(name, description, stats)

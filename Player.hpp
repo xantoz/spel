@@ -14,7 +14,7 @@ protected:
     virtual bool can_carry(const Item *i) const override;
     virtual attackResponse(Actor *actor);
 public:
-    Player(const std::string &name, const std::string &description);
+    // Player(const std::string &name, const std::string &description);
     Player(const std::string &name, const std::string &description, const Stats &stats);
     ~Player();
 
