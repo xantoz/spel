@@ -97,7 +97,7 @@ static std::string serializeActor(const Actor *actor, std::ostream &os)
 {
     std::string sym = gensym();
     os << sym;
-    os << "<<<ACTOR SERIALIZE TODO>>>"
+    os << "<<<ACTOR SERIALIZE TODO>>>";
     // actor->serialize(os);
     return sym;
 }
@@ -119,13 +119,12 @@ void serialize(const std::list<const Room*> &rooms, std::ostream &os)
     }
     for (const Room *room: rooms)
     {
-        const std::map<std::string, Room*> &room_exits = room->getExits();
-        for (auto it = room_exits.begin(); it != room_exits.end(); ++it)
+        for (auto const &ent: room->getExits())
         {
             os << ":SET-EXIT"          << " "
                << room_to_sym.at(room) << " "
-               << stringify(it->first) << " "
-               << room_to_sym.at(it->second);
+               << stringify(ent.first) << " "
+               << room_to_sym.at(ent.second);
         }
     }
 }
