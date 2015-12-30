@@ -13,7 +13,7 @@ private:
 protected:
     virtual bool can_carry(const Item *i) const override;
 public:
-    Player(const std::string &name, const std::string &description);
+    // Player(const std::string &name, const std::string &description);
     Player(const std::string &name, const std::string &description, const Stats &stats);
     ~Player();
 

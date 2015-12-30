@@ -14,7 +14,7 @@ private:
     std::list<Actor*> actors;
     
 public:
-    Room(const std::string &name, const std::string &description);
+    // Room(const std::string &name, const std::string &description);
     Room(const std::string &name, const std::string &description, ...);
     virtual ~Room() override;
 

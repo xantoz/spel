@@ -4,10 +4,10 @@
 #include <stdarg.h>
 #include <iostream>
 
-Room::Room(const std::string &name, const std::string &description) :
-    ItemOwner(name, description)
-{
-}
+// Room::Room(const std::string &name, const std::string &description) :
+//     ItemOwner(name, description)
+// {
+// }
 
 Room::Room(const std::string &name, const std::string &description, ...) :
     ItemOwner(name, description)
@@ -30,7 +30,7 @@ Room::Room(const std::string &name, const std::string &description, ...) :
 
 Room::~Room()
 {
-    std::cerr << "Room<" << getName() << "> destructor" << std::endl;
+    std::cerr << "Room<" << getName() << "> destructor" << std::endl;\
 
     for (auto const &exit: exits)
         exit.second->removeExit(this);
@@ -110,11 +110,11 @@ std::string Room::getDescription() const
     if (getItems().size() > 0)
     {
         desc += "\nYou see: ";
-        desc += getItems()[0]->getName();
-        for (unsigned i = 1; i < getItems().size(); ++i)
-            desc += ", " + getItems()[i]->getName();
-        // for (Item *item: getItems())
-        //     desc += " " + item->getName();
+        auto it = getItems().begin();
+        desc += (*it)->getName();
+        ++it;
+        for (; it != getItems().end(); ++it)
+            desc += ", " + (*it)->getName();
         desc += " on the floor.";
     }
     desc += "\n\nObvious Exits are:";

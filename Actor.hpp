@@ -18,6 +18,8 @@ private:
 protected:    
     Stats stats;
 
+    int hp;
+
     Armor *armor;
     Shield *shield;
     Sword *sword;
@@ -25,7 +27,7 @@ protected:
     virtual void attackResponse(Actor* actor);
     
 public:
-    Actor(const std::string &name, const std::string &description);
+    // Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     virtual ~Actor() override;
     
@@ -58,8 +60,9 @@ public:
 
     virtual std::string getDescription() const override;
 
+    virtual void die();
+
     friend class Room;
-    friend class Item; // KLUDGE: Needed so that Item can set the Armor etc. to nullptr in Item::~Item
 };
 
 #endif

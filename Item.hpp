@@ -13,7 +13,6 @@ private:
 public:
 
     Item(std::string name, std::string description, unsigned weight);
-    // Item(std::string name, std::string description, unsigned weight, ItemOwner *owner);
     virtual ~Item() override;
     
     unsigned getWeight() const;
