@@ -64,5 +64,3 @@ const std::list<Item*> &ItemOwner::getItems() const
 {
     return items;
 }
-
-

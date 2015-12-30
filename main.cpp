@@ -81,6 +81,11 @@ void equip(string arg)
     }
     string type = arg.substr(0, first_space);
     string what = arg.substr(first_space + 1);
+
+    cerr << "meep meep" << endl;
+    if (player->getItem(what))
+        cerr << "BLOOOORP " << typeid(*player->getItem(what)).name() << endl;
+    
     if (type == "sword")
     {
         if (!player->equipSword(what))
@@ -122,6 +127,38 @@ void equip(string arg)
     cout << "Equipped " << what << "." << endl;
 }
 
+void unequip(string arg)
+{
+    if (arg == "sword")
+    {
+        player->unequipSword();
+        cout << "Unequipped sword." << endl;
+    }
+    else if (arg == "shield")
+    {
+        player->unequipShield();
+        cout << "Unequipped shield." << endl;
+    }
+    else if (arg == "shoes")
+    {
+        player->unequipShoes();
+        cout << "Unequipped shoes." << endl; 
+    }
+    else if (arg == "armor")
+    {
+        player->unequipArmor();
+        cout << "Unequipped armor." << endl; 
+    }
+    else if (arg == "")
+    {
+        cout << "What did you want to unequip?" << endl;
+    }
+    else
+    {
+        cout << "I can't unequip " << arg << endl;
+    }
+}
+
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)> > map;
@@ -131,6 +168,7 @@ int main(int argc, char** argv)
     map["pickup"] = &pickup;
     map["get"] = &pickup;
     map["equip"] = &equip;
+    map["unequip"] = &unequip;
     map["drop"] = &drop;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
