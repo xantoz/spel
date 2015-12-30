@@ -4,6 +4,9 @@
 #include <iostream>
 #include <algorithm>
 
+// IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
+// unequipped. Item's destructor will otherwise explode.
+
 Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description)
 {
