@@ -11,6 +11,7 @@ private:
 
 public:
     Equippable(const std::string &name, const std::string &description, unsigned weight, const Stats &s);
+    virtual ~Equippable() override;
 
     const Stats &getStats() const;
 };

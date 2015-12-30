@@ -11,6 +11,7 @@
 #include "Actor.hpp"
 
 #include <iostream>
+#include <typeinfo>
 
 Item::Item(std::string name, std::string description, unsigned w) :
     GameObject(name, description),
@@ -43,10 +44,11 @@ Item::~Item()
             Actor *actor = dynamic_cast<Actor*>(this->owner);
             if (actor == nullptr) throw e; // just re-throw in the event we're not owned by an actor, something wierd is happening for sure
 
+            std::cerr << "WOOP " << typeid(this->owner).name() << " " << typeid(this).name() << std::endl;
             // If we end up here we better be an equippable and equipped, otherwise something wierd is happening
             if (nullptr == dynamic_cast<Equippable*>(this))
             {
-                throw GameException("Item::~Item: This should never happen. Being destructed but we're neither an Equippabble nor in our owner's bag");
+                throw GameException(this->getName() + " Item::~Item: This should never happen. Being destructed but we're neither an Equippabble nor in our owner's bag");
             }
             else if (Sword *sword = dynamic_cast<Sword*>(this))
             {

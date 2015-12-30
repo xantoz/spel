@@ -77,9 +77,22 @@ int main(int argc, char** argv)
                     continue;
                 }
                 if (player->pickup(arg))
-                    cout << "Picked up " << arg << endl;
+                    cout << "Picked up " << arg << "." << endl;
                 else 
                     cout << "I don't see any such thing." << endl;
+            }
+            else if (command == "equipsword")
+            {
+                if (arg == "")
+                {
+                    cout << "What did you want to equip?" << endl;
+                    continue;
+                }
+                if (player->equipSword(arg))
+                    cout << "Equipped " << arg << "." << endl;
+                else
+                    cout << "I don't have any such equipment." << endl;
+                
             }
             else if (command == "drop")
             {
@@ -89,7 +102,7 @@ int main(int argc, char** argv)
                     continue;
                 }
                 if (player->drop(arg))
-                    cout << "Dropped " << arg << endl;
+                    cout << "Dropped " << arg << "." << endl;
                 else
                     cout << "I'm not carrying anything like that." << endl;
             }

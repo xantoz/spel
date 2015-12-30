@@ -123,7 +123,6 @@ bool Actor::pickup(const std::string &itemName)
     if (room == nullptr) return false;
     Item *i = room->getItem(itemName);
     if (i == nullptr) return false;
-    std::cerr << "itemsme" << i->getDescription() << std::endl;
     bool res = this->addItem(i);
     if (res == false)
         std::cout << "Can't carry any more" << std::endl;
@@ -155,9 +154,16 @@ std::string Actor::getDescription() const
     ret += getBaseDescription() + "\n\n";
     ret += "STATS: " + stats.toString() + "\n";
     ret += "INVENTORY:";
-    for (Item *i: getItems())
-        ret += " " + i->getName();
+    if (items.size() > 0)
+        for (Item *i: getItems())
+            ret += " " + i->getName();
+    else
+        ret += " EMPTY";
     ret += "\n";
+    ret += "SWORD: "  + ((sword)  ? sword->getName()  : "NONE")
+        + " SHIELD: " + ((shield) ? shield->getName() : "NONE")
+        + " ARMOR: "  + ((armor)  ? armor->getName()  : "NONE")
+        + " SHOES: "  + ((shoes)  ? shoes->getName()  : "NONE");
     return ret;
 }
 
