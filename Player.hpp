@@ -12,7 +12,7 @@ private:
     const static unsigned magisk_konstant = 10;
 protected:
     virtual bool can_carry(const Item *i) const override;
-    virtual attackResponse(Actor *actor);
+    virtual void attackResponse(Actor *actor);
 public:
     // Player(const std::string &name, const std::string &description);
     Player(const std::string &name, const std::string &description, const Stats &stats);

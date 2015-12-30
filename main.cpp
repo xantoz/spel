@@ -186,7 +186,7 @@ void battle(string arg)
         Actor *actor = player->getRoom()->getActor(arg);
         if(actor != nullptr)
         {
-            enterBattleMode(arg);
+            enterBattleMode(actor);
         }
     }
 }
@@ -194,31 +194,12 @@ void battle(string arg)
 
 void attack(string arg)
 {
-    if(arg == "")
-    {
-        list<Actor*> actors = player->getRoom()->getActors();
-        player->attack(actors.getFirst());
-    }
-    else 
-    {
-        player->attack(arg);
-    }
+    player->attack(opponent);
 }
-
-void use(string arg)
-{
-    if (arg == "")
-    {
-        cout << "What do you want to use?" << endl;
-        return;
-    }
-    cout << player->use(arg) << endl; 
-}
-
 
 void run(string arg)
 {
-    if (opponent->getTotalStats().spd > player->getTotalStats().sped)
+    if (opponent->getTotalStats().spd > player->getTotalStats().spd)
     {
         int rval = std::rand()/(double)RAND_MAX;
         if (rval > 0.25)
