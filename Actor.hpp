@@ -24,7 +24,7 @@ protected:
     Shield *shield;
     Sword *sword;
     Shoes *shoes;
-    virtual void attackResponse(Actor* actor);
+    virtual void attackResponse(Actor *actor);
     
 public:
     // Actor(const std::string &name, const std::string &description);

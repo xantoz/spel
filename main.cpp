@@ -6,12 +6,30 @@
 
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <functional>
 #include <boost/algorithm/string/trim_all.hpp>
 
 using namespace std;
-Player* player;
+Player *player;
+Actor *opponent;
+bool battleMode;
+
+void enterBattleMode(Actor *actor)
+{
+    battleMode = true;
+    opponent = actor;
+    cout << "Entered battle with " << opponent->getName() << endl;
+    
+}
+
+void exitBattleMode()
+{
+    battleMode = false;
+    opponent = nullptr;
+    cout << "Exited battle" << endl;
+}
 
 void go(string arg)
 {
@@ -159,17 +177,58 @@ void unequip(string arg)
     }
 }
 
+void battle(string arg)
+{
+    if(arg == "")
+        cout << "Battle who?" << endl;
+    else 
+    {
+        Actor *actor = player->getRoom()->getActor(arg);
+        if(actor != nullptr)
+        {
+            enterBattleMode(actor);
+        }
+    }
+}
+
+
+void attack(string arg)
+{
+    player->attack(opponent);
+}
+
+void run(string arg)
+{
+    if (opponent->getTotalStats().spd > player->getTotalStats().spd)
+    {
+        int rval = std::rand()/(double)RAND_MAX;
+        if (rval > 0.25)
+        {
+            exitBattleMode();
+        }
+    }
+    exitBattleMode();
+}    
+
+
 int main(int argc, char** argv)
 {
-    std::map<string, function<void(string)> > map;
-    map["go"] = &go;
-    map["look"] = &look;
-    map["use"] = &use;
-    map["pickup"] = &pickup;
-    map["get"] = &pickup;
-    map["equip"] = &equip;
-    map["unequip"] = &unequip;
-    map["drop"] = &drop;
+    std::map<string, function<void(string)> > cmds;
+    std::map<string, function<void(string)>> battleCmds;
+    
+    cmds["go"] = &go;
+    cmds["look"] = &look;
+    cmds["use"] = &use;
+    cmds["pickup"] = &pickup;
+    cmds["get"] = &pickup;
+    cmds["equip"] = &equip;
+    cmds["unequip"] = &unequip;
+    cmds["drop"] = &drop;
+    cmds["battle"] = &battle;
+
+    battleCmds["attack"];
+    battleCmds["use"];
+    battleCmds["run"];
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
@@ -198,8 +257,14 @@ int main(int argc, char** argv)
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);
             string arg = (first_space == string::npos) ? "" : str.substr(first_space + 1);
-            map.at(command)(arg);
-            
+            if(battleMode)
+            {
+                battleCmds.at(command)(arg);
+            }
+            else 
+            {
+                cmds.at(command)(arg);
+            }
             // cout << "\"" << command << "\" \"" << arg << "\"" << endl;
         }
         catch(const out_of_range &e)

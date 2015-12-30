@@ -63,4 +63,6 @@ std::string Player::look(const std::string &actorOrItem) const
     }
 }
 
-
+void Player::attackResponse(Actor *actor)
+{
+}
