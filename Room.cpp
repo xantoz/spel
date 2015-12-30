@@ -4,6 +4,11 @@
 #include <stdarg.h>
 #include <iostream>
 
+Room::Room(const std::string &name, const std::string &description) :
+    ItemOwner(name, description)
+{
+}
+
 Room::Room(const std::string &name, const std::string &description, ...) :
     ItemOwner(name, description)
 {
