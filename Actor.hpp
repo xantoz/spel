@@ -33,6 +33,10 @@ public:
     bool equipShield(const std::string &shield);
     bool equipSword(const std::string &sword);
     bool equipShoes(const std::string &shoes);
+    void unequipArmor();
+    void unequipShield();
+    void unequipSword();
+    void unequipShoes();
     const Armor *getArmor() const;
     const Shield *getShield() const;
     const Sword *getSword() const;
@@ -49,7 +53,7 @@ public:
     virtual std::string getDescription() const override;
 
     friend class Room;
-    friend class Item;
+    friend class Item; // KLUDGE: Needed so that Item can set the Armor etc. to nullptr in Item::~Item
 };
 
 #endif
