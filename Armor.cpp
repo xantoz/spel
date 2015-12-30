@@ -1,4 +1,6 @@
 #include "Armor.hpp"
+#include <iostream>
+
 Armor::Armor(const std::string &name,
              const std::string &description,
              unsigned weight,
@@ -7,3 +9,7 @@ Armor::Armor(const std::string &name,
 {
 }
 
+Armor::~Armor()
+{
+    std::cerr << "Armor<" << this->getName() << "> destructor" << std::endl;
+}

@@ -83,19 +83,35 @@ void equip(string arg)
     string what = arg.substr(first_space + 1);
     if (type == "sword")
     {
-        player->equipSword(what);
+        if (!player->equipSword(what))
+        {
+            cout << "I don't have any such sword." << endl;
+            return;
+        }
     }
     else if ("shield" == type)
     {
-        player->equipShield(what);
+        if (!player->equipShield(what))
+        {
+            cout << "I don't have any such shield." << endl;
+            return;
+        }
     }
     else if ("shoes" == type)
     {
-        player->equipShoes(what);
+        if (!player->equipShoes(what))
+        {
+            cout << "I don't have any such shoes." << endl;
+            return;
+        }
     }
     else if ("armor" == type)
     {
-        player->equipArmor(what);
+        if (!player->equipArmor(what))
+        {
+            cout << "I don't have any such armor." << endl;
+            return;
+        }
     }
     else
     {
@@ -103,7 +119,7 @@ void equip(string arg)
         return;
     }
 
-    cout << "Equipped " << arg << "." << endl;
+    cout << "Equipped " << what << "." << endl;
 }
 
 int main(int argc, char** argv)

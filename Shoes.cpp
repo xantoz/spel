@@ -1,4 +1,6 @@
 #include "Shoes.hpp"
+#include <iostream>
+
 Shoes::Shoes(const std::string &name,
              const std::string &description,
              unsigned weight,
@@ -7,3 +9,8 @@ Shoes::Shoes(const std::string &name,
 {
 }
 
+
+Shoes::~Shoes()
+{
+    std::cerr << "Shoes<" << this->getName() << "> destructor" << std::endl;
+}

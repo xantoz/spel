@@ -1,4 +1,6 @@
 #include "Shield.hpp"
+#include <iostream>
+
 Shield::Shield(const std::string &name,
                const std::string &description,
                unsigned weight,
@@ -7,3 +9,7 @@ Shield::Shield(const std::string &name,
 {
 }
 
+Shield::~Shield()
+{
+    std::cerr << "Shield<" << this->getName() << "> destructor" << std::endl;
+}
