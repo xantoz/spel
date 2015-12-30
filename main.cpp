@@ -70,6 +70,95 @@ void drop(string arg)
         cout << "I'm not carrying anything like that." << endl;
 }
 
+void equip(string arg)
+{
+    boost::trim_all(arg);
+    size_t first_space = arg.find_first_of(' ');
+    if (first_space == string::npos)
+    {
+        cout << "What did you want to equip?" << endl;
+        return;
+    }
+    string type = arg.substr(0, first_space);
+    string what = arg.substr(first_space + 1);
+
+    cerr << "meep meep" << endl;
+    if (player->getItem(what))
+        cerr << "BLOOOORP " << typeid(*player->getItem(what)).name() << endl;
+    
+    if (type == "sword")
+    {
+        if (!player->equipSword(what))
+        {
+            cout << "I don't have any such sword." << endl;
+            return;
+        }
+    }
+    else if ("shield" == type)
+    {
+        if (!player->equipShield(what))
+        {
+            cout << "I don't have any such shield." << endl;
+            return;
+        }
+    }
+    else if ("shoes" == type)
+    {
+        if (!player->equipShoes(what))
+        {
+            cout << "I don't have any such shoes." << endl;
+            return;
+        }
+    }
+    else if ("armor" == type)
+    {
+        if (!player->equipArmor(what))
+        {
+            cout << "I don't have any such armor." << endl;
+            return;
+        }
+    }
+    else
+    {
+        cout << "There's no " << type << " kind of equipment in this world." << endl;
+        return;
+    }
+
+    cout << "Equipped " << what << "." << endl;
+}
+
+void unequip(string arg)
+{
+    if (arg == "sword")
+    {
+        player->unequipSword();
+        cout << "Unequipped sword." << endl;
+    }
+    else if (arg == "shield")
+    {
+        player->unequipShield();
+        cout << "Unequipped shield." << endl;
+    }
+    else if (arg == "shoes")
+    {
+        player->unequipShoes();
+        cout << "Unequipped shoes." << endl; 
+    }
+    else if (arg == "armor")
+    {
+        player->unequipArmor();
+        cout << "Unequipped armor." << endl; 
+    }
+    else if (arg == "")
+    {
+        cout << "What did you want to unequip?" << endl;
+    }
+    else
+    {
+        cout << "I can't unequip " << arg << endl;
+    }
+}
+
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)> > map;
@@ -77,11 +166,17 @@ int main(int argc, char** argv)
     map["look"] = &look;
     map["use"] = &use;
     map["pickup"] = &pickup;
+    map["get"] = &pickup;
+    map["equip"] = &equip;
+    map["unequip"] = &unequip;
     map["drop"] = &drop;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
     kitchen->setExit("east", first);
+    
+    Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
+    first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
 
