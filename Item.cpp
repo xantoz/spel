@@ -20,14 +20,13 @@ Item::Item(std::string name, std::string description, unsigned w) :
 {
 }
 
-
-Item::Item(std::string name, std::string description, unsigned w, ItemOwner *o) :
-    GameObject(name, description),
-    weight(w)
-{
-    // this will set this->owner = o
-    o->addItem(this);                                       
-}
+// Item::Item(std::string name, std::string description, unsigned w, ItemOwner *o) :
+//     GameObject(name, description),
+//     weight(w)
+// {
+//     // this will set this->owner = o
+//     o->addItem(this);                                       
+// }
 
 Item::~Item()
 {
