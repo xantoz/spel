@@ -40,6 +40,12 @@ Room::~Room()
         delete actors.front();
 }
 
+const std::list<Room*> getExits() const
+{
+    return exits;
+}
+
+
 
 Room *Room::getExit(const std::string &direction) const
 {
