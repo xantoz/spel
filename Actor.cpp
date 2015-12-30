@@ -9,16 +9,23 @@
 // unequipped. Item's destructor will otherwise explode.
 
 Actor::Actor(const std::string &name, const std::string &description) :
-     ItemOwner(name, description)
+    ItemOwner(name, description), dead(false),
+    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
-    
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), stats(_stats), hp(_stats.maxhp)
+    ItemOwner(name, description), stats(_stats), hp(_stats.maxhp), dead(false),
+    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
-    dead = false;
 }
+
+Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
+    ItemOwner(name, description), stats(_stats), hp(_hp), dead(false),
+    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+{
+}
+
 
 Actor::~Actor()
 {

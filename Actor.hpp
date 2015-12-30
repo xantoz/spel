@@ -28,6 +28,7 @@ protected:
 public:
     Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
+    Actor(const std::string &name, const std::string &description, const Stats &stats, int hp);
     virtual ~Actor() override;
     
     
