@@ -19,7 +19,7 @@ std::string gensym()
     return ss.str();
 }
 
-static std::string escapeString(const std::string &string)
+std::string escapeString(const std::string &string)
 {
     std::ostringstream ss;
     for (auto c: string)
@@ -88,7 +88,7 @@ static std::string unescapeString(const std::string &string)
     return ss.str();
 }
 
-static std::string stringify(const std::string &string)
+std::string stringify(const std::string &string)
 {
     std::ostringstream ss;
     ss << '"' << escapeString(string) << '"';
@@ -103,7 +103,7 @@ static std::string serializeActor(const Actor *actor, std::ostream &os)
     return sym;
 }
 
-void serialize(const std::list<const Room*> &rooms, std::ostream &os)
+void serialize(const std::list<Room*> &rooms, std::ostream &os)
 {
     std::unordered_map<const Room*, std::string> room_to_sym;
     std::vector<std::tuple<std::string, const Actor*> > actors;
@@ -112,11 +112,11 @@ void serialize(const std::list<const Room*> &rooms, std::ostream &os)
     {
         std::string roomSym = gensym();
         room_to_sym[room] = roomSym;
-        os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getDescription());
+        os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getBaseDescription()) << std::endl;
         for (const Actor *actor: room->getActors())
         {
             std::string actorSym = actor->serialize(os);
-            os << ":ADD-ACTOR " << roomSym << " " << actorSym;
+            os << ":ADD-ACTOR " << roomSym << " " << actorSym << std::endl;
             actors.emplace_back(actorSym, actor);           // save all actors together with their syms for later use
         }
         // ItemOwner::serializeItems(std::ostream&, const std::string&) const
@@ -130,7 +130,7 @@ void serialize(const std::list<const Room*> &rooms, std::ostream &os)
             os << ":SET-EXIT"          << " "
                << room_to_sym.at(room) << " "
                << stringify(ent.first) << " "
-               << room_to_sym.at(ent.second);
+               << room_to_sym.at(ent.second) << std::endl;
         }
     }
     // Set actor death-exits
@@ -138,7 +138,7 @@ void serialize(const std::list<const Room*> &rooms, std::ostream &os)
     {
         for (auto &ent: std::get<1>(tup)->getDeathExits())
         {
-            os << ":SET-DEATH-EXIT " << std::get<1>(tup) << " \"" << ent.first << "\" " << room_to_sym.at(ent.second) << std::endl;
+            os << ":SET-DEATH-EXIT " << std::get<1>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
         }
     }
              

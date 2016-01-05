@@ -52,6 +52,6 @@ std::string Item::use()
 std::string Item::serialize(std::ostream &os) const
 {
     std::string itemSym = gensym();
-    os << itemSym << ":MAKE-ITEM " << "\"" << getName() << "\" \"" << getBaseDescription() << "\" " << getWeight() << std::endl;
+    os << itemSym << ":MAKE-ITEM " << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << getWeight() << std::endl;
     return itemSym;
 }

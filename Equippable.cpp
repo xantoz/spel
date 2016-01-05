@@ -21,7 +21,7 @@ const Stats &Equippable::getStats() const
 
 void Equippable::serializeEquippableCommonConstructorParameters(std::ostream &os) const
 {
-    os << "\"" << getName() << "\" \"" << getBaseDescription() << "\" " << getWeight() << " " << stats.serializeString() << std::endl;
+    os << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << getWeight() << " " << stats.serializeString() << std::endl;
 }
 
 std::string Equippable::serialize(std::ostream &os) const

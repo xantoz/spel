@@ -1,9 +1,12 @@
 #include "Classes.hpp"
+#include "Serialize.hpp"
+
 #include <cstdlib>
 #include <array>
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+
 static Stats getRandomStats(int tmp2)
 {
     int tmp1 = 0;
@@ -35,45 +38,86 @@ Troll::Troll(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Troll", lvl), troll_base_stats*lvl + getRandomStats(10))
 {
 }
+
 Troll::~Troll()
 {
     std::cerr << "Troll<" << this->getName() << "> destructor" << std::endl;
+}
+
+std::string Troll::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-TROLL ";
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
 }
     
 Dragon::Dragon(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Dragon", lvl), dragon_base_stats*lvl + getRandomStats(10))
 {
 }
+
 Dragon::~Dragon()
 {
     std::cerr << "Dragon<" << this->getName() << "> destructor" << std::endl;
 }
 
+std::string Dragon::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-DRAGON ";
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
+}
+
 Thief::Thief(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Thief", lvl), thief_base_stats*lvl + getRandomStats(10))
 {
-  
 }
+
 Thief::~Thief()
 {
     std::cerr << "Thief<" << this->getName() << "> destructor" << std::endl;
+}
+
+std::string Thief::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-THIEF ";
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
 }
 
 Golem::Golem(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Golem", lvl), golem_base_stats*lvl + getRandomStats(10))
 {
 }
+
 Golem::~Golem()
 {
     std::cerr << "Golem<" << this->getName() << "> destructor" << std::endl;
 }
+
+std::string Golem::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-GOLEM ";
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
+}
+
 
 Human::Human(const std::string &name, const std::string &desc, const std::string &t) :
     Actor(name, desc, human_base_stats + getRandomStats(10)), text(t)
 {
 }
 
-Human::Human(const std::string &name, const std::string &desc, const std::string &t, Stats &stats) :  Actor(name, desc, stats), text(t)
+Human::Human(const std::string &name, const std::string &desc, const Stats &stats, const std::string &t) :
+    Actor(name, desc, stats), text(t)
 {
 }
 
@@ -86,3 +130,17 @@ bool Human::talk()
     std::cout << text << std::endl;
     return false;
 }
+
+std::string Human::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-HUMAN "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << stats.serializeString() << " "
+       << hp << " "
+       << stringify(text) << std::endl;
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
+}
+

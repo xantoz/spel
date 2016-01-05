@@ -4,10 +4,12 @@
 #include "Item.hpp"
 #include "Sword.hpp"
 #include "Classes.hpp"
+#include "Serialize.hpp"
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
 #include <functional>
 #include <boost/algorithm/string/trim_all.hpp>
 
@@ -238,22 +240,25 @@ void talk(string arg)
         }
         else 
         {
-<<<<<<< HEAD
             cout << "Not a human" << endl;
-=======
-            // actor->talk();
->>>>>>> 96947df47baaaa206e9f7a1229f57861a6d2ca36
-            
         }
         
     }
 }
 
 
+void save(string filename)
+{
+    if (filename == "")
+        filename = "quicksave.save";
+    std::ofstream outfile(filename);
+    serialize(Room::getRooms(), outfile);
+    cout << "Saved world to " << filename << endl;
+}
 
 int main(int argc, char** argv)
 {
-    std::map<string, function<void(string)> > cmds;
+    std::map<string, function<void(string)>> cmds;
     std::map<string, function<void(string)>> battleCmds;
     
     cmds["go"] = &go;
@@ -266,6 +271,7 @@ int main(int argc, char** argv)
     cmds["drop"] = &drop;
     cmds["battle"] = &battle;
     cmds["talk"] = &talk;
+    cmds["save"] = &save;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &use;
@@ -282,7 +288,7 @@ int main(int argc, char** argv)
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
     Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
-    Human* oldman = new Human("Rudolph", "It's your uncle", "Good morning my son, where are you going?", oldmanstats);
+    Human* oldman = new Human("Rudolph", "It's your uncle", oldmanstats, "Good morning my son, where are you going?");
     outside ->addActor(oldman);
 
     Stats nilsstats = { 20, 10, 10, 10, 10, 10 };
@@ -334,8 +340,15 @@ int main(int argc, char** argv)
         }
     }
 
-    delete kitchen;
-    delete first;
+    // delete kitchen;
+    // delete first;
+    // delete outside;
+    while (Room::getRooms().size() > 0)
+    {
+        Room *room = Room::getRooms().front();
+        cout << "==Deleting room " << room->getName() << "==" << endl;
+        delete room;
+    }
         
     return 0;
     
