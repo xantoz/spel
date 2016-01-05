@@ -15,6 +15,9 @@
 #include <unordered_map>
 #include <functional>
 #include <exception>
+#include <algorithm>
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 
 std::string gensym()
@@ -106,8 +109,6 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
 {
     args.clear();
     
-    // std::ostringstream ss;
-    
     auto it = str.begin();
     for (; it != str.end() && *it != ' '; ++it); // find first space
     cmd = std::string(str.begin(), it);
@@ -149,24 +150,72 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
     
 }
 
+Stats parseStats(const std::string &str)
+{
+    std::vector<std::string> strings; strings.reserve(7);
+    std::vector<int> numbers;         numbers.reserve(7);
+    boost::split(strings, str, boost::is_any_of(";"));
+    std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stoi(a); });
+    if (numbers.size() != 7) throw new InvalidFileException("Stats-param of wrong length");
+    Stats stats = {numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3), numbers.at(4), numbers.at(5), numbers.at(6)};
+    return stats;
+}
+
 void load(std::istream &is)
 {
+    unsigned row = 0;
+    
     std::unordered_map<std::string, GameObject*> vars;
-    std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds =
-        {
-            {"MAKE-ROOM", [](const std::vector<std::string> &args) {
-                    return new Room(args.at(0), args.at(1), nullptr);
-                }
+    std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds = {
+        {"MAKE-ROOM", [&](const std::vector<std::string> &args) {
+                return new Room(args.at(0), args.at(1), nullptr);
             }
-        };
-    
-    
-    
+        },
+        {"MAKE-ACTOR", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 2) return new Actor(args.at(0), args.at(1));
+                else if (args.size() == 3) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)));
+                else if (args.size() == 4) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw new InvalidFileException(std::to_string(row) + ": Wrong amount of args.");
+            }
+        },
+        {"SET-DROP", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Trying to pass non-Actor to SET-DROP.");
+                actor->setDrop(std::stoi(args.at(0)));
+                return nullptr;
+            }
+        },
+        {"ADD-ACTOR", [&](const std::vector<std::string> &args) {
+                Room *room = dynamic_cast<Room*>(vars.at(args.at(0)));
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(1)));
+                if (room == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Room as first arg to ADD-ACTOR.");
+                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Actor as second arg to ADD-ACTOR.");
+                room->addActor(actor);
+                return nullptr;
+            }
+        },
+        {"ADD-ITEM", [&](const std::vector<std::string> &args) {
+                ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
+                Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
+                if (itemOwner == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected ItemOwner as first arg to ADD-ITEM.");
+                if (item == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Item as second arg to ADD-ITEM.");
+                itemOwner->addItem(item);
+                return nullptr;
+            }
+        },
+        {"EQUIP-SWORD", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected actor as first arg.");
+                actor->equipSword(args.at(1));
+                return nullptr;
+            }
+        }
+    };
+        
     std::string line;
     std::string var_name = "";
     std::string cmd_name = "";
     std::vector<std::string> args = {};
-    unsigned row = 0;
     
     while (!is.eof())
     {
@@ -179,7 +228,7 @@ void load(std::istream &is)
         
         size_t pos = line.find_first_of(':');
         if (pos == std::string::npos)
-            throw InvalidFileException("Row without colon.");
+            throw InvalidFileException(std::to_string(row) + ": Row without colon.");
         var_name = line.substr(0, pos);
         parseCmd(line.substr(pos + 1), cmd_name, args);
 
@@ -196,7 +245,7 @@ void load(std::istream &is)
         }
         catch (const std::out_of_range &e)
         {
-            throw InvalidFileException("No such command/var. Or too few parameters.");
+            throw InvalidFileException(std::to_string(row) + ": No such command/var. Or too few parameters.");
         }
     }
 }
