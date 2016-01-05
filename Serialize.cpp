@@ -1,14 +1,21 @@
 #include "Serialize.hpp"
 
+#include "main.hpp"
 #include "Actor.hpp"
+#include "exceptions.hpp"
+#include "GameObject.hpp"
+#include "Room.hpp"
 
-#include <map>
+// #include <map>
 #include <vector>
 #include <tuple>
 #include <list>
 #include <sstream>
 #include <iostream>
 #include <unordered_map>
+#include <functional>
+#include <exception>
+
 
 std::string gensym()
 {
@@ -95,12 +102,103 @@ std::string stringify(const std::string &string)
     return ss.str();
 }
 
-static std::string serializeActor(const Actor *actor, std::ostream &os)
+static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::string> &args)
 {
-    std::string sym = gensym();
-    os << sym;
-    actor->serialize(os);
-    return sym;
+    args.clear();
+    
+    // std::ostringstream ss;
+    
+    auto it = str.begin();
+    for (; it != str.end() && *it != ' '; ++it); // find first space
+    cmd = std::string(str.begin(), it);
+
+    while (it != str.end() && *it == ' ') ++it; // skip additional space
+    auto start = it;
+    while (it != str.end())
+    {
+        if (*it == '"')
+        {
+            ++it;
+            char prevChar = '"';
+            start = it;
+            for (; it != str.end(); ++it)
+            {
+                if (*it == '"' && prevChar != '\\')
+                {
+                    args.emplace_back(unescapeString(std::string(start, it)));
+                    ++it;
+                    goto wind_whitespace;
+                }
+                prevChar = *it;
+            }
+            throw InvalidFileException("Row ended inside string.");
+        }
+        else if (*it == ' ')
+        {
+            args.emplace_back(start, it);
+            goto wind_whitespace;
+        }
+        
+        ++it;
+        continue;
+        
+      wind_whitespace:
+        while (it != str.end() && *it == ' ') ++it;    // skip additional space
+        start = it;
+    }
+    
+}
+
+void load(std::istream &is)
+{
+    std::unordered_map<std::string, GameObject*> vars;
+    std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds =
+        {
+            {"MAKE-ROOM", [](const std::vector<std::string> &args) {
+                    return new Room(args.at(0), args.at(1), nullptr);
+                }
+            }
+        };
+    
+    
+    
+    std::string line;
+    std::string var_name = "";
+    std::string cmd_name = "";
+    std::vector<std::string> args = {};
+    unsigned row = 0;
+    
+    while (!is.eof())
+    {
+        ++row;
+        
+        getline(is, line);
+        if(line.find_first_not_of(' ') == std::string::npos) // this row is only spaces or empty
+            continue;
+
+        
+        size_t pos = line.find_first_of(':');
+        if (pos == std::string::npos)
+            throw InvalidFileException("Row without colon.");
+        var_name = line.substr(0, pos);
+        parseCmd(line.substr(pos + 1), cmd_name, args);
+
+        // std::cerr << "VAR_NAME: " << var_name << " CMD: " << cmd_name << " ARGS: ";
+        // for (std::string &arg: args)
+        //     std::cerr << "\"" << arg << "\" ";
+        // std::cerr << std::endl;
+        
+        try 
+        {
+            GameObject *result = cmds.at(cmd_name)(args);
+            if (var_name.size() > 0)
+                vars[var_name] = result;
+        }
+        catch (const std::out_of_range &e)
+        {
+            throw InvalidFileException("No such command/var. Or too few parameters.");
+        }
+    }
 }
 
 void serialize(const std::list<Room*> &rooms, std::ostream &os)

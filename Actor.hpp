@@ -59,15 +59,16 @@ public:
     const Sword *getSword() const;
     const Shoes *getShoes() const;
 
-    int getHp() const;
-    void setHp(int hp);
+    int getHP() const;
+    void setHP(int hp);
 
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
     
-    // When using this one must ensure that the Room passed lives longer than this Actor
     void setDeathExit(const std::string &name, Room *room);
     const std::map<std::string, Room*> &getDeathExits() const;
+    void removeDeathExit(const std::string &direction);
+    void removeDeathExit(Room *exit);
     
     void go(std::string direction);
     Room *getRoom() const;

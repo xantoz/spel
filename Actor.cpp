@@ -306,6 +306,23 @@ const std::map<std::string, Room*> &Actor::getDeathExits() const
     return deathExits;
 }
 
+void Actor::removeDeathExit(const std::string &direction)
+{
+    if (deathExits.find(direction) == deathExits.end())
+        throw NoSuchExitException(); // TODO: possibly more severe than regular NoSuchExitException
+    deathExits.erase(direction);
+}
+
+void Actor::removeDeathExit(Room *exit)
+{
+    std::map<std::string, Room*>::iterator
+        it = std::find_if(deathExits.begin(), deathExits.end(),
+                          [&](const std::pair<std::string, Room*> &item) -> bool { return item.second == room; });
+    if (it == deathExits.end())
+        throw NoSuchExitException(); // TODO: possibly more severe than regular NoSuchExitException
+    deathExits.erase(it);
+}
+
 void Actor::setDrop(bool drop)
 {
     dropItems = drop;
@@ -364,12 +381,12 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     // }
 }
 
-int Actor::getHp() const
+int Actor::getHP() const
 {
     return hp;
 }
 
-void Actor::setHp(int hphp)
+void Actor::setHP(int hphp)
 {
     hp = hphp;
 }

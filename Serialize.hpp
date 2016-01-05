@@ -3,8 +3,11 @@
 
 #include <string>
 #include <ostream>
+#include <istream>
 
 #include "Room.hpp"
+
+void load(std::istream &is);
 
 std::string gensym();
 std::string stringify(const std::string &string);
