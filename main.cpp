@@ -194,6 +194,7 @@ void battle(string arg)
 
 void attack(string arg)
 {
+
     player->attack(opponent);
 }
 
@@ -238,11 +239,7 @@ void talk(string arg)
         }
         else 
         {
-<<<<<<< HEAD
             cout << "Not a human" << endl;
-=======
-            // actor->talk();
->>>>>>> 96947df47baaaa206e9f7a1229f57861a6d2ca36
             
         }
         
