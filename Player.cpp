@@ -1,5 +1,7 @@
 #include "Player.hpp"
 #include "Room.hpp"
+#include "Serialize.hpp"
+
 #include <iostream>
 
 // Player::Player(const std::string &name, const std::string &description) :
@@ -72,4 +74,14 @@ Stats Player::addStats(const Stats &s2)
 {
     stats += s2;
     return stats;
+}
+
+
+std::string Player::serialize(std::ostream &os) const
+{
+    std::string playerSym = gensym();
+    os << playerSym << ":MAKE-PLAYER ";
+    actorTypeIndependentSerializeConstructorParameters();
+    actorTypeIndependentSerialize();
+    return playerSym;
 }
