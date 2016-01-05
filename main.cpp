@@ -47,7 +47,6 @@ void go(string arg)
 
 void look(string arg)
 {
- // cout << player->getRoom()->getDescription() << endl
     if (arg == "")
         cout << player->look() << endl;
     else
@@ -196,6 +195,7 @@ void battle(string arg)
 
 void attack(string arg)
 {
+
     player->attack(opponent);
 }
 
@@ -340,9 +340,6 @@ int main(int argc, char** argv)
         }
     }
 
-    // delete kitchen;
-    // delete first;
-    // delete outside;
     while (Room::getRooms().size() > 0)
     {
         Room *room = Room::getRooms().front();
