@@ -132,6 +132,7 @@ std::string Stats::serializeString() const
 {
     std::ostringstream os;
     os << maxhp << ";" << str << ";" << atk << ";" << def << ";" << spd << ";" << acc << ";" << eva;
+    return os.str();
 }
 
     
