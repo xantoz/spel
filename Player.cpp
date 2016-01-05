@@ -65,6 +65,8 @@ std::string Player::look(const std::string &actorOrItem) const
 
 void Player::attackResponse(Actor *actor)
 {
+    //std::cout << "Player attack response" << std::endl;
+    
     std::cout << "HP: " << hp << "/" << getStats().maxhp << std::endl;
 }
 

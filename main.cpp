@@ -201,14 +201,18 @@ void run(string arg)
 {
     if (opponent->getTotalStats().spd > player->getTotalStats().spd)
     {
-        int rval = std::rand()/(double)RAND_MAX;
-        if (rval > 0.95)
+        double rval = std::rand()/(double)RAND_MAX;
+        cout << rval << endl;
+        
+        if (rval < 0.8)
         {
             exitBattleMode();
         }
         else 
         {
             cout << "Could not run away" << endl;
+            opponent->attack(player);
+            
         }
         
             
@@ -226,11 +230,18 @@ void talk(string arg)
     else 
     {
         Actor *actor = player->getRoom()->getActor(arg);
-        if(actor != nullptr)
+        Human *human = dynamic_cast<Human*>(actor);
+        if(human != nullptr)
         {
-            actor->talk();
+            human->talk();
             
         }
+        else 
+        {
+            cout << "Not a human" << endl;
+            
+        }
+        
     }
 }
 

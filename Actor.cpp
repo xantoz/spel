@@ -229,11 +229,15 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
     {
         damage = (int) (2*atk/(double)stats.def);
         hp -= damage;
+        //std::cerr << "beAttacked if" << std::endl;
+        
     }
     else 
     {
         damage = hp;
         hp = 0;
+        //std::cerr << "beAttacked else" << std::endl;
+        
     }
     std::cout << getName() << " took " << damage << " damage." << std::endl;
     

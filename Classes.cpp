@@ -35,11 +35,18 @@ Troll::Troll(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Troll", lvl), troll_base_stats*lvl + getRandomStats(10))
 {
 }
-
+Troll::~Troll()
+{
+    std::cerr << "Troll<" << this->getName() << "> destructor" << std::endl;
+}
     
 Dragon::Dragon(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Dragon", lvl), dragon_base_stats*lvl + getRandomStats(10))
 {
+}
+Dragon::~Dragon()
+{
+    std::cerr << "Dragon<" << this->getName() << "> destructor" << std::endl;
 }
 
 Thief::Thief(const std::string &name,  int lvl) :
@@ -47,10 +54,18 @@ Thief::Thief(const std::string &name,  int lvl) :
 {
   
 }
+Thief::~Thief()
+{
+    std::cerr << "Thief<" << this->getName() << "> destructor" << std::endl;
+}
 
 Golem::Golem(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Golem", lvl), golem_base_stats*lvl + getRandomStats(10))
 {
+}
+Golem::~Golem()
+{
+    std::cerr << "Golem<" << this->getName() << "> destructor" << std::endl;
 }
 
 Human::Human(const std::string &name, const std::string &desc, const std::string &t) :
@@ -60,6 +75,11 @@ Human::Human(const std::string &name, const std::string &desc, const std::string
 
 Human::Human(const std::string &name, const std::string &desc, const std::string &t, Stats &stats) :  Actor(name, desc, stats), text(t)
 {
+}
+
+Human::~Human()
+{
+    std::cerr << "Human<" << this->getName() << "> destructor" << std::endl;
 }
 bool Human::talk()
 {
