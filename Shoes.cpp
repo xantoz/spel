@@ -1,4 +1,6 @@
 #include "Shoes.hpp"
+#include "Serialize.hpp"
+
 #include <iostream>
 
 Shoes::Shoes(const std::string &name,
@@ -13,4 +15,12 @@ Shoes::Shoes(const std::string &name,
 Shoes::~Shoes()
 {
     std::cerr << "Shoes<" << this->getName() << "> destructor" << std::endl;
+}
+
+std::string Shoes::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-SHOES ";
+    serializeEquippableCommonConstructorParameters(os);
+    return sym;
 }

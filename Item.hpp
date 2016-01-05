@@ -4,6 +4,7 @@
 // #include "ItemOwner.hpp"
 #include "GameObject.hpp"
 
+#include <string>
 #include <ostream>
 
 class ItemOwner;                                            // solve circular reference

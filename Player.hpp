@@ -4,7 +4,9 @@
 #include "Actor.hpp"
 #include "Stats.hpp"
 #include "Item.hpp"
+
 #include <string>
+#include <ostream>
 
 class Player : public Actor
 {
@@ -21,6 +23,8 @@ public:
     std::string look() const;
     std::string look(const std::string &actorOrItem) const;
     Stats addStats(const Stats &stats);
+
+    virtual std::string serialize(std::ostream &os) const override;
 };
 
 #endif
