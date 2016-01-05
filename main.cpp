@@ -5,6 +5,7 @@
 #include "Sword.hpp"
 #include "Classes.hpp"
 #include "Serialize.hpp"
+#include "Potion.hpp"
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -60,7 +61,24 @@ void use(string arg)
         cout << "What do you want to use?" << endl;
         return;
     }
-    cout << player->use(arg) << endl;   
+    else 
+    {
+        auto it = arg.begin();
+        for(; it != arg.end() && *it != ' '; ++it);
+        string first(arg.begin(), it);
+        for(; it != arg.end() && *it == ' '; ++it);
+        string second(it, arg.end());
+        if(second == "")
+        {
+             cout << player->use(first) << endl;
+             delete player->getItem(first);
+        }
+        else
+        {
+            cout << player->use(first, second);
+        }
+    }
+    
 }
 
 void pickup(string arg)
@@ -282,20 +300,20 @@ int main(int argc, char** argv)
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
     Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
     Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);
-    Room* park = new Room("Park", "The biggest park in this city. \n There's a big tree in the middle", "north", street,nullptr);
-    
-    neighbor->setExit("west", outside);
-    outside->setExit("southwest", street);
-    neighbor->setExit("southeast", street);
-    street->setExit("south", park);
+    Room* park = new Room("Park", "The biggest park in this city. \nThere's a big tree in the middle", "north", street,nullptr);
+    outside->setExit("west", neighbor);
+    outside->setExit("northwest", street);
+    neighbor->setExit("northeast", street);
+    street->setExit("north", park);
     
     kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
-    
     Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
+    kitchen->addItem(new Potion("Potion1", "Potion that heals 20 hp", 5, 2));
+    
     Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
     Human* oldman = new Human("Rudolph", "It's your uncle", oldmanstats, "Good morning my son, where are you going?");
     outside ->addActor(oldman);
@@ -325,7 +343,19 @@ int main(int argc, char** argv)
                 cout << "Game over" << endl;
                 return 0;
             }
-            
+            vector<Actor*> actorList;
+            for(Room *room : Room::getRooms())
+            {
+                for(Actor *actor : room->getActors())
+                {
+                    actorList.push_back(actor);
+                }
+                
+            }
+            for(Actor *actor : actorList)
+            {
+                actor->update();
+            }
             cout << "\n> ";
             getline(cin, str);
             boost::trim_all(str);

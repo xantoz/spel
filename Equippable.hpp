@@ -7,7 +7,7 @@
 #include <string>
 #include <ostream>
 
-class Equippable : public Item 
+class Equippable : public Item
 {
 private:
     const Stats stats;

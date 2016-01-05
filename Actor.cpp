@@ -43,6 +43,8 @@ Actor::~Actor()
     unequipShoes();
 }
 
+void Actor::update() {}
+
 
 bool Actor::equipArmor(const std::string &name)
 {
@@ -125,13 +127,24 @@ void Actor::go(std::string direction)
     nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
-std::string Actor::use(const std::string &itemName)
+std::string Actor::use(const std::string &itemName )
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)
         throw NoSuchItemException();
-    return item->use();
+    return item->use(this);
 }
+std::string Actor::use(const std::string &itemName, const std::string &useOn)
+{
+    Item *item = this->getItem(itemName);
+    if (item == nullptr)
+        throw NoSuchItemException();
+    Actor* actor = getRoom()->getActor(useOn);
+    if(actor == nullptr)
+        throw NoSuchActorException();
+    return item->use(actor);
+}
+
 
 bool Actor::pickup(const std::string &itemName)
 {
@@ -364,12 +377,12 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     // }
 }
 
-int Actor::getHp() const
+int Actor::getHP() const
 {
     return hp;
 }
 
-void Actor::setHp(int hphp)
+void Actor::setHP(int hphp)
 {
     hp = hphp;
 }

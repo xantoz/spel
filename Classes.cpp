@@ -44,6 +44,24 @@ Troll::~Troll()
     std::cerr << "Troll<" << this->getName() << "> destructor" << std::endl;
 }
 
+void Troll::update()
+{ 
+    for(auto &roomDirection : getRoom()->getExits())
+    {   
+        if (std::rand() % 100 < 5)
+        {
+            std::cout << "Troll moved to " << roomDirection.first << std::endl;
+            
+            roomDirection.second->addActor(this);
+            //std::cout << "not broken" << std::endl;
+            
+            break;
+        }
+    }
+    
+}
+
+
 std::string Troll::serialize(std::ostream &os) const
 {
     std::string sym = gensym();
@@ -62,6 +80,11 @@ Dragon::~Dragon()
 {
     std::cerr << "Dragon<" << this->getName() << "> destructor" << std::endl;
 }
+
+void Dragon::update()
+{
+}
+
 
 std::string Dragon::serialize(std::ostream &os) const
 {
@@ -82,6 +105,10 @@ Thief::~Thief()
     std::cerr << "Thief<" << this->getName() << "> destructor" << std::endl;
 }
 
+void Thief::update()
+{
+}
+
 std::string Thief::serialize(std::ostream &os) const
 {
     std::string sym = gensym();
@@ -100,6 +127,11 @@ Golem::~Golem()
 {
     std::cerr << "Golem<" << this->getName() << "> destructor" << std::endl;
 }
+
+void Golem::update()
+{
+}
+
 
 std::string Golem::serialize(std::ostream &os) const
 {
@@ -125,6 +157,11 @@ Human::~Human()
 {
     std::cerr << "Human<" << this->getName() << "> destructor" << std::endl;
 }
+
+void Human::update()
+{
+}
+
 bool Human::talk()
 {
     std::cout << text << std::endl;

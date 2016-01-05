@@ -14,10 +14,12 @@
 #include <iostream>
 #include <typeinfo>
 
-Item::Item(std::string name, std::string description, unsigned w) :
+Item::Item(const std::string &name, const std::string &description, unsigned w) :
     GameObject(name, description),
     weight(w),
-    owner(nullptr)
+    owner(nullptr),
+    used(false),
+    consumable(false)
 {
 }
 
@@ -42,9 +44,9 @@ ItemOwner *Item::getOwner() const
     return owner;
 }
 
-std::string Item::use()
+std::string Item::use(Actor* actor)
 {
-    static std::string asdf = "This item is useless.";
+    static std::string asdf = "this item is useless";
     return asdf;
 }
 

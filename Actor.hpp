@@ -40,7 +40,7 @@ public:
     Actor(const std::string &name, const std::string &description, const Stats &stats, int hp);
     virtual ~Actor() override;
     
-    
+    virtual void update();
     Stats getTotalStats() const;
     void attack(Actor *actor);
     bool attack(const std::string&);
@@ -59,8 +59,8 @@ public:
     const Sword *getSword() const;
     const Shoes *getShoes() const;
 
-    int getHp() const;
-    void setHp(int hp);
+    int getHP() const;
+    void setHP(int hp);
 
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
@@ -72,6 +72,7 @@ public:
     void go(std::string direction);
     Room *getRoom() const;
     std::string use(const std::string &itemName);
+    std::string use(const std::string &itemName, const std::string &useOn);
     bool pickup(const std::string &itemName); // returns true if manage to pick up
     bool drop(const std::string &itemName); // returns true if manage to drop (can fail when naming non-existent item)
     
