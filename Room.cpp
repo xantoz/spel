@@ -55,9 +55,12 @@ Room::~Room()
     // for (auto const &exit: exits)
     //     exit.second->removeExit(this);
     
-    // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
-    while (actors.size() != 0)
-        delete actors.front();
+    // // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
+    // while (actors.size() != 0)
+    //     delete actors.front();
+    auto it = actors.begin();
+    while (it != actors.end())
+        delete *it++; // deleting removes the actor from the list
 
     // Remove ourselves from the list of rooms
     rooms.remove(this);
