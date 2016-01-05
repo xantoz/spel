@@ -48,7 +48,9 @@ void ItemOwner::removeItem(Item *i)
     {
         throw NoSuchItemException();
     }
+    Item *item = *it;
     items.erase(it);
+    item->owner = nullptr;                                  // this item is no longer owned by anybody
 }
 
 Item *ItemOwner::getItem(const std::string &name)
