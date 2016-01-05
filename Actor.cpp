@@ -224,33 +224,44 @@ void Actor::attack(Actor *actor)
 void Actor::beAttacked(Actor *actor, unsigned int atk)
 {
     Stats stats = getTotalStats();
-    int damage;
-    if(stats.def != 0)
-    {
-        damage = (int) (2*atk/(double)stats.def);
-        hp -= damage;
-        //std::cerr << "beAttacked if" << std::endl;
-        
-    }
-    else 
-    {
-        damage = hp;
-        hp = 0;
-        //std::cerr << "beAttacked else" << std::endl;
-        
-    }
-    std::cout << getName() << " took " << damage << " damage." << std::endl;
+    Stats aStats = actor->getTotalStats();
+    double quote = (aStats.acc+1)/(double)(stats.eva+1);
+    //std::cout << aStats.acc << std::endl;
+    //std::cout << stats.eva << std::endl;
     
-    if(hp <= 0)
-        die();
-    else 
-    {
-        attackResponse(actor);
-    }
+    //std::cout << quote << std::endl;
+
+    int damage;
+     if(std::rand()/(double)RAND_MAX <= quote)
+     {
+         if(stats.def != 0)
+         {
+             damage = (int) (2*atk/(double)stats.def);
+             hp -= damage;
+         }
+         else 
+         {
+             damage = hp;
+             hp = 0;
+         }
+         std::cout << getName() << " took " << damage << " damage." << std::endl;
+     }
+     else
+     {
+         std::cout << actor->getName() << "'s attack missed!" << std::endl;
+     }
+    
+     if(hp <= 0)
+         die();
+     else 
+     {
+         attackResponse(actor);
+     }
 }
 
 void Actor::attackResponse(Actor *actor)
 {
+    std::cout << getName() << "'s HP: " << hp << "/" << stats.maxhp << std::endl;
     attack(actor);
 }
 

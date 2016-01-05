@@ -271,6 +271,15 @@ int main(int argc, char** argv)
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
+    Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
+    Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);
+    Room* park = new Room("Park", "The biggest park in this city. \n There's a big tree in the middle", "north", street,nullptr);
+    
+    neighbor->setExit("west", outside);
+    outside->setExit("southwest", street);
+    neighbor->setExit("southeast", street);
+    street->setExit("south", park);
+    
     kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
     
@@ -282,19 +291,32 @@ int main(int argc, char** argv)
     Human* oldman = new Human("Rudolph", "It's your uncle", "Good morning my son, where are you going?", oldmanstats);
     outside ->addActor(oldman);
 
-    Stats nilsstats = { 20, 10, 10, 10, 10, 10 };
+    Stats nilsstats = { 20, 10, 10, 10, 10, 10, 20 };
     player = new Player("nils", "it's you", nilsstats);
     first->addActor(player);
     Troll* troll = new Troll("Troll1", 2);
     kitchen->addActor(troll);
+    Stats bigTreeStats = {1000, 10, 100, 10, 10, 10, 1};
+
+    Stats axestats = {0, 0, 20, 0, -10,-5,-5};
+    neighbor->addItem(new Sword("Axe", "A really heavy axe", 100, axestats));
+            
     
+    Actor* yTree = new Actor("BigTree", "The tree looks really old", bigTreeStats);
+    park->addActor(yTree);
     cout << player->getRoom()->getName() << endl;
     cout << player->getRoom()->getDescription() << endl;
     string str;
     while(!cin.eof())
     {
-        try 
+        try
         {
+            if(player->isDead())
+            {
+                cout << "Game over" << endl;
+                return 0;
+            }
+            
             cout << "\n> ";
             getline(cin, str);
             boost::trim_all(str);
