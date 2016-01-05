@@ -59,6 +59,9 @@ public:
     const Sword *getSword() const;
     const Shoes *getShoes() const;
 
+    int getHp() const;
+    void setHp(int hp);
+
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
     

@@ -12,6 +12,8 @@ class Room : public ItemOwner
 private:
     std::map<std::string, Room*> exits;
     std::list<Actor*> actors;
+
+    static std::list<Room*> rooms;
     
 public:
     // Room(const std::string &name, const std::string &description);
@@ -33,6 +35,7 @@ public:
 
     virtual std::string getDescription() const override;
 
+    static const std::list<Room*> &getRooms();
 
     // friend void main_loop();
 };

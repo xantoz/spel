@@ -26,6 +26,9 @@ Room::Room(const std::string &name, const std::string &description, ...) :
         exit_str  = va_arg(list, char*);
         exit_room = va_arg(list, Room*);
     }
+
+    // Add ourselves to the list of rooms
+    rooms.push_front(this);
 }
 
 Room::~Room()
@@ -38,14 +41,15 @@ Room::~Room()
     // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
     while (actors.size() != 0)
         delete actors.front();
+
+    // Remove ourselves from the list of rooms
+    rooms.remove(this);
 }
 
 const std::map<std::string, Room*> &Room::getExits() const
 {
     return exits;
 }
-
-
 
 Room *Room::getExit(const std::string &direction) const
 {
@@ -144,3 +148,9 @@ std::string Room::getDescription() const
     return desc;
 }
 
+std::list<Room*> Room::rooms;
+
+const std::list<Room*> &Room::getRooms()
+{
+    return Room::rooms;
+}

@@ -322,7 +322,8 @@ std::string Actor::serialize(std::ostream &os) const
 
 void Actor::actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const
 {
-    os << "\"" << getName() << "\" \"" << getBaseDescription() << "\"" << " " << stats.serializeString() << " " << hp << std::endl;
+    os << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << stats.serializeString() << " " << hp << std::endl;
+    // os << "\"" << getName() << "\" \"" << getBaseDescription() << "\"" << " " << stats.serializeString() << " " << hp << std::endl;
 }
 
 
@@ -333,32 +334,42 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     {
         std::string itemSym = sword->serialize(os);
         os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
-        os << ":EQUIP-SWORD " << actorSym << " \"" << sword->getName() << "\"" << std::endl;
+        os << ":EQUIP-SWORD " << actorSym << " " << stringify(sword->getName()) << std::endl;
         
     }
     if (armor != nullptr)
     {
         std::string itemSym = armor->serialize(os);
         os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
-        os << ":EQUIP-ARMOR " << actorSym << " \"" << armor->getName() << "\"" << std::endl;
+        os << ":EQUIP-ARMOR " << actorSym << " " << stringify(armor->getName()) << std::endl;
     }
     if (shield != nullptr)
     {
         std::string itemSym = shield->serialize(os);
         os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
-        os << ":EQUIP-SHIELD " << actorSym << " \"" << shield->getName() << "\"" << std::endl;
+        os << ":EQUIP-SHIELD " << actorSym << " " << stringify(shield->getName()) << std::endl;
     }
     if (shoes != nullptr)
     {
         std::string itemSym = shoes->serialize(os);
         os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
-        os << ":EQUIP-SHOES " << actorSym << " \"" << shoes->getName() << "\"" << std::endl;
+        os << ":EQUIP-SHOES " << actorSym << " " << stringify(shoes->getName()) << std::endl;
     }
 
-    os << ":SET-DROP " << dropItems << std::endl;
+    os << ":SET-DROP " << actorSym << " " << dropItems << std::endl;
 
     // for (auto const &ent: deathExits)
     // {
     //     os << ":SET-DEATH-EXIT " << actorSym << " \"" << ent.first << " " << 
     // }
+}
+
+int Actor::getHp() const
+{
+    return hp;
+}
+
+void Actor::setHp(int hphp)
+{
+    hp = hphp;
 }
