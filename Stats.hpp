@@ -17,6 +17,7 @@ struct Stats
     Stats &operator-=(int scalar);
 
     std::string toString() const;
+    std::string serializeString() const;
 };
 
 #endif    

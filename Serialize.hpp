@@ -9,6 +9,4 @@
 std::string gensym();
 void serialize(const std::list<Room*> &rooms, std::ostream &os);
 
-
-
 #endif /* SERIALIZE_HPP */

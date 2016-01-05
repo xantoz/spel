@@ -48,3 +48,8 @@ std::string Item::use()
 }
 
 
+std::string Item::serialize(std::ostream &os) const
+{
+    os << "<<<TODO>>>";
+    return "TODO";
+}

@@ -3,7 +3,10 @@
 
 #include "Item.hpp"
 #include "GameObject.hpp"
+
 #include <list>
+#include <string>
+#include <ostream>
 
 class ItemOwner : public GameObject
 {
@@ -23,7 +26,9 @@ public:
     /// Returns nullptr when item doesn't exist
     Item *getItem(const std::string &name);
     const std::list<Item*> &getItems() const;
-        
+
+    void serializeItems(std::ostream &os, const std::string &ownerSym) const;
+    
     virtual ~ItemOwner();
 };
 
