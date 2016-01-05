@@ -81,7 +81,7 @@ std::string Player::serialize(std::ostream &os) const
 {
     std::string playerSym = gensym();
     os << playerSym << ":MAKE-PLAYER ";
-    actorTypeIndependentSerializeConstructorParameters();
-    actorTypeIndependentSerialize();
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, playerSym);
     return playerSym;
 }

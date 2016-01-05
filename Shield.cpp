@@ -1,4 +1,6 @@
 #include "Shield.hpp"
+#include "Serialize.hpp"
+
 #include <iostream>
 
 Shield::Shield(const std::string &name,
@@ -12,4 +14,12 @@ Shield::Shield(const std::string &name,
 Shield::~Shield()
 {
     std::cerr << "Shield<" << this->getName() << "> destructor" << std::endl;
+}
+
+std::string Shield::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-SHIELD ";
+    serializeEquippableCommonConstructorParameters(os);
+    return sym;
 }

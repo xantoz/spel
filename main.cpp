@@ -228,7 +228,7 @@ void talk(string arg)
         Actor *actor = player->getRoom()->getActor(arg);
         if(actor != nullptr)
         {
-            actor->talk();
+            // actor->talk();
             
         }
     }

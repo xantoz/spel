@@ -1,4 +1,6 @@
 #include "Armor.hpp"
+#include "Serialize.hpp"
+
 #include <iostream>
 
 Armor::Armor(const std::string &name,
@@ -12,4 +14,12 @@ Armor::Armor(const std::string &name,
 Armor::~Armor()
 {
     std::cerr << "Armor<" << this->getName() << "> destructor" << std::endl;
+}
+
+std::string Armor::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-ARMOR ";
+    serializeEquippableCommonConstructorParameters(os);
+    return sym;
 }

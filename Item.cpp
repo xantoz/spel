@@ -9,6 +9,7 @@
 #include "Shield.hpp"
 #include "ItemOwner.hpp"
 #include "Actor.hpp"
+#include "Serialize.hpp"
 
 #include <iostream>
 #include <typeinfo>
@@ -50,6 +51,7 @@ std::string Item::use()
 
 std::string Item::serialize(std::ostream &os) const
 {
-    os << "<<<TODO>>>";
-    return "TODO";
+    std::string itemSym = gensym();
+    os << itemSym << ":MAKE-ITEM " << "\"" << getName() << "\" \"" << getBaseDescription() << "\" " << getWeight() << std::endl;
+    return itemSym;
 }
