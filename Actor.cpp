@@ -1,6 +1,8 @@
 #include "Actor.hpp"
 #include "Room.hpp"
 #include "exceptions.hpp"
+#include "Serialize.hpp"
+
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
@@ -180,7 +182,7 @@ std::string Actor::getDescription() const
     else
         ret << " EMPTY";
     ret << "\n";
-    ret << "SWORD: "  << ((sword)  ? sword->getName()  : "NONE")
+    ret << "SWORD: "   << ((sword)  ? sword->getName()  : "NONE")
         << " SHIELD: " << ((shield) ? shield->getName() : "NONE")
         << " ARMOR: "  << ((armor)  ? armor->getName()  : "NONE")
         << " SHOES: "  << ((shoes)  ? shoes->getName()  : "NONE");
@@ -258,7 +260,7 @@ void Actor::die()
         std::cout << "A door opened to the " << ent.first << std::endl;
     }
 
-    if (dropItems)
+    if (dropItems && room != nullptr)
     {
         unequipArmor();
         unequipShield();
@@ -284,8 +286,64 @@ void Actor::setDeathExit(const std::string &name, Room* room)
     deathExits[name] = room;
 }
 
+const std::map<std::string, Room*> &Actor::getDeathExits() const
+{
+    return deathExits;
+}
 
 void Actor::setDrop(bool drop)
 {
     dropItems = drop;
+}
+
+std::string Actor::serialize(std::ostream &os) const
+{
+    std::string actorSym = gensym();
+    os << actorSym << ":MAKE-ACTOR ";
+    actorTypeIndependentSerializeConstructorParameters(os);
+    actorTypeIndependentSerialize(os, actorSym);
+    return actorSym;
+}
+
+void Actor::actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const
+{
+    os << "\"" << getName() << "\" \"" << getBaseDescription() << "\"" << " " << stats.serializeString() << " " << hp << std::endl;
+}
+
+
+void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const
+{
+    this->serializeItems(os, actorSym);
+    if (sword != nullptr)
+    {
+        std::string itemSym = sword->serialize(os);
+        os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
+        os << ":EQUIP-SWORD " << actorSym << " \"" << sword->getName() << "\"" << std::endl;
+        
+    }
+    if (armor != nullptr)
+    {
+        std::string itemSym = armor->serialize(os);
+        os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
+        os << ":EQUIP-ARMOR " << actorSym << " \"" << armor->getName() << "\"" << std::endl;
+    }
+    if (shield != nullptr)
+    {
+        std::string itemSym = shield->serialize(os);
+        os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
+        os << ":EQUIP-SHIELD " << actorSym << " \"" << shield->getName() << "\"" << std::endl;
+    }
+    if (shoes != nullptr)
+    {
+        std::string itemSym = shoes->serialize(os);
+        os << ":ADD-ITEM " << actorSym << " " << itemSym << std::endl;
+        os << ":EQUIP-SHOES " << actorSym << " \"" << shoes->getName() << "\"" << std::endl;
+    }
+
+    os << ":SET-DROP " << dropItems << std::endl;
+
+    // for (auto const &ent: deathExits)
+    // {
+    //     os << ":SET-DEATH-EXIT " << actorSym << " \"" << ent.first << " " << 
+    // }
 }

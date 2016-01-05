@@ -4,6 +4,8 @@
 // #include "ItemOwner.hpp"
 #include "GameObject.hpp"
 
+#include <ostream>
+
 class ItemOwner;                                            // solve circular reference
 class Item : public GameObject
 {
@@ -19,6 +21,8 @@ public:
     ItemOwner *getOwner() const;
     
     virtual std::string use();
+
+    virtual std::string serialize(std::ostream &os) const;
     
     friend class ItemOwner;
 };

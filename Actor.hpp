@@ -8,7 +8,9 @@
 #include "Shoes.hpp"
 #include "Shield.hpp"
 
+#include <string>
 #include <map>
+#include <ostream>
 
 class Room;                                                 // solve circular reference
 class Actor : public ItemOwner 
@@ -28,7 +30,10 @@ protected:
     Sword *sword;
     Shoes *shoes;
     virtual void attackResponse(Actor *actor);
-    
+    // To be used be inheriting classes when serializing
+    void actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const;
+    void actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const;
+
 public:
     Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
@@ -59,6 +64,7 @@ public:
     
     // When using this one must ensure that the Room passed lives longer than this Actor
     void setDeathExit(const std::string &name, Room *room);
+    const std::map<std::string, Room*> &getDeathExits() const;
     
     void go(std::string direction);
     Room *getRoom() const;
@@ -69,6 +75,8 @@ public:
     const Stats &getStats() const;
 
     virtual std::string getDescription() const override;
+
+    virtual std::string serialize(std::ostream &os) const;
 
     virtual void die();
     bool isDead();

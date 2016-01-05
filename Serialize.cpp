@@ -3,6 +3,8 @@
 #include "Actor.hpp"
 
 #include <map>
+#include <vector>
+#include <tuple>
 #include <list>
 #include <sstream>
 #include <iostream>
@@ -97,26 +99,30 @@ static std::string serializeActor(const Actor *actor, std::ostream &os)
 {
     std::string sym = gensym();
     os << sym;
-    os << "<<<ACTOR SERIALIZE TODO>>>";
-    // actor->serialize(os);
+    actor->serialize(os);
     return sym;
 }
 
 void serialize(const std::list<const Room*> &rooms, std::ostream &os)
 {
     std::unordered_map<const Room*, std::string> room_to_sym;
+    std::vector<std::tuple<std::string, const Actor*> > actors;
     
     for (const Room *room: rooms)
     {
-        std::string sym = gensym();
-        room_to_sym[room] = sym;
-        os << sym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getDescription());
+        std::string roomSym = gensym();
+        room_to_sym[room] = roomSym;
+        os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getDescription());
         for (const Actor *actor: room->getActors())
         {
-            std::string actorSym = serializeActor(actor, os);
-            os << ":ADD-ACTOR " << actorSym;
+            std::string actorSym = actor->serialize(os);
+            os << ":ADD-ACTOR " << roomSym << " " << actorSym;
+            actors.emplace_back(actorSym, actor);           // save all actors together with their syms for later use
         }
+        // ItemOwner::serializeItems(std::ostream&, const std::string&) const
+        room->serializeItems(os, roomSym);
     }
+    // Link the room graph
     for (const Room *room: rooms)
     {
         for (auto const &ent: room->getExits())
@@ -127,4 +133,14 @@ void serialize(const std::list<const Room*> &rooms, std::ostream &os)
                << room_to_sym.at(ent.second);
         }
     }
+    // Set actor death-exits
+    for (auto &tup: actors)
+    {
+        for (auto &ent: std::get<1>(tup)->getDeathExits())
+        {
+            os << ":SET-DEATH-EXIT " << std::get<1>(tup) << " \"" << ent.first << "\" " << room_to_sym.at(ent.second) << std::endl;
+        }
+    }
+             
+    
 }

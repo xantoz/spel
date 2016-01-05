@@ -64,3 +64,13 @@ const std::list<Item*> &ItemOwner::getItems() const
 {
     return items;
 }
+
+void ItemOwner::serializeItems(std::ostream &os, const std::string &ownerSym) const
+{
+    for (Item *item: items)
+    {
+        std::string itemSym = item->serialize(os);
+        os << ":ADD-ITEM " << ownerSym << " " << itemSym << std::endl;
+    }
+}
+
