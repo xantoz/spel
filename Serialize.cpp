@@ -138,7 +138,7 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
     {
         for (auto &ent: std::get<1>(tup)->getDeathExits())
         {
-            os << ":SET-DEATH-EXIT " << std::get<1>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
+            os << ":SET-DEATH-EXIT " << std::get<0>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
         }
     }
              
