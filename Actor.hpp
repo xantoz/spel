@@ -7,13 +7,17 @@
 #include "Sword.hpp"
 #include "Shoes.hpp"
 #include "Shield.hpp"
-#include <string>
+
+#include <map>
 
 class Room;                                                 // solve circular reference
 class Actor : public ItemOwner 
 {
 private:
     Room *room;
+    std::map<std::string, Room*> deathExits;
+    bool dropItems; // if True we drop our items and equipment at death
+
 protected:    
     Stats stats;
 
@@ -49,6 +53,12 @@ public:
     const Shield *getShield() const;
     const Sword *getSword() const;
     const Shoes *getShoes() const;
+
+    // If we set this to true we drop our items and equipment on death instead of deleting them
+    void setDrop(bool drop);
+    
+    // When using this one must ensure that the Room passed lives longer than this Actor
+    void setDeathExit(const std::string &name, Room *room);
     
     void go(std::string direction);
     Room *getRoom() const;

@@ -9,19 +9,19 @@
 // unequipped. Item's destructor will otherwise explode.
 
 Actor::Actor(const std::string &name, const std::string &description) :
-    ItemOwner(name, description), dead(false),
+    ItemOwner(name, description), dropItems(false), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), stats(_stats), hp(_stats.maxhp), dead(false),
+    ItemOwner(name, description), dropItems(false), stats(_stats), hp(_stats.maxhp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
-    ItemOwner(name, description), stats(_stats), hp(_hp), dead(false),
+    ItemOwner(name, description), dropItems(false), stats(_stats), hp(_hp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
 }
@@ -251,10 +251,41 @@ void Actor::attackResponse(Actor *actor)
 void Actor::die()
 {
     std::cout << getName() << " died." << std::endl;
+
+    for (auto &ent: deathExits)
+    {
+        room->setExit(ent.first, ent.second);
+        std::cout << "A door opened to the " << ent.first << std::endl;
+    }
+
+    if (dropItems)
+    {
+        unequipArmor();
+        unequipShield();
+        unequipSword();
+        unequipShoes();
+        for (Item *item: this->getItems())
+        {
+            std::cout << getName() << " dropped " << item->getName() << std::endl;
+            room->addItem(item);
+        }
+    }
+    
     dead = true;
 }
+
 bool Actor::isDead()
 {
     return dead;
 }
 
+void Actor::setDeathExit(const std::string &name, Room* room)
+{
+    deathExits[name] = room;
+}
+
+
+void Actor::setDrop(bool drop)
+{
+    dropItems = drop;
+}
