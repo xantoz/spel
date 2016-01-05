@@ -35,12 +35,32 @@ Room::~Room()
 {
     std::cerr << "Room<" << getName() << "> destructor" << std::endl;\
 
-    for (auto const &exit: exits)
-        exit.second->removeExit(this);
+    // Garbage collect ourselves from all other rooms' exits, and the Actors' deathExits
+    for (Room *room: Room::getRooms())
+    {
+        try {
+            room->removeExit(this);
+        
+            for (Actor *actor: room->getActors())
+            {
+                actor->removeDeathExit(this);
+            }
+        }
+        catch (const NoSuchExitException) {
+            // ignore NoSuchExitException since were asking all rooms and all actors, even those
+            // who don't have exits to us, to remove us from their list
+        }
+    }
     
-    // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
-    while (actors.size() != 0)
-        delete actors.front();
+    // for (auto const &exit: exits)
+    //     exit.second->removeExit(this);
+    
+    // // Since destructing actors will automatically remove them from the list of actors (see Actor::~Actor)
+    // while (actors.size() != 0)
+    //     delete actors.front();
+    auto it = actors.begin();
+    while (it != actors.end())
+        delete *it++; // deleting removes the actor from the list
 
     // Remove ourselves from the list of rooms
     rooms.remove(this);

@@ -6,6 +6,7 @@
 #include "Classes.hpp"
 #include "Serialize.hpp"
 #include "Potion.hpp"
+
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -15,9 +16,25 @@
 #include <boost/algorithm/string/trim_all.hpp>
 
 using namespace std;
+
+
 Player *player;
 Actor *opponent;
 bool battleMode;
+
+void destroy_everything()
+{
+    while (Room::getRooms().size() > 0)
+    {
+        Room *room = Room::getRooms().front();
+        cout << "==Deleting room " << room->getName() << "==" << endl;
+        delete room;
+    }
+
+    player = nullptr;
+    opponent = nullptr;
+    battleMode = false;
+}
 
 void enterBattleMode(Actor *actor)
 {
@@ -254,7 +271,6 @@ void talk(string arg)
         if(human != nullptr)
         {
             human->talk();
-            
         }
         else 
         {
@@ -274,6 +290,17 @@ void save(string filename)
     cout << "Saved world to " << filename << endl;
 }
 
+void load_world(string filename)
+{
+    if (filename == "")
+        filename = "quicksave.save";
+    cout << "Loading from " << filename << endl;
+    // destroy_everything();
+    std::ifstream infile(filename);
+    load(infile);
+}
+
+
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)>> cmds;
@@ -290,6 +317,7 @@ int main(int argc, char** argv)
     cmds["battle"] = &battle;
     cmds["talk"] = &talk;
     cmds["save"] = &save;
+    cmds["load"] = &load_world;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &use;
@@ -308,6 +336,7 @@ int main(int argc, char** argv)
     
     kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
+    
     Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
@@ -392,12 +421,7 @@ int main(int argc, char** argv)
         }
     }
 
-    while (Room::getRooms().size() > 0)
-    {
-        Room *room = Room::getRooms().front();
-        cout << "==Deleting room " << room->getName() << "==" << endl;
-        delete room;
-    }
+    destroy_everything();
         
     return 0;
     

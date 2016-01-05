@@ -37,4 +37,13 @@ class NoSuchActorException : public GameException
     NoSuchActorException() : GameException("No such actor.") {}
 };
 
+class InvalidFileException : public GameException
+{
+public:
+    InvalidFileException() : GameException("Invalid file.") {}
+    InvalidFileException(const std::string &msg) : GameException("Invalid File: " + msg) {}
+};
+
+    
+
 #endif /* EXCEPTIONS_HPP */
