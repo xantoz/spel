@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <array>
 #include <algorithm>
+#include <sstream>
+#include <iostream>
 static Stats getRandomStats(int tmp2)
 {
     int tmp1 = 0;
@@ -17,49 +19,50 @@ static Stats getRandomStats(int tmp2)
     return random_stats;
     
 }
-
-Troll::Troll(const std::string &name, const std::string &description, int lvl) :
-    Actor(name, description) 
+static const Stats troll_base_stats = {10, 1, 3, 4, 20, 2, 2};
+static const Stats dragon_base_stats = {20, 3, 3, 6, 4, 5, 2};
+static const Stats thief_base_stats = {10, 2, 3, 2, 8, 2, 7};
+static const Stats golem_base_stats = {10, 6, 4, 12, 2, 2, 2};
+static const Stats human_base_stats = {20, 1, 2, 1, 1, 1, 1};
+static std::string classAndLevel(const std::string &c, int lvl)
 {
-    static const Stats base_stats = {10, 1, 3, 4, 20, 2, 2};
-    
-    stats = base_stats*lvl + getRandomStats(10);
-    hp = stats.maxhp;
+    std::ostringstream ostring;
+    ostring << c << " level "<< lvl;
+    return ostring.str();
+}
+
+Troll::Troll(const std::string &name, int lvl) :
+    Actor(name, classAndLevel("Troll", lvl), troll_base_stats*lvl + getRandomStats(10))
+{
 }
 
     
-Dragon::Dragon(const std::string &name, const std::string &description, int lvl) :
-    Actor(name, description)
+Dragon::Dragon(const std::string &name, int lvl) :
+    Actor(name, classAndLevel("Dragon", lvl), dragon_base_stats*lvl + getRandomStats(10))
 {
-    static const Stats base_stats = {20, 3, 3, 6, 4, 5, 2};
-    
-    stats = base_stats*lvl+getRandomStats(10);
-    hp = stats.maxhp;
 }
 
-Thief::Thief(const std::string &name, const std::string &description, int lvl) :
-    Actor(name, description)
+Thief::Thief(const std::string &name,  int lvl) :
+    Actor(name, classAndLevel("Thief", lvl), thief_base_stats*lvl + getRandomStats(10))
 {
-    static const Stats base_stats = {10, 2, 3, 2, 8, 2, 7};
-    
-    stats = base_stats*lvl+getRandomStats(10);
-    hp = stats.maxhp;
+  
 }
 
-Golem:: Golem(const std::string &name, const std::string &description, int lvl) :
-    Actor(name, description)
+Golem::Golem(const std::string &name,  int lvl) :
+    Actor(name, classAndLevel("Golem", lvl), golem_base_stats*lvl + getRandomStats(10))
 {
-    static const Stats base_stats = {10, 6, 4, 12, 2, 2, 2};
-    
-    stats = base_stats*lvl + getRandomStats(10);
-    hp = stats.maxhp;
 }
 
-Human::Human(const std::string &name, const std::string &description, const std::string &text) :
-    Actor(name, description)
+Human::Human(const std::string &name, const std::string &desc, const std::string &t) :
+    Actor(name, desc, human_base_stats + getRandomStats(10)), text(t)
 {
-    static const Stats base_stats = {20, 1, 2, 1, 1, 1, 1};
-    
-    stats = base_stats+getRandomStats(10);
-    hp = stats.maxhp;
+}
+
+Human::Human(const std::string &name, const std::string &desc, const std::string &t, Stats &stats) :  Actor(name, desc, stats), text(t)
+{
+}
+bool Human::talk()
+{
+    std::cout << text << std::endl;
+    return false;
 }

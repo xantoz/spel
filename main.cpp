@@ -217,7 +217,23 @@ void run(string arg)
     {
         exitBattleMode();
     }
-}    
+}
+
+void talk(string arg)
+{
+    if(arg == "")
+        cout << "Talk who?" << endl;
+    else 
+    {
+        Actor *actor = player->getRoom()->getActor(arg);
+        if(actor != nullptr)
+        {
+            actor->talk();
+            
+        }
+    }
+}
+
 
 
 int main(int argc, char** argv)
@@ -234,24 +250,30 @@ int main(int argc, char** argv)
     cmds["unequip"] = &unequip;
     cmds["drop"] = &drop;
     cmds["battle"] = &battle;
-
+    cmds["talk"] = &talk;
+    
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &use;
     battleCmds["run"] = &run;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
+    Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
+    kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
     
     Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
+    Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
+    Human* oldman = new Human("Rudolph", "It's your uncle", "Good morning my son, where are you going?", oldmanstats);
+    outside ->addActor(oldman);
 
     Stats nilsstats = { 20, 10, 10, 10, 10, 10 };
     player = new Player("nils", "it's you", nilsstats);
     first->addActor(player);
-    Troll* troll = new Troll("Troll1", "Bad troll", 2);
+    Troll* troll = new Troll("Troll1", 2);
     kitchen->addActor(troll);
     
     cout << player->getRoom()->getName() << endl;
