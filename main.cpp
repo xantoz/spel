@@ -136,9 +136,9 @@ void equip(string arg)
     string type = arg.substr(0, first_space);
     string what = arg.substr(first_space + 1);
 
-    cerr << "meep meep" << endl;
-    if (player->getItem(what))
-        cerr << "BLOOOORP " << typeid(*player->getItem(what)).name() << endl;
+    // cerr << "meep meep" << endl;
+    // if (player->getItem(what))
+    //     cerr << "BLOOOORP " << typeid(*player->getItem(what)).name() << endl;
     
     if (type == "sword")
     {

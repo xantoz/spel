@@ -354,10 +354,10 @@ void load(std::istream &is)
         var_name = line.substr(0, pos);
         parseCmd(line.substr(pos + 1), cmd_name, args);
 
-        std::cerr << "VAR_NAME: " << stringify(var_name) << " CMD: " << stringify(cmd_name) << " ARGS: ";
-        for (std::string &arg: args)
-            std::cerr << "\"" << arg << "\" ";
-        std::cerr << std::endl;
+        // std::cerr << "VAR_NAME: " << stringify(var_name) << " CMD: " << stringify(cmd_name) << " ARGS: ";
+        // for (std::string &arg: args)
+        //     std::cerr << "\"" << arg << "\" ";
+        // std::cerr << std::endl;
         
         try 
         {
