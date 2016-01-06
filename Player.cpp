@@ -83,6 +83,25 @@ Stats Player::addStats(const Stats &s2)
     return stats;
 }
 
+int Player::numberOfKills()
+{
+    return kills;
+}
+
+bool Player::hasKilledMonster()
+{
+    return killedMonster;
+}
+
+void Player::setKills(int k)
+{
+    kills = k;
+}
+
+void Player::setKilledMonster(bool k)
+{
+    killedMonster = k;
+}
 
 std::string Player::serialize(std::ostream &os) const
 {
@@ -90,5 +109,7 @@ std::string Player::serialize(std::ostream &os) const
     os << playerSym << ":MAKE-PLAYER ";
     actorTypeIndependentSerializeConstructorParameters(os);
     actorTypeIndependentSerialize(os, playerSym);
+    os << ":SET-KILLED-MONSTER " << killedMonster;
+    os << ":SET-NUMBER-KILLS " << kills;
     return playerSym;
 }

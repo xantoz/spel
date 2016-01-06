@@ -29,7 +29,6 @@ protected:
     Shield *shield;
     Sword *sword;
     Shoes *shoes;
-    virtual void attackResponse(Actor *actor);
     // To be used be inheriting classes when serializing
     void actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const;
     void actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const;
@@ -45,7 +44,7 @@ public:
     void attack(Actor *actor);
     bool attack(const std::string&);
     void beAttacked(Actor* actor, unsigned int dmg);
-    
+    virtual void attackResponse(Actor *actor);
     bool equipArmor(const std::string &name);
     bool equipShield(const std::string &shield);
     bool equipSword(const std::string &sword);

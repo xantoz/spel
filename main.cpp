@@ -7,6 +7,7 @@
 #include "Serialize.hpp"
 #include "Potion.hpp"
 #include "Key.hpp"
+#include "Shop.hpp"
 
 #include <cstring>
 #include <cstdio>
@@ -99,6 +100,40 @@ void use(string arg)
     }
     
 }
+
+void useBattle(string arg)
+{
+    if (arg == "")
+    {
+        cout << "What do you want to use?" << endl;
+        return;
+    }
+    else 
+    {
+        auto it = arg.begin();
+        for(; it != arg.end() && *it != ' '; ++it);
+        string first(arg.begin(), it);
+        for(; it != arg.end() && *it == ' '; ++it);
+        string second(it, arg.end());
+        if(second == "")
+            cout << player->use(first) << endl;
+        else
+        {
+            cout << player->use(first, second) << endl;
+        }
+
+        opponent->attackResponse(player);
+
+        // always non-null since we'd have triggered an exception with player->use for a
+        // non-existant item
+        
+        Item *item = player->getItem(first);
+        if (item->usedUp())
+            delete item;
+
+    }
+}
+
 
 void pickup(string arg)
 {
@@ -251,10 +286,7 @@ void run(string arg)
         {
             cout << "Could not run away" << endl;
             opponent->attack(player);
-            
         }
-        
-            
     }
     else 
     {
@@ -311,8 +343,6 @@ void randomSpawn()
     }
 }
 
-
-
 void save(string filename)
 {
     if (filename == "")
@@ -353,7 +383,7 @@ int main(int argc, char** argv)
     cmds["load"] = &load_world;
     
     battleCmds["attack"] = &attack;
-    battleCmds["use"] = &use;
+    battleCmds["use"] = &useBattle;
     battleCmds["run"] = &run;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
@@ -368,9 +398,19 @@ int main(int argc, char** argv)
     outside->setExit("northwest", street);
     neighbor->setExit("northeast", street);
     street->setExit("north", park);
-    
+
+    std::list<std::pair<Item*, unsigned>> shop1List;
+    Stats goldshieldstats = {0, 0, 40, -3, 0, -2};
+    Stats golddaggerstats = {0, 0, 30, 0, 0, 1, 4};
+            
+    shop1List.push_back(std::pair<Item*, unsigned>(new Shield("Gold shield", "An awesome shield", 40, goldshieldstats), 100));
+    shop1List.push_back(std::pair<Item*, unsigned>(new Sword("Gold dagger", "An awesome dagger", 50, golddaggerstats), 100));
+    shop1List.push_back(std::pair<Item*, unsigned>(new Potion("GoldPotion", 4), 30));                              
+    Shop* shop = new Shop("Shop", "The shop, type list to list all items", shop1List );
     kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
+    neighbor->setExit("shop", shop);
+    shop->setExit("exit", neighbor);
     
     Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
@@ -392,7 +432,6 @@ int main(int argc, char** argv)
 
     Stats axestats = {0, 0, 20, 0, -10,-5,-5};
     neighbor->addItem(new Sword("Axe", "A really heavy axe", 100, axestats));
-            
     
     Actor* yTree = new Actor("BigTree", "The tree looks really old", bigTreeStats);
     park->addActor(yTree);

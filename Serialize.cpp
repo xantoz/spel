@@ -14,6 +14,7 @@
 #include "Classes.hpp"
 #include "Potion.hpp"
 #include "Key.hpp"
+#include "Shop.hpp"
 
 // #include <map>
 #include <vector>
@@ -186,6 +187,19 @@ void load(std::istream &is)
                 return new Room(args.at(0), args.at(1), nullptr);
             }
         },
+        {"MAKE-SHOP", [&](const std::vector<std::string> &args) 
+         {
+             std::list<std::pair<Item*, unsigned>> items;
+             for(std::size_t i = 2; i < args.size(); i+=2)
+             {
+                 Item* item = dynamic_cast<Item*>(vars.at(args[i]));
+                 items.push_back(std::pair<Item*, unsigned>(item, std::stoi(args[i+1])));
+             }
+             
+             return new Shop(args.at(0), args.at(1), items);
+         }
+        },
+        
         {"MAKE-ACTOR", [&](const std::vector<std::string> &args) {
                 if      (args.size() == 2) return new Actor(args.at(0), args.at(1));
                 else if (args.size() == 3) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)));
@@ -285,6 +299,23 @@ void load(std::istream &is)
                     throw InvalidFileException(row, "Wrong amount of arguments.");
             }
         },
+        {"SET-NUMBER-KILLS", [&](const std::vector<std::string> &args) 
+         {
+             Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
+             if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-NUMBER-KILLS.");
+             player->setKills(std::stoi(args.at(1)));
+             return nullptr;
+         }
+        },
+        {"SET-KILLED-MONSTER", [&](const std::vector<std::string> &args)
+         {
+             Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
+             if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-KILLED-MONSTER.");
+             player->setKilledMonster(std::stoi(args.at(1)));
+             return nullptr;
+         }
+        },
+        
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
                 if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-DROP.");

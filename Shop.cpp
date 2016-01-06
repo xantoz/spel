@@ -1,37 +1,61 @@
 #include "Shop.hpp"
-#include <algorithm>
 #include "exceptions.hpp"
-Shop::Shop(std::string &name, std::string &description, std::list<Item*> itms) : Room(name, description,"exit",  Room* exit, nullptr), inventory(itms) 
+#include "Serialize.hpp"
+
+#include <algorithm>
+#include <sstream>
+Shop::Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms) : Room(name, description, nullptr), inventory(itms) 
 {
 }
-std::string Shop::listItems() const 
+std::string Shop::listInventory() const 
 {
     std::ostringstream os;
     
-    for(std::pair<Item, unsigned> itemPrice : inventory)
+    for(std::pair<Item*, unsigned> itemPrice : inventory)
     {
-        os << itemPrice.first.getName() << " " << itemPrice.second  << "\n";
+os << itemPrice.first->getName() << " " << itemPrice.second << "\n";
     }
     return os.str();
 }
 
-const std::pair<Item, unsigned>& Shop:: getShopItem(const std::string &name)
+const std::pair<Item*, unsigned>& Shop::getShopItem(const std::string &name) const
 {
-    std::list<std::pair<Item, unsigned>> it =
+    auto it =
         std::find_if(inventory.begin(), inventory.end(),
-                     [&](const std::pair<Item,unsigned> &pair) {
-                         return pair.first == name;
+                     [&](const std::pair<Item*,unsigned> &pair) {
+                         return pair.first->getName() == name;
                      });
     
     if (it == inventory.end())
         throw NoSuchItemException();
     else
         return *it;
-        
 }
 
 std::string Shop::getDescription() const 
 {
-    return Room::getDescription() + " " + listItems();
-    
+    return Room::getDescription() + "\n" + listInventory();
 }
+
+std::string Shop::serialize(std::ostream &os) const
+{
+    std::string actorSym = gensym();
+    std::vector<std::string> itemsyms;
+    for (const std::pair<Item*, unsigned> &itemAndPrice : inventory)
+    {
+        itemsyms.emplace_back(itemAndPrice.first->serialize(os));
+    }
+    
+    os << actorSym << ":MAKE-SHOP ";
+    os << stringify(getName()) << " ";
+    os << stringify(getBaseDescription()) << " ";
+    int i = 0;
+    for (const std::pair<Item*, unsigned> &itemAndPrice : inventory)
+    {
+        os << itemsyms[i] << itemAndPrice.second << " ";
+        ++i;
+    }
+    
+    return actorSym;
+}
+

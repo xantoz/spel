@@ -147,7 +147,6 @@ std::string Actor::use(const std::string &itemName,
     return item->use(actor);
 }
 
-
 bool Actor::pickup(const std::string &itemName)
 {
     if (room == nullptr) return false;
