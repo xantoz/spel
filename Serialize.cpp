@@ -367,7 +367,7 @@ void load(std::istream &is)
         }
         catch (const std::out_of_range &e)
         {
-            throw InvalidFileException(row, "No such command/var. Or too few parameters.");
+            throw InvalidFileException(row, "No such command/var. Or too few parameters. what(): " + std::string(e.what()));
         }
         catch (const std::invalid_argument &e)
         {
