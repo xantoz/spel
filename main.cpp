@@ -329,7 +329,7 @@ int main(int argc, char** argv)
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
     Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
     Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);
-    Room* park = new Room("Park", "The biggest park in this city. \nThere's a big tree in the middle", "north", street,nullptr);
+    Room* park = new Room("Park", "The biggest park in this city. \nThere's a big tree in the middle", "south", street,nullptr);
     outside->setExit("west", neighbor);
     outside->setExit("northwest", street);
     neighbor->setExit("northeast", street);
