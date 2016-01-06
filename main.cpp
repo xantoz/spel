@@ -282,6 +282,36 @@ void talk(string arg)
     }
 }
 
+// template <typename I>
+// I random_element(I begin, I end)
+// {
+//     const unsigned long n = std::distance(begin, end);
+//     const unsigned long divisor = (RAND_MAX + 1) / n;
+
+//     unsigned long k;
+//     do { k = std::rand() / divisor; } while (k >= n);
+
+//     return std::advance(begin, k);
+// }
+
+void randomSpawn()
+{
+    static unsigned cntr = 0;
+    if (rand() % 5 == 1)
+    {
+        Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
+        auto rooms = Room::getRooms();
+        // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
+                
+        unsigned cnt = rand() % rooms.size();
+        auto it = rooms.begin();
+        for (unsigned i = 0; i < cnt; ++i)
+            ++it;
+        (*it)->addActor(act);
+    }
+}
+
+
 
 void save(string filename)
 {
@@ -391,6 +421,7 @@ int main(int argc, char** argv)
             {
                 actor->update();
             }
+            randomSpawn();
             cout << "\n> ";
             getline(cin, str);
             boost::trim_all(str);
