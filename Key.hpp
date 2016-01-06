@@ -34,6 +34,8 @@ public:
                    Room* toRoom, const std::string &toRoomDirection);
     Room *getFromRoom() const;
     Room *getToRoom() const;
+    void setFromRoom(Room *room);
+    void setToRoom(Room *room);
     const std::string &getFromRoomDirection() const;
     const std::string &getToRoomDirection() const;
     

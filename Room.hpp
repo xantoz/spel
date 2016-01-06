@@ -7,6 +7,17 @@
 #include <list>
 #include <map>
 
+struct EncounterProbability
+{
+    double dragon;
+    double thief;
+    double golem;
+    double troll;
+    EncounterProbability();
+    EncounterProbability(double dragon, double thief, double golem, double troll);
+    std::string serializeString() const;
+};
+  
 class Room : public ItemOwner 
 {
 private:
@@ -14,10 +25,14 @@ private:
     std::list<Actor*> actors;
 
     static std::list<Room*> rooms;
+
+    EncounterProbability encounters;
     
 public:
     // Room(const std::string &name, const std::string &description);
     Room(const std::string &name, const std::string &description, ...);
+    Room(const std::string &name, const std::string &description, const EncounterProbability &encounters);
+    Room(const std::string &name, const std::string &description, int lvl);
     virtual ~Room() override;
 
     /// Returns nullptr for non-existant exits
@@ -35,7 +50,11 @@ public:
 
     virtual std::string getDescription() const override;
 
+    void update();
+
     static const std::list<Room*> &getRooms();
+
+    const EncounterProbability &getEncounterProbs() const;
 
     // friend void main_loop();
 };

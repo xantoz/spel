@@ -104,6 +104,16 @@ Room *Key::getToRoom() const
     return toRoom;
 }
 
+void Key::setFromRoom(Room *room)
+{
+    fromRoom = room;
+}
+
+void Key::setToRoom(Room *room)
+{
+    toRoom = room;
+}
+
 const std::string &Key::getFromRoomDirection() const
 {
     return fromRoomDirection;

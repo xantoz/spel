@@ -175,6 +175,16 @@ Stats parseStats(const std::string &str)
     return stats;
 }
 
+EncounterProbability parseEncounterProbs(const std::string &str)
+{
+    std::vector<std::string> strings; strings.reserve(4);
+    std::vector<double> numbers;      numbers.reserve(4);
+    boost::split(strings, str, boost::is_any_of(";"));
+    std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stod(a); });
+    if (numbers.size() != 4) throw InvalidFileException("EncounterProbability-param of wrong length");
+    return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
+}
+
 void load(std::istream &is)
 {
     unsigned row = 0;
@@ -183,7 +193,16 @@ void load(std::istream &is)
     std::unordered_map<std::string, GameObject*> vars;
     std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds = {
         {"MAKE-ROOM", [&](const std::vector<std::string> &args) {
-                return new Room(args.at(0), args.at(1), nullptr);
+                if (args.size() == 2)
+                    return new Room(args.at(0), args.at(1), nullptr);
+                else if (args.size() == 3) {
+                    if (args.at(2).find_first_of(';') != std::string::npos) // third argument is an EncounterProbability
+                        return new Room(args.at(0), args.at(1), parseEncounterProbs(args.at(2)));
+                    else                 // third argument is a level
+                        return new Room(args.at(0), args.at(1), std::stoi(args.at(2)));
+                }
+                else
+                    throw InvalidFileException(row, "Wrong amount of args.");
             }
         },
         {"MAKE-ACTOR", [&](const std::vector<std::string> &args) {
@@ -456,7 +475,10 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
     {
         std::string roomSym = gensym();
         room_to_sym[room] = roomSym;
-        os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getBaseDescription()) << std::endl;
+        os << roomSym << ":MAKE-ROOM "
+           << stringify(room->getName()) << " "
+           << stringify(room->getBaseDescription()) << " " 
+           << room->getEncounterProbs().serializeString() << std::endl;
         for (const Actor *actor: room->getActors())
         {
             std::string actorSym = actor->serialize(os);

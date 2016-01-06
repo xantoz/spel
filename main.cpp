@@ -294,22 +294,22 @@ void talk(string arg)
 //     return std::advance(begin, k);
 // }
 
-void randomSpawn()
-{
-    static unsigned cntr = 0;
-    if (rand() % 5 == 1)
-    {
-        Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
-        auto rooms = Room::getRooms();
-        // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
+// void randomSpawn()
+// {
+//     static unsigned cntr = 0;
+//     if (rand() % 5 == 1)
+//     {
+//         Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
+//         auto rooms = Room::getRooms();
+//         // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
                 
-        unsigned cnt = rand() % rooms.size();
-        auto it = rooms.begin();
-        for (unsigned i = 0; i < cnt; ++i)
-            ++it;
-        (*it)->addActor(act);
-    }
-}
+//         unsigned cnt = rand() % rooms.size();
+//         auto it = rooms.begin();
+//         for (unsigned i = 0; i < cnt; ++i)
+//             ++it;
+//         (*it)->addActor(act);
+//     }
+// }
 
 
 
@@ -357,7 +357,7 @@ int main(int argc, char** argv)
     battleCmds["run"] = &run;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
-    Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", nullptr);
+    Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
     Room* first = new Room("My room", "This is my room\n You see a yellow locked door to the east.", "west", kitchen, nullptr);
     first->addItem(new Key("yellowkey", "A yellow key", 5, first, "east", secret, "west"));
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
@@ -376,7 +376,6 @@ int main(int argc, char** argv)
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
-    // kitchen->addItem(new Potion("Potion1", "Potion that heals 20 hp", 5, 2));
     kitchen->addItem(new Potion("Potion1", 2));
     
     Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
@@ -415,13 +414,14 @@ int main(int argc, char** argv)
                 {
                     actorList.push_back(actor);
                 }
-                
+                room->update();
             }
             for(Actor *actor : actorList)
             {
                 actor->update();
             }
-            randomSpawn();
+            // randomSpawn();
+            
             cout << "\n> ";
             getline(cin, str);
             boost::trim_all(str);
@@ -433,7 +433,6 @@ int main(int argc, char** argv)
             {
                 battleCmds.at(command)(arg);
                 
-                
                 if(opponent != nullptr && opponent->isDead())
                 {
                     player->addStats((opponent->getStats())*0.1);
@@ -443,7 +442,6 @@ int main(int argc, char** argv)
             }
             else 
             {
-                
                 cmds.at(command)(arg);
             }
             // cout << "\"" << command << "\" \"" << arg << "\"" << endl;
