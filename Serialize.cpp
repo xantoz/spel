@@ -5,6 +5,14 @@
 #include "exceptions.hpp"
 #include "GameObject.hpp"
 #include "Room.hpp"
+#include "Item.hpp"
+#include "Equippable.hpp"
+#include "Sword.hpp"
+#include "Shoes.hpp"
+#include "Shield.hpp"
+#include "Armor.hpp"
+#include "Classes.hpp"
+#include "Potion.hpp"
 
 // #include <map>
 #include <vector>
@@ -115,9 +123,15 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
 
     while (it != str.end() && *it == ' ') ++it; // skip additional space
     auto start = it;
-    while (it != str.end())
+    while (true)
     {
-        if (*it == '"')
+        if (it == str.end())
+        {
+            if (start != it && std::none_of(start, it, [](char c) { return c == ' '; }))
+                args.emplace_back(start, it);
+            break;
+        }
+        else if (*it == '"')
         {
             ++it;
             char prevChar = '"';
@@ -147,7 +161,6 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
         while (it != str.end() && *it == ' ') ++it;    // skip additional space
         start = it;
     }
-    
 }
 
 Stats parseStats(const std::string &str)
@@ -156,7 +169,7 @@ Stats parseStats(const std::string &str)
     std::vector<int> numbers;         numbers.reserve(7);
     boost::split(strings, str, boost::is_any_of(";"));
     std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stoi(a); });
-    if (numbers.size() != 7) throw new InvalidFileException("Stats-param of wrong length");
+    if (numbers.size() != 7) throw InvalidFileException("Stats-param of wrong length");
     Stats stats = {numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3), numbers.at(4), numbers.at(5), numbers.at(6)};
     return stats;
 }
@@ -164,6 +177,7 @@ Stats parseStats(const std::string &str)
 void load(std::istream &is)
 {
     unsigned row = 0;
+    bool made_player = false;
     
     std::unordered_map<std::string, GameObject*> vars;
     std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds = {
@@ -175,21 +189,108 @@ void load(std::istream &is)
                 if      (args.size() == 2) return new Actor(args.at(0), args.at(1));
                 else if (args.size() == 3) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)));
                 else if (args.size() == 4) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
-                else                       throw new InvalidFileException(std::to_string(row) + ": Wrong amount of args.");
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
+                // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
+                made_player = true;
+                if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER several times (but why would you?)
+                if      (args.size() == 3) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)));
+                else if (args.size() == 4) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+                return player;
+            }
+        },
+        {"MAKE-TROLL", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 2) return new Troll(args.at(0), std::stoi(args.at(1)));
+                else if (args.size() == 4) return new Troll(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-DRAGON", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 2) return new Dragon(args.at(0), std::stoi(args.at(1)));
+                else if (args.size() == 4) return new Dragon(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-THIEF", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 2) return new Thief(args.at(0), std::stoi(args.at(1)));
+                else if (args.size() == 4) return new Thief(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-GOLEM", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 2) return new Golem(args.at(0), std::stoi(args.at(1)));
+                else if (args.size() == 4) return new Golem(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-HUMAN", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 3) return new Human(args.at(0), args.at(1), args.at(2));
+                else if (args.size() == 4) return new Human(args.at(0), args.at(1), parseStats(args.at(2)), args.at(3));
+                else if (args.size() == 5) return new Human(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)), args.at(4));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        {"MAKE-ITEM", [&](const std::vector<std::string> &args) {
+                return new Item(args.at(0), args.at(1), std::stoi(args.at(2)));
+            }
+        },
+        {"MAKE-EQUIPPABLE", [&](const std::vector<std::string> &args) {
+                return new Equippable(args.at(0), args.at(1), std::stoi(args.at(2)), parseStats(args.at(3)));
+            }
+        },
+        {"MAKE-SHIELD", [&](const std::vector<std::string> &args) {
+                return new Shield(args.at(0), args.at(1), std::stoi(args.at(2)), parseStats(args.at(3)));
+            }
+        },
+        {"MAKE-SWORD", [&](const std::vector<std::string> &args) {
+                return new Sword(args.at(0), args.at(1), std::stoi(args.at(2)), parseStats(args.at(3)));
+            }
+        },
+        {"MAKE-SHOES", [&](const std::vector<std::string> &args) {
+                return new Shoes(args.at(0), args.at(1), std::stoi(args.at(2)), parseStats(args.at(3)));
+            }
+        },
+        {"MAKE-ARMOR", [&](const std::vector<std::string> &args) {
+                return new Armor(args.at(0), args.at(1), std::stoi(args.at(2)), parseStats(args.at(3)));
+            }
+        },
+        {"MAKE-POTION", [&](const std::vector<std::string> &args) {
+                return new Potion(args.at(0), std::stoi(args.at(1)));
             }
         },
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
-                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Trying to pass non-Actor to SET-DROP.");
-                actor->setDrop(std::stoi(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-DROP.");
+                actor->setDrop(std::stoi(args.at(1)));
+                return nullptr;
+            }
+        },
+        {"SET-EXIT", [&](const std::vector<std::string> &args) {
+                Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(0)));
+                Room *toRoom   = dynamic_cast<Room*>(vars.at(args.at(2)));
+                if (fromRoom == nullptr) throw InvalidFileException(row, "Expected Room as first arg to SET-EXIT.");
+                if (toRoom == nullptr)   throw InvalidFileException(row, "Expected Room as third arg to SET-EXIT.");
+                fromRoom->setExit(args.at(1), toRoom);
+                return nullptr;
+            }
+        },
+        {"SET-DEATH-EXIT", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                Room *room = dynamic_cast<Room*>(vars.at(args.at(2)));
+                if (actor == nullptr) throw InvalidFileException(row, "Expected Actor as first arg to SET-DEATH-EXIT.");
+                if (room == nullptr) throw InvalidFileException(row, "Expected Room as third arg to SET-DEATH-EXIT.");
+                actor->setDeathExit(args.at(1), room);
                 return nullptr;
             }
         },
         {"ADD-ACTOR", [&](const std::vector<std::string> &args) {
                 Room *room = dynamic_cast<Room*>(vars.at(args.at(0)));
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(1)));
-                if (room == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Room as first arg to ADD-ACTOR.");
-                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Actor as second arg to ADD-ACTOR.");
+                if (room == nullptr) throw InvalidFileException(row, "Expected Room as first arg to ADD-ACTOR.");
+                if (actor == nullptr) throw InvalidFileException(row, "Expected Actor as second arg to ADD-ACTOR.");
                 room->addActor(actor);
                 return nullptr;
             }
@@ -197,16 +298,37 @@ void load(std::istream &is)
         {"ADD-ITEM", [&](const std::vector<std::string> &args) {
                 ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
                 Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
-                if (itemOwner == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected ItemOwner as first arg to ADD-ITEM.");
-                if (item == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected Item as second arg to ADD-ITEM.");
+                if (itemOwner == nullptr) throw InvalidFileException(row, "Expected ItemOwner as first arg to ADD-ITEM.");
+                if (item == nullptr) throw InvalidFileException(row, "Expected Item as second arg to ADD-ITEM.");
                 itemOwner->addItem(item);
                 return nullptr;
             }
         },
         {"EQUIP-SWORD", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
-                if (actor == nullptr) throw InvalidFileException(std::to_string(row) + ": Expected actor as first arg.");
+                if (actor == nullptr) throw InvalidFileException(row, "Expected actor as first arg.");
                 actor->equipSword(args.at(1));
+                return nullptr;
+            }
+        },
+        {"EQUIP-SHIELD", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Expected actor as first arg.");
+                actor->equipShield(args.at(1));
+                return nullptr;
+            }
+        },
+        {"EQUIP-SHOES", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Expected actor as first arg.");
+                actor->equipShoes(args.at(1));
+                return nullptr;
+            }
+        },
+        {"EQUIP-ARMOR", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Expected actor as first arg.");
+                actor->equipArmor(args.at(1));
                 return nullptr;
             }
         }
@@ -228,14 +350,14 @@ void load(std::istream &is)
         
         size_t pos = line.find_first_of(':');
         if (pos == std::string::npos)
-            throw InvalidFileException(std::to_string(row) + ": Row without colon.");
+            throw InvalidFileException(row, "Row without colon.");
         var_name = line.substr(0, pos);
         parseCmd(line.substr(pos + 1), cmd_name, args);
 
-        // std::cerr << "VAR_NAME: " << var_name << " CMD: " << cmd_name << " ARGS: ";
-        // for (std::string &arg: args)
-        //     std::cerr << "\"" << arg << "\" ";
-        // std::cerr << std::endl;
+        std::cerr << "VAR_NAME: " << stringify(var_name) << " CMD: " << stringify(cmd_name) << " ARGS: ";
+        for (std::string &arg: args)
+            std::cerr << "\"" << arg << "\" ";
+        std::cerr << std::endl;
         
         try 
         {
@@ -245,9 +367,16 @@ void load(std::istream &is)
         }
         catch (const std::out_of_range &e)
         {
-            throw InvalidFileException(std::to_string(row) + ": No such command/var. Or too few parameters.");
+            throw InvalidFileException(row, "No such command/var. Or too few parameters.");
+        }
+        catch (const std::invalid_argument &e)
+        {
+            throw InvalidFileException(row, "invalid_argument: " + std::string(e.what()));
         }
     }
+
+    if (made_player == false)
+        throw InvalidFileException("No MAKE-PLAYER call in the file.");
 }
 
 void serialize(const std::list<Room*> &rooms, std::ostream &os)
@@ -288,6 +417,4 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
             os << ":SET-DEATH-EXIT " << std::get<0>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
         }
     }
-             
-    
 }

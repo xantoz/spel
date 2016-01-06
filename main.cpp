@@ -294,8 +294,9 @@ void load_world(string filename)
 {
     if (filename == "")
         filename = "quicksave.save";
+    cout << "Ragnarök devours the known world." << std::endl;
+    destroy_everything();
     cout << "Loading from " << filename << endl;
-    // destroy_everything();
     std::ifstream infile(filename);
     load(infile);
 }
@@ -341,7 +342,8 @@ int main(int argc, char** argv)
     first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
     Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
     kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
-    kitchen->addItem(new Potion("Potion1", "Potion that heals 20 hp", 5, 2));
+    // kitchen->addItem(new Potion("Potion1", "Potion that heals 20 hp", 5, 2));
+    kitchen->addItem(new Potion("Potion1", 2));
     
     Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
     Human* oldman = new Human("Rudolph", "It's your uncle", oldmanstats, "Good morning my son, where are you going?");
@@ -414,6 +416,13 @@ int main(int argc, char** argv)
         catch(const out_of_range &e)
         {
             cout << "What are ye doing, LOL" << endl;
+        }
+        catch (const InvalidFileException &e)
+        {
+            cerr << "ERROR: Trying to load invalid file:" << endl;
+            cerr << e.what() << endl;
+            cerr << "ABNORMAL SHUTDOWN" << endl;
+            return 1;
         }
         catch (const GameException &e)
         {

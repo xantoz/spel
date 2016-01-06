@@ -18,7 +18,8 @@ protected:
 public:
     // Player(const std::string &name, const std::string &description);
     Player(const std::string &name, const std::string &description, const Stats &stats);
-    ~Player();
+    Player(const std::string &name, const std::string &description, const Stats &stats, int hp);
+    virtual ~Player() override;
 
     std::string look() const;
     std::string look(const std::string &actorOrItem) const;

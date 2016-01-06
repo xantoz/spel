@@ -42,6 +42,11 @@ class InvalidFileException : public GameException
 public:
     InvalidFileException() : GameException("Invalid file.") {}
     InvalidFileException(const std::string &msg) : GameException("Invalid File: " + msg) {}
+    InvalidFileException(unsigned row, const std::string &msg) :
+        GameException("Invalid File at Row " + std::to_string(row) + ": " + msg) 
+    {
+    }
+    
 };
 
     

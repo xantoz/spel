@@ -14,6 +14,11 @@ Player::Player(const std::string &name, const std::string &description, const St
 {
 }
 
+Player::Player(const std::string &name, const std::string &description, const Stats &stats, int hp) :
+    Actor(name, description, stats, hp)
+{
+}
+
 Player::~Player()
 {
     std::cerr << "Player<" << getName() << "> destructor" << std::endl;

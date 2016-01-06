@@ -1,5 +1,6 @@
 #include "Classes.hpp"
 #include "Serialize.hpp"
+#include "Room.hpp"
 
 #include <cstdlib>
 #include <array>
@@ -39,6 +40,12 @@ Troll::Troll(const std::string &name, int lvl) :
 {
 }
 
+Troll::Troll(const std::string &name, const std::string &description, const Stats &stats, int hp) :
+    Actor(name, description, stats, hp)
+{
+}
+
+
 Troll::~Troll()
 {
     std::cerr << "Troll<" << this->getName() << "> destructor" << std::endl;
@@ -61,7 +68,6 @@ void Troll::update()
     
 }
 
-
 std::string Troll::serialize(std::ostream &os) const
 {
     std::string sym = gensym();
@@ -73,6 +79,11 @@ std::string Troll::serialize(std::ostream &os) const
     
 Dragon::Dragon(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Dragon", lvl), dragon_base_stats*lvl + getRandomStats(10))
+{
+}
+
+Dragon::Dragon(const std::string &name, const std::string &description, const Stats &stats, int hp) :
+    Actor(name, description, stats, hp)
 {
 }
 
@@ -100,6 +111,11 @@ Thief::Thief(const std::string &name,  int lvl) :
 {
 }
 
+Thief::Thief(const std::string &name, const std::string &description, const Stats &stats, int hp) :
+    Actor(name, description, stats, hp)
+{
+}
+
 Thief::~Thief()
 {
     std::cerr << "Thief<" << this->getName() << "> destructor" << std::endl;
@@ -122,6 +138,12 @@ Golem::Golem(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Golem", lvl), golem_base_stats*lvl + getRandomStats(10))
 {
 }
+
+Golem::Golem(const std::string &name, const std::string &description, const Stats &stats, int hp) :
+    Actor(name, description, stats, hp)
+{
+}
+
 
 Golem::~Golem()
 {
@@ -152,6 +174,12 @@ Human::Human(const std::string &name, const std::string &desc, const Stats &stat
     Actor(name, desc, stats), text(t)
 {
 }
+
+Human::Human(const std::string &name, const std::string &desc, const Stats &stats, int hp, const std::string &t) :
+    Actor(name, desc, stats, hp), text(t)
+{
+}
+
 
 Human::~Human()
 {

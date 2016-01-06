@@ -4,8 +4,9 @@
 #include <string>
 #include <ostream>
 #include <istream>
+#include <list>
 
-#include "Room.hpp"
+class Room;
 
 void load(std::istream &is);
 
