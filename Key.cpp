@@ -12,6 +12,14 @@ Key::Key(const std::string &name,
 }
 
 Key::Key(const std::string &name,
+    const std::string &description,
+    unsigned weight,
+    Room *fromRoom, const std::string &fromRoomDirection) :
+    Key(name, description, weight, fromRoom, fromRoomDirection, nullptr, "")
+{
+}
+
+Key::Key(const std::string &name,
          const std::string &description,
          unsigned weight,
          Room *fr, const std::string &frd,
@@ -41,10 +49,37 @@ void Key::setAction(Room *fr, const std::string &frdir,
 
 std::string Key::use(Actor *actor)
 {
-    return "";
+    if (fromRoom == nullptr)
+        return "This key is unusable.";
+    if (actor->getRoom() != fromRoom)
+        return "No door in this room will fit this key";
+
+    fromRoom->setExit(fromRoomDirection, toRoom);
+    if (toRoom != nullptr)
+        toRoom->setExit(toRoomDirection, fromRoom);
+    
+    used = true;
+    return "A door going " + fromRoomDirection + " has openened.";
 }
 
-std::string Key::serialize(std::ostream &os)
+std::string Key::serialize(std::ostream &os, const std::unordered_map<const Room*, std::string> &room_to_sym) const
+{
+    std::string itemSym = gensym();
+    os << itemSym << ":MAKE-KEY "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << getWeight();
+    if (fromRoom != nullptr)
+    {
+        os << " " << room_to_sym.at(fromRoom) << " " << fromRoomDirection;
+        if (toRoom != nullptr)
+            os << " " << room_to_sym.at(toRoom) << " " << toRoomDirection;
+    }
+    os << std::endl;
+    return itemSym;
+}
+
+std::string Key::serialize(std::ostream &os) const
 {
     // Due to how the file format is made we might need to refer to yet
     // non-created rooms and thus the constructor used in the save-file
@@ -56,4 +91,25 @@ std::string Key::serialize(std::ostream &os)
        << stringify(getBaseDescription()) << " "
        << getWeight() << std::endl;
     return sym;
+}
+
+
+Room *Key::getFromRoom() const
+{
+    return fromRoom;
+}
+
+Room *Key::getToRoom() const
+{
+    return toRoom;
+}
+
+const std::string &Key::getFromRoomDirection() const
+{
+    return fromRoomDirection;
+}
+
+const std::string &Key::getToRoomDirection() const
+{
+    return toRoomDirection;
 }

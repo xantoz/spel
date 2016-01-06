@@ -44,6 +44,11 @@ ItemOwner *Item::getOwner() const
     return owner;
 }
 
+bool Item::usedUp() const
+{
+    return consumable && used;
+}
+
 std::string Item::use(Actor* actor)
 {
     static std::string asdf = "this item is useless";

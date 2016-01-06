@@ -127,14 +127,16 @@ void Actor::go(std::string direction)
     nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
-std::string Actor::use(const std::string &itemName )
+std::string Actor::use(const std::string &itemName)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)
         throw NoSuchItemException();
     return item->use(this);
 }
-std::string Actor::use(const std::string &itemName, const std::string &useOn)
+
+std::string Actor::use(const std::string &itemName,
+                       const std::string &useOn)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)
@@ -359,7 +361,7 @@ void Actor::actorTypeIndependentSerializeConstructorParameters(std::ostream &os)
 
 void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const
 {
-    this->serializeItems(os, actorSym);
+    // this->serializeItems(os, actorSym);
     if (sword != nullptr)
     {
         std::string itemSym = sword->serialize(os);
@@ -388,10 +390,10 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
 
     os << ":SET-DROP " << actorSym << " " << dropItems << std::endl;
 
-    // for (auto const &ent: deathExits)
-    // {
-    //     os << ":SET-DEATH-EXIT " << actorSym << " \"" << ent.first << " " << 
-    // }
+    // The rest of the Items owned by actor (currently in inventory) is taken care of in the
+    // ItemOwner pass in serialize after we're certain all rooms have been created.
+    // The death-exits are also taken care of in a special pass in serialize after we can be
+    // sure all rooms have been created.
 }
 
 int Actor::getHP() const

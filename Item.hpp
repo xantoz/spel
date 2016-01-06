@@ -23,6 +23,7 @@ public:
     
     unsigned getWeight() const;
     ItemOwner *getOwner() const;
+    bool usedUp() const;
     
     virtual std::string use(Actor* actor);
 

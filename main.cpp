@@ -6,6 +6,7 @@
 #include "Classes.hpp"
 #include "Serialize.hpp"
 #include "Potion.hpp"
+#include "Key.hpp"
 
 #include <cstring>
 #include <cstdio>
@@ -86,14 +87,15 @@ void use(string arg)
         for(; it != arg.end() && *it == ' '; ++it);
         string second(it, arg.end());
         if(second == "")
-        {
-             cout << player->use(first) << endl;
-             delete player->getItem(first);
-        }
+            cout << player->use(first) << endl;
         else
-        {
-            cout << player->use(first, second);
-        }
+            cout << player->use(first, second) << endl;
+
+        // always non-null since we'd have triggered an exception with player->use for a non-existant item
+        Item *item = player->getItem(first);
+        if (item->usedUp())
+            delete item;
+
     }
     
 }
@@ -325,7 +327,9 @@ int main(int argc, char** argv)
     battleCmds["run"] = &run;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
-    Room* first = new Room("My room", "This is my room", "west", kitchen, nullptr);
+    Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", nullptr);
+    Room* first = new Room("My room", "This is my room\n You see a yellow locked door to the east.", "west", kitchen, nullptr);
+    first->addItem(new Key("yellowkey", "A yellow key", 5, first, "east", secret, "west"));
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
     Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
     Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);

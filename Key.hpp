@@ -4,6 +4,7 @@
 #include "Item.hpp"
 #include <ostream>
 #include <string>
+#include <unordered_map>
 
 class Room;
 class Key : public Item 
@@ -13,9 +14,6 @@ private:
     std::string fromRoomDirection;
     Room *toRoom;
     std::string toRoomDirection;
-
-    // KLUDGE: hack to keep track of key syms
-    
     
 public:
     Key(const std::string &name,
@@ -24,14 +22,25 @@ public:
     Key(const std::string &name,
         const std::string &description,
         unsigned weight,
+        Room *fromRoom, const std::string &fromRoomDirection);
+    Key(const std::string &name,
+        const std::string &description,
+        unsigned weight,
         Room *fromRoom, const std::string &fromRoomDirection,
-        Room *toRoom, const std::string &toRoomDirectionx);
+        Room *toRoom, const std::string &toRoomDirection);
     virtual ~Key() override;
 
     void setAction(Room *fromRoom, const std::string &fromRoomDirection,
                    Room* toRoom, const std::string &toRoomDirection);
+    Room *getFromRoom() const;
+    Room *getToRoom() const;
+    const std::string &getFromRoomDirection() const;
+    const std::string &getToRoomDirection() const;
+    
     virtual std::string use(Actor *actor) override;
     virtual std::string serialize(std::ostream &os) const override;
+    // This is a special case where we need the room_to_sym stuff to be able to utilize the full-length MAKE-KEY constructor.
+    std::string serialize(std::ostream &os, const std::unordered_map<const Room*, std::string> &room_to_sym) const;
 };
     
 #endif

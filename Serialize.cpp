@@ -13,6 +13,7 @@
 #include "Armor.hpp"
 #include "Classes.hpp"
 #include "Potion.hpp"
+#include "Key.hpp"
 
 // #include <map>
 #include <vector>
@@ -261,6 +262,29 @@ void load(std::istream &is)
                 return new Potion(args.at(0), std::stoi(args.at(1)));
             }
         },
+        {"MAKE-KEY", [&](const std::vector<std::string> &args) {
+                if (args.size() == 3)
+                    return new Key(args.at(0), args.at(1), std::stoi(args.at(2)));
+                else if (args.size() == 5)
+                {
+                    Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(3)));
+                    if (fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
+                    return new Key(args.at(0), args.at(1), std::stoi(args.at(2)), fromRoom, args.at(4));
+                }
+                else if (args.size() == 7)
+                {
+                    Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(3)));
+                    Room *toRoom = dynamic_cast<Room*>(vars.at(args.at(5)));
+                    if (fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
+                    if (toRoom == nullptr) throw InvalidFileException(row, "Expected 6th arg to be Room.");
+                    return new Key(args.at(0), args.at(1), std::stoi(args.at(2)),
+                                   fromRoom, args.at(4),
+                                   toRoom, args.at(6));
+                }
+                else
+                    throw InvalidFileException(row, "Wrong amount of arguments.");
+            }
+        },
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
                 if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-DROP.");
@@ -379,11 +403,55 @@ void load(std::istream &is)
         throw InvalidFileException("No MAKE-PLAYER call in the file.");
 }
 
+
+// void serialize(const std::list<Room*> &rooms, std::ostream &os)
+// {
+//     std::unordered_map<const Room*, std::string> room_to_sym;
+//     std::vector<std::tuple<std::string, const Actor*> > actors;
+//     // std::vector<std::tuple<std::string, const Key*> > keys;
+//    
+//     for (const Room *room: rooms)
+//     {
+//         std::string roomSym = gensym();
+//         room_to_sym[room] = roomSym;
+//         os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getBaseDescription()) << std::endl;
+//         for (const Actor *actor: room->getActors())
+//         {
+//             std::string actorSym = actor->serialize(os);
+//             os << ":ADD-ACTOR " << roomSym << " " << actorSym << std::endl;
+//             actors.emplace_back(actorSym, actor);           // save all actors together with their syms for later use
+//         }
+//         // ItemOwner::serializeItems(std::ostream&, const std::string&) const
+//         room->serializeItems(os, roomSym);
+//     }
+//     // Link the room graph
+//     for (const Room *room: rooms)
+//     {
+//         for (auto const &ent: room->getExits())
+//         {
+//             os << ":SET-EXIT"          << " "
+//                << room_to_sym.at(room) << " "
+//                << stringify(ent.first) << " "
+//                << room_to_sym.at(ent.second) << std::endl;
+//         }
+//     }
+//     // Set actor death-exits
+//     for (auto &tup: actors)
+//     {
+//         for (auto &ent: std::get<1>(tup)->getDeathExits())
+//         {
+//             os << ":SET-DEATH-EXIT " << std::get<0>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
+//         }
+//     }
+// }
+
 void serialize(const std::list<Room*> &rooms, std::ostream &os)
 {
     std::unordered_map<const Room*, std::string> room_to_sym;
     std::vector<std::tuple<std::string, const Actor*> > actors;
-    
+    std::vector<std::tuple<std::string, const ItemOwner*> > itemOwners;
+
+    // Create all rooms and the actors in there. Put the actors in the appropriate rooms.
     for (const Room *room: rooms)
     {
         std::string roomSym = gensym();
@@ -394,9 +462,31 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
             std::string actorSym = actor->serialize(os);
             os << ":ADD-ACTOR " << roomSym << " " << actorSym << std::endl;
             actors.emplace_back(actorSym, actor);           // save all actors together with their syms for later use
+            itemOwners.emplace_back(actorSym, actor);
         }
-        // ItemOwner::serializeItems(std::ostream&, const std::string&) const
-        room->serializeItems(os, roomSym);
+        itemOwners.emplace_back(roomSym, room);
+    }
+    // Create all the Items owned by ItemOwners, and add them to their respective owners
+    for (auto &itemOwnerTuple: itemOwners)
+    {
+        const ItemOwner *itemOwner = std::get<1>(itemOwnerTuple);
+        const std::string &itemOwnerSym = std::get<0>(itemOwnerTuple);
+        for (Item *item: itemOwner->getItems())
+        {
+            std::string itemSym;
+            Key* key;
+            if ((key = dynamic_cast<Key*>(item)))
+            {
+                // we can create keys in one row here if we can call the (non-virtual)
+                // Key::serialize(std::ostream&, const std::unordered_map<const Room*, std::string>&)
+                itemSym = key->serialize(os, room_to_sym);
+            }
+            else
+            {
+                itemSym = item->serialize(os);
+            }
+            os << ":ADD-ITEM " << itemOwnerSym << " " << itemSym << std::endl;
+        }
     }
     // Link the room graph
     for (const Room *room: rooms)
