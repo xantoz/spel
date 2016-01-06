@@ -206,19 +206,17 @@ void load(std::istream &is)
                     throw InvalidFileException(row, "Wrong amount of args.");
             }
         },
-        {"MAKE-SHOP", [&](const std::vector<std::string> &args) 
-         {
-             std::list<std::pair<Item*, unsigned>> items;
-             for(std::size_t i = 2; i < args.size(); i+=2)
-             {
-                 Item* item = dynamic_cast<Item*>(vars.at(args[i]));
-                 items.push_back(std::pair<Item*, unsigned>(item, std::stoi(args[i+1])));
-             }
+        {"MAKE-SHOP", [&](const std::vector<std::string> &args) {
+                std::list<std::pair<Item*, unsigned>> items;
+                for(std::size_t i = 2; i < args.size(); i+=2)
+                {
+                    Item* item = dynamic_cast<Item*>(vars.at(args[i]));
+                    items.emplace_back(item, std::stoi(args[i+1]));
+                }
              
-             return new Shop(args.at(0), args.at(1), items);
-         }
+                return new Shop(args.at(0), args.at(1), items);
+            }
         },
-        
         {"MAKE-ACTOR", [&](const std::vector<std::string> &args) {
                 if      (args.size() == 2) return new Actor(args.at(0), args.at(1));
                 else if (args.size() == 3) return new Actor(args.at(0), args.at(1), parseStats(args.at(2)));
@@ -504,12 +502,8 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
     // Create all rooms and the actors in there. Put the actors in the appropriate rooms.
     for (const Room *room: rooms)
     {
-        std::string roomSym = gensym();
+        std::string roomSym = room->serialize(os);
         room_to_sym[room] = roomSym;
-        os << roomSym << ":MAKE-ROOM "
-           << stringify(room->getName()) << " "
-           << stringify(room->getBaseDescription()) << " " 
-           << room->getEncounterProbs().serializeString() << std::endl;
         for (const Actor *actor: room->getActors())
         {
             std::string actorSym = actor->serialize(os);

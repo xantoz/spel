@@ -109,7 +109,7 @@ std::string Player::serialize(std::ostream &os) const
     os << playerSym << ":MAKE-PLAYER ";
     actorTypeIndependentSerializeConstructorParameters(os);
     actorTypeIndependentSerialize(os, playerSym);
-    os << ":SET-KILLED-MONSTER " << killedMonster;
-    os << ":SET-NUMBER-KILLS " << kills;
+    os << ":SET-KILLED-MONSTER " << playerSym << " " << killedMonster << std::endl;
+    os << ":SET-NUMBER-KILLS " << playerSym << " " << kills << std::endl;
     return playerSym;
 }

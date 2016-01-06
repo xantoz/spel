@@ -13,7 +13,7 @@ public:
     std::string listInventory() const;
     const std::pair<Item*, unsigned>& getShopItem(const std::string &name) const;
     virtual std::string getDescription() const override;
-    virtual std::string serialize(std::ostream &os) const;
+    virtual std::string serialize(std::ostream &os) const override;
 };
 #endif
 

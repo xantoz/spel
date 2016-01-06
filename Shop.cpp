@@ -52,9 +52,10 @@ std::string Shop::serialize(std::ostream &os) const
     int i = 0;
     for (const std::pair<Item*, unsigned> &itemAndPrice : inventory)
     {
-        os << itemsyms[i] << itemAndPrice.second << " ";
+        os << itemsyms[i] << " " << itemAndPrice.second << " ";
         ++i;
     }
+    os << std::endl;
     
     return actorSym;
 }

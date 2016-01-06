@@ -56,6 +56,8 @@ public:
 
     const EncounterProbability &getEncounterProbs() const;
 
+    virtual std::string serialize(std::ostream &os) const;
+
     // friend void main_loop();
 };
 
