@@ -14,18 +14,21 @@ Actor::Actor(const std::string &name, const std::string &description) :
     ItemOwner(name, description), room(nullptr), dropItems(false), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
+    actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
     ItemOwner(name, description), room(nullptr), dropItems(false), stats(_stats), hp(_stats.maxhp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
+    actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
     ItemOwner(name, description), room(nullptr), dropItems(false), stats(_stats), hp(_hp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
+    actors.push_front(this);
 }
 
 
@@ -41,7 +44,15 @@ Actor::~Actor()
     unequipShield();
     unequipArmor();
     unequipShoes();
+    actors.remove(this);
 }
+std::list<Actor*> Actor::actors;
+
+const std::list<Actor*>& Actor::getActors()
+{
+    return Actor::actors;
+}
+
 
 void Actor::update() {}
 
