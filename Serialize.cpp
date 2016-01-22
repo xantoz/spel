@@ -142,7 +142,7 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
             {
                 if (*it == '"' && prevChar != '\\')
                 {
-                    args.emplace_back(unescapeString(std::string(start, it)));
+                    args.emplace_back(std::move(unescapeString(std::string(start, it))));
                     ++it;
                     goto wind_whitespace;
                 }
@@ -186,13 +186,75 @@ EncounterProbability parseEncounterProbs(const std::string &str)
     return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
 }
 
+// note that this is a very stupid format and there are lots of undefined scenarios that may make
+// the whole program crash, leak memory or worse. Like not creating a Player instance in the world
+// file, creating a Player in a callback file, creating an Item and not assigning it to an
+// ItemOwner, or creating an Actor without assigning it to a Room and probably more.
 void load(std::istream &is)
 {
-    unsigned row = 0;
-    bool made_player = false;
-    
+    unsigned row = 1; // program counter that also doubles as indicating row for printouts. NOTE: indexed from 1!!
+
+    std::unordered_map<std::string, unsigned> labels;
     std::unordered_map<std::string, GameObject*> vars;
+    auto get_label = [&] (const std::string label) {
+        auto it = labels.find(label);
+        if (it == labels.end()) throw InvalidFileException(row, "Jumping to non-existant label.");
+        return it->second - 1; // compensate for row being iterated directly after an executed command
+    };
     std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds = {
+        {"GOTO", [&](const std::vector<std::string> &args) {
+                row = get_label(args.at(0)); // change current row.
+                return nullptr;
+            }
+        },
+        // Conditional. In the two arg form it jumps to the label only if the first argument is
+        // non-null (true). In the three arg form it jumps to the first label (argument 2) if first
+        // argument is non-null (true) else it jumps to the the second label (third argument) 
+        {"IF", [&](const std::vector<std::string> &args) {  
+                if (args.size() == 2 || args.size() == 3)
+                {
+                    if (vars.at(args[0]) != nullptr)
+                        row = get_label(args[1]);
+                    else if (args.size() == 3)
+                        row = get_label(args[2]);
+                }
+                else
+                    throw InvalidFileException(row, "Wrong amount of args.");
+                return nullptr;
+            }
+        },
+        // inline if, only has a three arg form. returns the value of the second arg if first arg is true
+        // else it returns the value of the third arg
+        {"?", [&](const std::vector<std::string> &args) {   
+                return (vars.at(args.at(0)) != nullptr) ? vars.at(args.at(1)) : vars.at(args.at(2));
+            }
+        },
+        {"DESTRUCT", [&](const std::vector<std::string> &args) {
+                delete vars.at(args.at(0));
+                return nullptr;
+            }
+        },
+        // <VAR>:GET-ROOM "<ROOM NAME>"
+        {"GET-ROOM", [&](const std::vector<std::string> &args) {
+                auto it = std::find_if(Room::getRooms().begin(), Room::getRooms().end(),
+                                       [&](Room *r) { return r->getName() == args.at(0); });
+                return (it == Room::getRooms().end()) ? nullptr : *it;
+            }
+        },
+        // <VAR>:GET-ACTOR <ROOM VARIABLE> "<ACTOR NAME>"
+        {"GET-ACTOR", [&](const std::vector<std::string> &args) {
+                Room *room = dynamic_cast<Room*>(vars.at(args.at(0)));
+                if (room == nullptr) throw InvalidFileException(row, "Expected a Room in the first argument.");
+                return room->getActor(args.at(1));
+            }
+        },
+        // <VAR>:GET-ITEM <ITEMOWNER VARIABLE> "<ITEM NAME>"
+        {"GET-ITEM", [&](const std::vector<std::string> &args) {
+                ItemOwner *io = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
+                if (io == nullptr) throw InvalidFileException(row, "Expected an ItemOwner in the first argument.");
+                return io->getItem(args.at(1));
+            }
+        },
         {"MAKE-ROOM", [&](const std::vector<std::string> &args) {
                 if (args.size() == 2)
                     return new Room(args.at(0), args.at(1), nullptr);
@@ -226,7 +288,6 @@ void load(std::istream &is)
         },
         {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
                 // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
-                made_player = true;
                 if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER several times (but why would you?)
                 if      (args.size() == 3) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)));
                 else if (args.size() == 4) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
@@ -406,36 +467,67 @@ void load(std::istream &is)
         }
     };
         
-    std::string line;
-    std::string var_name = "";
-    std::string cmd_name = "";
-    std::vector<std::string> args = {};
-    
-    while (!is.eof())
+    struct linestruct
     {
-        ++row;
-        
+        std::string var_name, cmd_name;
+        std::vector<std::string> args;
+        linestruct(std::string &&a, std::string &&b, std::vector<std::string> &&c) :
+            var_name(a), cmd_name(b), args(c)
+        {
+        }
+    };
+    std::vector<struct linestruct> lines = {};
+    std::string line;
+    while (!is.eof()) 
+    {
+        // new variables each pass so we can move construct from them.
+        // default values for the empty row case
+        std::string var_name = "";
+        std::string cmd_name = "";
+        std::vector<std::string> args = {}; 
+                
         getline(is, line);
-        if(line.find_first_not_of(' ') == std::string::npos) // this row is only spaces or empty
+        if (line.find_first_not_of(' ') != std::string::npos) 
+        { // non-empty row 
+            auto colon = line.begin();
+            for (; colon != line.end() && *colon != ':'; ++colon);
+            if (colon == line.end())
+                throw InvalidFileException(row, "Row without colon.");
+            auto dot = line.begin(); // if there's a dot somewhere in the colon part it's a label for jumping
+            for (; dot != colon && *dot != '.'; ++dot);
+            if (dot != colon)
+            { // we found a dot, we have a label on our hands
+                labels.emplace(std::string(line.begin(), dot), row);
+                var_name = std::string(dot+1, colon);
+            }
+            else
+            {
+                var_name = std::string(line.begin(), colon);
+            }
+            parseCmd(std::string(colon+1, line.end()), cmd_name, args);
+        }
+        
+        lines.emplace_back(std::move(var_name), std::move(cmd_name), std::move(args));
+        ++row;
+    }
+
+    row = 1; // reset row counter/PC. remember that row is indexed from 1 (so that it is usable for printouts)
+    for (; row <= lines.size(); ++row)
+    {
+        auto &line = lines[row-1];
+        
+        std::cerr << row << " VAR_NAME: " << stringify(line.var_name) << " CMD: " << stringify(line.cmd_name) << " ARGS: ";
+        for (std::string &arg: line.args)
+            std::cerr << "\"" << arg << "\" ";
+        std::cerr << std::endl;
+
+        if (line.cmd_name == "")
             continue;
-
-        
-        size_t pos = line.find_first_of(':');
-        if (pos == std::string::npos)
-            throw InvalidFileException(row, "Row without colon.");
-        var_name = line.substr(0, pos);
-        parseCmd(line.substr(pos + 1), cmd_name, args);
-
-        // std::cerr << "VAR_NAME: " << stringify(var_name) << " CMD: " << stringify(cmd_name) << " ARGS: ";
-        // for (std::string &arg: args)
-        //     std::cerr << "\"" << arg << "\" ";
-        // std::cerr << std::endl;
-        
         try 
         {
-            GameObject *result = cmds.at(cmd_name)(args);
-            if (var_name.size() > 0)
-                vars[var_name] = result;
+            GameObject *result = cmds.at(line.cmd_name)(line.args);
+            if (line.var_name.size() > 0)
+                vars[line.var_name] = result;
         }
         catch (const std::out_of_range &e)
         {
@@ -446,52 +538,7 @@ void load(std::istream &is)
             throw InvalidFileException(row, "invalid_argument: " + std::string(e.what()));
         }
     }
-
-    if (made_player == false)
-        throw InvalidFileException("No MAKE-PLAYER call in the file.");
 }
-
-
-// void serialize(const std::list<Room*> &rooms, std::ostream &os)
-// {
-//     std::unordered_map<const Room*, std::string> room_to_sym;
-//     std::vector<std::tuple<std::string, const Actor*> > actors;
-//     // std::vector<std::tuple<std::string, const Key*> > keys;
-//    
-//     for (const Room *room: rooms)
-//     {
-//         std::string roomSym = gensym();
-//         room_to_sym[room] = roomSym;
-//         os << roomSym << ":MAKE-ROOM " << stringify(room->getName()) << " " << stringify(room->getBaseDescription()) << std::endl;
-//         for (const Actor *actor: room->getActors())
-//         {
-//             std::string actorSym = actor->serialize(os);
-//             os << ":ADD-ACTOR " << roomSym << " " << actorSym << std::endl;
-//             actors.emplace_back(actorSym, actor);           // save all actors together with their syms for later use
-//         }
-//         // ItemOwner::serializeItems(std::ostream&, const std::string&) const
-//         room->serializeItems(os, roomSym);
-//     }
-//     // Link the room graph
-//     for (const Room *room: rooms)
-//     {
-//         for (auto const &ent: room->getExits())
-//         {
-//             os << ":SET-EXIT"          << " "
-//                << room_to_sym.at(room) << " "
-//                << stringify(ent.first) << " "
-//                << room_to_sym.at(ent.second) << std::endl;
-//         }
-//     }
-//     // Set actor death-exits
-//     for (auto &tup: actors)
-//     {
-//         for (auto &ent: std::get<1>(tup)->getDeathExits())
-//         {
-//             os << ":SET-DEATH-EXIT " << std::get<0>(tup) << " " << stringify(ent.first) << " " << room_to_sym.at(ent.second) << std::endl;
-//         }
-//     }
-// }
 
 void serialize(const std::list<Room*> &rooms, std::ostream &os)
 {
@@ -513,7 +560,8 @@ void serialize(const std::list<Room*> &rooms, std::ostream &os)
         }
         itemOwners.emplace_back(roomSym, room);
     }
-    // Create all the Items owned by ItemOwners, and add them to their respective owners
+    // Create all the Items owned by ItemOwners, and add them to their respective owners. This needs
+    // to happen after Rooms have been created since keys can reference rooms.
     for (auto &itemOwnerTuple: itemOwners)
     {
         const ItemOwner *itemOwner = std::get<1>(itemOwnerTuple);
