@@ -59,7 +59,7 @@ public:
     virtual void update() override;
     virtual std::string serialize(std::ostream &os) const override;
     
-    bool talk();
+    void talk();
 private:
     std::string text;
 };

@@ -202,10 +202,9 @@ void Human::update()
 {
 }
 
-bool Human::talk()
+void Human::talk()
 {
     std::cout << text << std::endl;
-    return false;
 }
 
 std::string Human::serialize(std::ostream &os) const
