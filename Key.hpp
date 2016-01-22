@@ -39,7 +39,7 @@ public:
     const std::string &getFromRoomDirection() const;
     const std::string &getToRoomDirection() const;
     
-    virtual std::string use(Actor *actor) override;
+    virtual void use(Actor *actor) override;
     virtual std::string serialize(std::ostream &os) const override;
     // This is a special case where we need the room_to_sym stuff to be able to utilize the full-length MAKE-KEY constructor.
     std::string serialize(std::ostream &os, const std::unordered_map<const Room*, std::string> &room_to_sym) const;

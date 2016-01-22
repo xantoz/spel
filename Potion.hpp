@@ -17,7 +17,7 @@ public:
     Potion(const std::string &name, int lvl);
     
     virtual ~Potion() override;
-    virtual std::string use(Actor* actor) override;
+    virtual void use(Actor* actor) override;
     
     virtual std::string serialize(std::ostream&) const override;
 };

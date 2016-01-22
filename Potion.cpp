@@ -22,7 +22,7 @@ Potion::~Potion()
     std::cerr << "Potion<" << getName() << "> destructor" << std::endl;
 }
 
-std::string Potion::use(Actor* actor)
+void Potion::use(Actor* actor)
 {
     int maxHP = actor->getStats().maxhp;
     if(actor->getHP() + hpHeals > maxHP)
@@ -34,7 +34,8 @@ std::string Potion::use(Actor* actor)
         actor->setHP(actor->getHP() + hpHeals);
     }
     used = true;
-    return actor->getName() + " recovered hp!";
+    std::cout << actor->getName() + " recovered hp!" << std::endl;
+    return;
 }
 
 std::string Potion::serialize(std::ostream &os) const

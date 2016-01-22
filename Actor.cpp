@@ -138,15 +138,15 @@ void Actor::go(std::string direction)
     nroom->addActor(this); // this moves the actor to nroom (sets this->room)
 }
 
-std::string Actor::use(const std::string &itemName)
+void Actor::use(const std::string &itemName)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)
         throw NoSuchItemException();
-    return item->use(this);
+    item->use(this);
 }
 
-std::string Actor::use(const std::string &itemName,
+void Actor::use(const std::string &itemName,
                        const std::string &useOn)
 {
     Item *item = this->getItem(itemName);
@@ -155,7 +155,7 @@ std::string Actor::use(const std::string &itemName,
     Actor* actor = getRoom()->getActor(useOn);
     if(actor == nullptr)
         throw NoSuchActorException();
-    return item->use(actor);
+    item->use(actor);
 }
 
 bool Actor::pickup(const std::string &itemName)

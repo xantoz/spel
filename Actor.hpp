@@ -73,8 +73,8 @@ public:
     
     void go(std::string direction);
     Room *getRoom() const;
-    std::string use(const std::string &itemName);
-    std::string use(const std::string &itemName, const std::string &useOn);
+    void use(const std::string &itemName);
+    void use(const std::string &itemName, const std::string &useOn);
     bool pickup(const std::string &itemName); // returns true if manage to pick up
     bool drop(const std::string &itemName); // returns true if manage to drop (can fail when naming non-existent item)
     

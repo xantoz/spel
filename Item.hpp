@@ -25,11 +25,12 @@ public:
     ItemOwner *getOwner() const;
     bool usedUp() const;
     
-    virtual std::string use(Actor* actor);
+    virtual void use(Actor* actor);
 
     virtual std::string serialize(std::ostream &os) const;
     
     friend class ItemOwner;
 };
+
 
 #endif

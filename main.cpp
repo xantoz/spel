@@ -77,8 +77,6 @@ void go(string arg)
      {
          mode = NORMAL;
      }
-     
-     
 }
 
 void look(string arg)
@@ -104,9 +102,9 @@ void use(string arg)
         for(; it != arg.end() && *it == ' '; ++it);
         string second(it, arg.end());
         if(second == "")
-            cout << player->use(first) << endl;
+            player->use(first);
         else
-            cout << player->use(first, second) << endl;
+            player->use(first, second);
 
         // always non-null since we'd have triggered an exception with player->use for a non-existant item
         Item *item = player->getItem(first);
@@ -132,10 +130,10 @@ void useBattle(string arg)
         for(; it != arg.end() && *it == ' '; ++it);
         string second(it, arg.end());
         if(second == "")
-            cout << player->use(first) << endl;
+            player->use(first);
         else
         {
-            cout << player->use(first, second) << endl;
+            player->use(first, second);
         }
 
         opponent->attackResponse(player);

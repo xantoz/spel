@@ -49,10 +49,11 @@ bool Item::usedUp() const
     return consumable && used;
 }
 
-std::string Item::use(Actor* actor)
+void Item::use(Actor* actor)
 {
     static std::string asdf = "this item is useless";
-    return asdf;
+    std::cout << asdf << std::endl;
+    return;
 }
 
 

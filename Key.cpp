@@ -47,21 +47,31 @@ void Key::setAction(Room *fr, const std::string &frdir,
     toRoomDirection = trdir;
 }
 
-std::string Key::use(Actor *actor)
+void Key::use(Actor *actor)
 {
     if (fromRoom == nullptr)
-        return "This key is unusable.";
+    {
+        std::cout << "This key is unusable." << std::endl;
+        return;
+    }
     if (actor->getRoom() != fromRoom)
-        return "No door in this room will fit this key";
+    {
+        std::cout << "No door in this room will fit this key" << std::endl;
+        return;
+    }
 
     fromRoom->setExit(fromRoomDirection, toRoom);
     if (toRoom != nullptr)
         toRoom->setExit(toRoomDirection, fromRoom);
     
     used = true;
-    return "A door going " + fromRoomDirection + " has openened.";
+
+    std::cout << "A door going " << fromRoomDirection << " has openened.";
+    return;
 }
 
+// Special serializer that can utilize the full-length MAKE-KEY constructor by being given
+// several extra parameters from the serializer.
 std::string Key::serialize(std::ostream &os, const std::unordered_map<const Room*, std::string> &room_to_sym) const
 {
     std::string itemSym = gensym();
