@@ -3,6 +3,7 @@
 #include "Key.hpp"
 #include "Classes.hpp"
 #include "exceptions.hpp"
+#include "Serialize.hpp"
 
 #include <algorithm>
 #include <stdarg.h>
@@ -257,4 +258,12 @@ void Room::update()
         this->addActor(new Troll("troll" + std::to_string(++cntr), lvl(engine)));
 }
 
-
+std::string Room::serialize(std::ostream &os) const
+{
+    std::string roomSym = gensym();
+    os << roomSym << ":MAKE-ROOM "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " " 
+       << getEncounterProbs().serializeString() << std::endl;
+    return roomSym;
+}

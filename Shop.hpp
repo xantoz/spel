@@ -14,8 +14,7 @@ public:
     bool removeShopItem(std::pair<Item*, unsigned> item);
     const std::pair<Item*, unsigned>& getShopItem(const std::string &name) const;
     virtual std::string getDescription() const override;
-    virtual std::string serialize(std::ostream &os) const;
-    
+    virtual std::string serialize(std::ostream &os) const override;
 };
 #endif
 
