@@ -18,6 +18,13 @@ os << itemPrice.first->getName() << " " << itemPrice.second << "\n";
     return os.str();
 }
 
+bool Shop::removeShopItem(std::pair<Item*, unsigned> item)
+{
+    inventory.remove(item);
+    return true;
+}
+
+
 const std::pair<Item*, unsigned>& Shop::getShopItem(const std::string &name) const
 {
     auto it =

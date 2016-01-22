@@ -8,6 +8,7 @@
 #include "Shoes.hpp"
 #include "Shield.hpp"
 
+#include <list>
 #include <string>
 #include <map>
 #include <ostream>
@@ -16,10 +17,10 @@ class Room;                                                 // solve circular re
 class Actor : public ItemOwner 
 {
 private:
+    static std::list<Actor*> actors;
     Room *room;
     std::map<std::string, Room*> deathExits;
     bool dropItems; // if True we drop our items and equipment at death
-
 protected:    
     Stats stats;
 
@@ -34,11 +35,12 @@ protected:
     void actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const;
 
 public:
+    
     Actor(const std::string &name, const std::string &description);
     Actor(const std::string &name, const std::string &description, const Stats &stats);
     Actor(const std::string &name, const std::string &description, const Stats &stats, int hp);
     virtual ~Actor() override;
-    
+    static const std::list<Actor*> &getActors();
     virtual void update();
     Stats getTotalStats() const;
     void attack(Actor *actor);

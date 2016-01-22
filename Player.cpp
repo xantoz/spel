@@ -1,7 +1,6 @@
 #include "Player.hpp"
 #include "Room.hpp"
 #include "Serialize.hpp"
-
 #include <iostream>
 
 // Player::Player(const std::string &name, const std::string &description) :
@@ -10,12 +9,12 @@
 // }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats) :
-    Actor(name, description, stats)
+    Actor(name, description, stats), money(0)
 {
 }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats, int hp) :
-    Actor(name, description, stats, hp)
+    Actor(name, description, stats, hp), money(0)
 {
 }
 
@@ -31,6 +30,12 @@ bool Player::can_carry(const Item *i) const
     	total_weight += i->getWeight();
     
     return (total_weight < stats.str*magisk_konstant);
+}
+
+std::string Player::getDescription() const 
+{
+    std::string firstPart = Actor::getDescription();
+    return firstPart + "\nMoney: " + std::to_string(money);
 }
 
 
@@ -101,6 +106,16 @@ void Player::setKills(int k)
 void Player::setKilledMonster(bool k)
 {
     killedMonster = k;
+}
+
+void Player::addMoney(int k)
+{
+    money += k;
+}
+
+unsigned Player::getMoney()
+{
+    return money;
 }
 
 std::string Player::serialize(std::ostream &os) const

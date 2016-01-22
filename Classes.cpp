@@ -1,7 +1,7 @@
 #include "Classes.hpp"
 #include "Serialize.hpp"
 #include "Room.hpp"
-
+#include "Shop.hpp"
 #include <cstdlib>
 #include <array>
 #include <algorithm>
@@ -23,6 +23,27 @@ static Stats getRandomStats(int tmp2)
     return random_stats;
     
 }
+
+static void updateActor(Actor* actor)
+{
+    for(auto &roomDirection : actor->getRoom()->getExits())
+    {   
+        if (std::rand() % 100 < 5)
+        {
+            if(dynamic_cast<Shop*>(roomDirection.second) == nullptr)
+            {
+                std::cout << actor->getName() << " moved to " << roomDirection.first << std::endl;
+                roomDirection.second->addActor(actor);
+                //std::cout << "not broken" << std::endl;
+            }
+            
+            
+            break;
+        }
+    }
+
+}
+
 static const Stats troll_base_stats = {10, 1, 3, 4, 20, 2, 2};
 static const Stats dragon_base_stats = {20, 3, 3, 6, 4, 5, 2};
 static const Stats thief_base_stats = {10, 2, 3, 2, 8, 2, 7};
@@ -53,19 +74,7 @@ Troll::~Troll()
 
 void Troll::update()
 { 
-    for(auto &roomDirection : getRoom()->getExits())
-    {   
-        if (std::rand() % 100 < 5)
-        {
-            std::cout << "Troll moved to " << roomDirection.first << std::endl;
-            
-            roomDirection.second->addActor(this);
-            //std::cout << "not broken" << std::endl;
-            
-            break;
-        }
-    }
-    
+    updateActor(this);
 }
 
 std::string Troll::serialize(std::ostream &os) const
@@ -94,6 +103,7 @@ Dragon::~Dragon()
 
 void Dragon::update()
 {
+    updateActor(this);
 }
 
 
@@ -123,6 +133,7 @@ Thief::~Thief()
 
 void Thief::update()
 {
+    updateActor(this);
 }
 
 std::string Thief::serialize(std::ostream &os) const
@@ -152,6 +163,7 @@ Golem::~Golem()
 
 void Golem::update()
 {
+    updateActor(this);
 }
 
 

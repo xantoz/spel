@@ -19,10 +19,14 @@
 
 using namespace std;
 
+enum Mode 
+{
+    NORMAL, BATTLE, SHOP
+} mode;
 
 Player *player;
 Actor *opponent;
-bool battleMode;
+Shop *shop;
 
 void destroy_everything()
 {
@@ -35,12 +39,12 @@ void destroy_everything()
 
     player = nullptr;
     opponent = nullptr;
-    battleMode = false;
+    mode = NORMAL;
 }
 
 void enterBattleMode(Actor *actor)
 {
-    battleMode = true;
+    mode = BATTLE;
     opponent = actor;
     cout << "Entered battle with " << opponent->getName() << endl;
     cout << "Opponent has Stats: " << opponent->getStats().toString() << endl;
@@ -48,7 +52,7 @@ void enterBattleMode(Actor *actor)
 
 void exitBattleMode()
 {   
-    battleMode = false;
+    mode = NORMAL;
     opponent = nullptr;
     cout << "Exited battle" << endl;
 }
@@ -63,6 +67,18 @@ void go(string arg)
      player->go(arg);
      cout << player->getRoom()->getName() << endl;
      cout << player->getRoom()->getDescription() << endl;
+     shop = dynamic_cast<Shop*>(player->getRoom());
+
+     if(shop != nullptr)
+     {
+         mode = SHOP;
+     }
+     else 
+     {
+         mode = NORMAL;
+     }
+     
+     
 }
 
 void look(string arg)
@@ -363,12 +379,73 @@ void load_world(string filename)
     load(infile);
 }
 
+// Shop functions
+void listItems(string arg)
+{
+    cout << shop->listInventory();
+}
+
+void buy(string arg)
+{
+    if(arg == "")
+    {
+        cout << "Buy what?" << endl;
+    }
+    else 
+    {
+        try
+        {
+            pair<Item*, unsigned> item = shop->getShopItem(arg);
+            if(player->getMoney() >= item.second)
+            {
+                shop->removeShopItem(item);
+                player->addMoney(-item.second);
+                player->addItem(item.first);
+                cout << "You bought the " << item.first->getName()  << "!" << endl;
+            }
+            else 
+            {
+                cout << "Not enough money!" << endl;
+            }
+            
+        }
+        catch (const NoSuchItemException &e)
+        {
+            cout << "No such item!" << endl;
+        }
+        
+    }
+}
+
+void sell(string arg)
+{
+    if(arg == "")
+    {
+        cout << "Sell what?" << endl;
+    }
+    else 
+    {
+        Item* item = player->getItem(arg);
+        if(item == nullptr)
+        {
+            cout << "You don't have that item!" << endl;
+        }
+        else 
+        {
+            cout << "You sold the item for " << item->getWeight() << endl;
+            player->removeItem(item);
+        }    
+    }       
+}
+
+
+
 
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)>> cmds;
     std::map<string, function<void(string)>> battleCmds;
-    
+    std::map<string, function<void(string)>> shopCmds;
     cmds["go"] = &go;
     cmds["look"] = &look;
     cmds["use"] = &use;
@@ -385,6 +462,11 @@ int main(int argc, char** argv)
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &useBattle;
     battleCmds["run"] = &run;
+
+    shopCmds["list"] = &listItems;
+    shopCmds["buy"] = &buy;
+    shopCmds["sell"] = &sell;
+    shopCmds["go"] = &go;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
@@ -403,10 +485,10 @@ int main(int argc, char** argv)
     Stats goldshieldstats = {0, 0, 40, -3, 0, -2};
     Stats golddaggerstats = {0, 0, 30, 0, 0, 1, 4};
             
-    shop1List.push_back(std::pair<Item*, unsigned>(new Shield("Gold shield", "An awesome shield", 40, goldshieldstats), 100));
+    shop1List.push_back(std::pair<Item*, unsigned>(new Shield("Gold shield", "An awesome shield", 40, goldshieldstats), 90));
     shop1List.push_back(std::pair<Item*, unsigned>(new Sword("Gold dagger", "An awesome dagger", 50, golddaggerstats), 100));
     shop1List.push_back(std::pair<Item*, unsigned>(new Potion("GoldPotion", 4), 30));                              
-    Shop* shop = new Shop("Shop", "The shop, type list to list all items", shop1List );
+    Shop* shop = new Shop("Shop", "The shop, type look to list all items", shop1List );
     kitchen->setExit("north", outside);
     kitchen->setExit("east", first);
     neighbor->setExit("shop", shop);
@@ -436,6 +518,8 @@ int main(int argc, char** argv)
     park->addActor(yTree);
     cout << player->getRoom()->getName() << endl;
     cout << player->getRoom()->getDescription() << endl;
+    player->addMoney(100);
+    
     string str;
     while(!cin.eof())
     {
@@ -464,20 +548,24 @@ int main(int argc, char** argv)
             cout << "\n> ";
             getline(cin, str);
             boost::trim_all(str);
-
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);
             string arg = (first_space == string::npos) ? "" : str.substr(first_space + 1);
-            if(battleMode)
+            
+            if (mode == BATTLE)
             {
                 battleCmds.at(command)(arg);
                 
-                if(opponent != nullptr && opponent->isDead())
+                if (opponent != nullptr && opponent->isDead())
                 {
                     player->addStats((opponent->getStats())*0.1);
                     delete opponent;
                     exitBattleMode();
                 }
+            }
+            else if (mode == SHOP)
+            {
+                shopCmds.at(command)(arg);
             }
             else 
             {
