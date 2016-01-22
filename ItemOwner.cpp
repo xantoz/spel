@@ -53,7 +53,7 @@ void ItemOwner::removeItem(Item *i)
     item->owner = nullptr;                                  // this item is no longer owned by anybody
 }
 
-Item *ItemOwner::getItem(const std::string &name)
+Item *ItemOwner::getItem(const std::string &name) const
 {
     auto it = std::find_if(items.begin(), items.end(),
                            [&](const Item *item) {

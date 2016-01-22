@@ -26,7 +26,7 @@ public:
 
     
     /// Returns nullptr when item doesn't exist
-    Item *getItem(const std::string &name);
+    Item *getItem(const std::string &name) const;
     const std::list<Item*> &getItems() const;
 
     void serializeItems(std::ostream &os, const std::string &ownerSym) const;
