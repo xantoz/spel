@@ -63,3 +63,54 @@ std::string Item::serialize(std::ostream &os) const
     os << itemSym << ":MAKE-ITEM " << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << getWeight() << std::endl;
     return itemSym;
 }
+
+
+CallbackItem::CallbackItem(const std::string &name,
+             const std::string &description,
+             unsigned weight) :
+    CallbackItem(name, description, weight, "")
+{
+}
+CallbackItem::CallbackItem(const std::string &name,
+             const std::string &description,
+             unsigned weight,
+             const std::string &callback_path) :
+    Item(name, description, weight), Callback(callback_path)
+{
+}
+
+CallbackItem::~CallbackItem()
+{
+    std::cerr << "CallbackItem<" << getName() << "> destructor" << std::endl;
+}
+
+void CallbackItem::use(Actor* actor)
+{
+    // Pass the actor using the item/having the item used on self as ACTOR
+    // Pass the item being used as THIS
+    runCallback({{"ACTOR", actor}, {"THIS", this}});
+}
+    
+std::string CallbackItem::serialize(std::ostream &os) const 
+{
+    std::string itemSym = gensym();
+    os << itemSym << ":MAKE-CALLBACK-ITEM "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << getWeight() << " "
+       << stringify(getCallback()) << std::endl;
+    os << ":SET-CONSUMABLE " << itemSym << " " << consumable << std::endl;
+    os << ":SET-USED " << itemSym << " " << used << std::endl;
+    
+    return itemSym;
+}
+
+void CallbackItem::setConsumable(bool bol)
+{
+    consumable = bol;
+}
+void CallbackItem::setUsed(bool bol)
+{
+    used = bol;
+}
+

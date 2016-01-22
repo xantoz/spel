@@ -15,6 +15,7 @@
 #include "Potion.hpp"
 #include "Key.hpp"
 #include "Shop.hpp"
+#include "Callback.hpp"
 
 // #include <map>
 #include <vector>
@@ -26,6 +27,7 @@
 #include <functional>
 #include <exception>
 #include <algorithm>
+#include <limits>
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
@@ -190,12 +192,12 @@ EncounterProbability parseEncounterProbs(const std::string &str)
 // the whole program crash, leak memory or worse. Like not creating a Player instance in the world
 // file, creating a Player in a callback file, creating an Item and not assigning it to an
 // ItemOwner, or creating an Actor without assigning it to a Room and probably more.
-void load(std::istream &is)
+void load(std::istream &is, std::initializer_list<std::pair<const std::string, GameObject*>> predef_vars)
 {
     unsigned row = 1; // program counter that also doubles as indicating row for printouts. NOTE: indexed from 1!!
 
     std::unordered_map<std::string, unsigned> labels;
-    std::unordered_map<std::string, GameObject*> vars;
+    std::unordered_map<std::string, GameObject*> vars(predef_vars);
     auto get_label = [&] (const std::string label) {
         auto it = labels.find(label);
         if (it == labels.end()) throw InvalidFileException(row, "Jumping to non-existant label.");
@@ -229,16 +231,53 @@ void load(std::istream &is)
                 return (vars.at(args.at(0)) != nullptr) ? vars.at(args.at(1)) : vars.at(args.at(2));
             }
         },
-        {"DESTRUCT", [&](const std::vector<std::string> &args) {
+        // Stop processing the script here, as if the file ended after this command
+        {"STOP",
+         [&](const std::vector<std::string> &args) {
+                // Setting the row value to maximum should do the trick. Remember to subtract one
+                // since we'll increment row after this, otherwise we'll run into a nasty bug.
+                row = std::numeric_limits<unsigned>::max() - 1; 
+                return nullptr;
+            }
+        },
+        // :DESTROY <GAMEOBJECT>. Destroy something
+        {"DESTROY", [&](const std::vector<std::string> &args) {
                 delete vars.at(args.at(0));
                 return nullptr;
             }
         },
-        // <VAR>:GET-ROOM "<ROOM NAME>"
-        {"GET-ROOM", [&](const std::vector<std::string> &args) {
+        // :TELEPORT <ACTOR> <ROOM>. Teleports actor in first arg to the room in the second arg
+        {"TELEPORT", [&](const std::vector<std::string> &args) {
+                Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                Room *r = dynamic_cast<Room*>(vars.at(args.at(1)));
+                if (a == nullptr || r == nullptr)
+                    throw new InvalidFileException(row, "Expected an Actor in the first argument, and a Room in the second.");
+                r->addActor(a);
+                return nullptr;
+            }
+        },
+        // :GO <ACTOR> "<DIRECTION>". Makes actor go in the direction direction.
+        {"GO",  [&](const std::vector<std::string> &args) {
+                Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (a == nullptr)
+                    throw new InvalidFileException(row, "Expected an Actor in the first argument.");
+                a->go(args.at(1));
+                return nullptr;
+            }
+        },
+        // <VAR>:GET-ROOM-BY-NAME "<ROOM NAME>"
+        {"GET-ROOM-BY-NAME", [&](const std::vector<std::string> &args) {
                 auto it = std::find_if(Room::getRooms().begin(), Room::getRooms().end(),
                                        [&](Room *r) { return r->getName() == args.at(0); });
                 return (it == Room::getRooms().end()) ? nullptr : *it;
+            }
+        },
+        // <VAR>:GET-ROOM-FROM-ACTOR <ACTOR>
+        {"GET-ROOM-FROM-ACTOR", [&](const std::vector<std::string> &args) {
+                Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (a == nullptr)
+                    throw new InvalidFileException(row, "Expected an Actor in the first argument.");
+                return a->getRoom();
             }
         },
         // <VAR>:GET-ACTOR <ROOM VARIABLE> "<ACTOR NAME>"
@@ -248,11 +287,35 @@ void load(std::istream &is)
                 return room->getActor(args.at(1));
             }
         },
+        // <VAR>:GET-ACTOR-GLOBAL "<ACTOR NAME>". Will get an actor by name, no matter what room  it's in.
+        {"GET-ACTOR-GLOBAL", [&](const std::vector<std::string> &args) {
+                auto actors = Actor::getActors();
+                auto it = std::find_if(actors.begin(), actors.end(), [&](Actor *a) {
+                        return a->getName() == args.at(0);
+                    });
+                return (it != actors.end()) ? *it : nullptr;
+            }
+        },
+        // <VAR>:GET-PLAYER. Simply gets the player from the global player pointer.
+        {"GET-PLAYER", [&](const std::vector<std::string> &args) {
+                return player;
+            }
+        },
         // <VAR>:GET-ITEM <ITEMOWNER VARIABLE> "<ITEM NAME>"
         {"GET-ITEM", [&](const std::vector<std::string> &args) {
                 ItemOwner *io = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
                 if (io == nullptr) throw InvalidFileException(row, "Expected an ItemOwner in the first argument.");
                 return io->getItem(args.at(1));
+            }
+        },
+        // We might need to summon a null now that we have conditionals and stuff
+        {"GET-NULL", [&](const std::vector<std::string> &args) {
+                return nullptr;
+            }
+        },
+        {"MESSAGE", [&](const std::vector<std::string> &args) {
+                std::cout << args.at(0) << std::endl;
+                return nullptr;
             }
         },
         {"MAKE-ROOM", [&](const std::vector<std::string> &args) {
@@ -328,6 +391,41 @@ void load(std::istream &is)
         },
         {"MAKE-ITEM", [&](const std::vector<std::string> &args) {
                 return new Item(args.at(0), args.at(1), std::stoi(args.at(2)));
+            }
+        },
+        {"MAKE-CALLBACK-ITEM", [&](const std::vector<std::string> &args) {
+                if (args.size() == 3)
+                    return new CallbackItem(args.at(0), args.at(1), std::stoi(args.at(2)));
+                else if (args.size() == 4)
+                    return new CallbackItem(args.at(0), args.at(1), std::stoi(args.at(2)), args.at(3));
+                else
+                    throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
+        // :SET-CONSUMABLE <CALLBACKITEM> [01]
+        {"SET-CONSUMABLE", [&](const std::vector<std::string> &args) {
+                CallbackItem *ci = dynamic_cast<CallbackItem*>(vars.at(args.at(0)));
+                if (ci == nullptr)
+                    throw InvalidFileException(row, "Expected first arg to be a CallbackItem");
+                ci->setConsumable(std::stoi(args.at(1)));
+                return nullptr;
+            }
+        },
+        // :SET-USED <CALLBACKITEM> [01]
+        {"SET-USED", [&](const std::vector<std::string> &args) {
+                CallbackItem *ci = dynamic_cast<CallbackItem*>(vars.at(args.at(0)));
+                if (ci == nullptr)
+                    throw InvalidFileException(row, "Expected first arg to be a CallbackItem");
+                ci->setUsed(std::stoi(args.at(1)));
+                return nullptr;
+            }
+        },
+        {"SET-CALLBACK", [&](const std::vector<std::string> &args) {
+                Callback *cb = dynamic_cast<Callback*>(vars.at(args.at(0)));
+                if (cb == nullptr)
+                    throw InvalidFileException(row, "Expected first arg to be a Callback");
+                cb->setCallback(args.at(1));
+                return nullptr;
             }
         },
         {"MAKE-EQUIPPABLE", [&](const std::vector<std::string> &args) {
@@ -516,10 +614,10 @@ void load(std::istream &is)
     {
         auto &line = lines[row-1];
         
-        std::cerr << row << " VAR_NAME: " << stringify(line.var_name) << " CMD: " << stringify(line.cmd_name) << " ARGS: ";
-        for (std::string &arg: line.args)
-            std::cerr << "\"" << arg << "\" ";
-        std::cerr << std::endl;
+        // std::cerr << row << " VAR_NAME: " << stringify(line.var_name) << " CMD: " << stringify(line.cmd_name) << " ARGS: ";
+        // for (std::string &arg: line.args)
+        //     std::cerr << "\"" << arg << "\" ";
+        // std::cerr << std::endl;
 
         if (line.cmd_name == "")
             continue;

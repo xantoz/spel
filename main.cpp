@@ -79,6 +79,20 @@ void go(string arg)
      }
 }
 
+void die(string arg)
+{
+    if (arg == "")
+    {
+        std::cout << "In a desperate bout of rage you kill yourself\nYou are dead\nRest In Pepperonis." << std::endl;
+        player->die();
+    }
+    else
+    {
+        std::cout << "???" << std::endl;
+    }
+    
+}
+
 void look(string arg)
 {
     if (arg == "")
@@ -109,7 +123,10 @@ void use(string arg)
         // always non-null since we'd have triggered an exception with player->use for a non-existant item
         Item *item = player->getItem(first);
         if (item->usedUp())
+        {
+            std::cout << "You used up the " << item->getName() << std::endl;
             delete item;
+        }
 
     }
     
@@ -456,10 +473,12 @@ int main(int argc, char** argv)
     cmds["talk"] = &talk;
     cmds["save"] = &save;
     cmds["load"] = &load_world;
+    cmds["die"] = &die;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &useBattle;
     battleCmds["run"] = &run;
+    battleCmds["die"] = &die;
 
     shopCmds["list"] = &listItems;
     shopCmds["buy"] = &buy;
@@ -470,6 +489,9 @@ int main(int argc, char** argv)
     Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
     Room* first = new Room("My room", "This is my room\n You see a yellow locked door to the east.", "west", kitchen, nullptr);
     first->addItem(new Key("yellowkey", "A yellow key", 5, first, "east", secret, "west"));
+    auto *widget = new CallbackItem("widget", "A magical talking widget", 4, "widget.script");
+    widget->setConsumable(true);
+    first->addItem(widget);
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
     Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
     Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);

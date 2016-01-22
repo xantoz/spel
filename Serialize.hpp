@@ -5,10 +5,14 @@
 #include <ostream>
 #include <istream>
 #include <list>
+#include <initializer_list>
+#include <utility>
 
+class GameObject;
 class Room;
 
-void load(std::istream &is);
+void load(std::istream &is,
+          std::initializer_list<std::pair<const std::string, GameObject*>> predef_vars={});
 
 std::string gensym();
 std::string stringify(const std::string &string);

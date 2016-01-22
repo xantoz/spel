@@ -2,6 +2,7 @@
 #define ITEM_HPP
 
 #include "GameObject.hpp"
+#include "Callback.hpp"
 #include <string>
 #include <ostream>
 
@@ -30,6 +31,24 @@ public:
     virtual std::string serialize(std::ostream &os) const;
     
     friend class ItemOwner;
+};
+
+class CallbackItem : public Item, public Callback
+{
+public:
+    CallbackItem(const std::string &name,
+                 const std::string &description,
+                 unsigned weight);
+    CallbackItem(const std::string &name,
+                 const std::string &description,
+                 unsigned weight,
+                 const std::string &callback_path);
+    virtual ~CallbackItem();
+    virtual void use(Actor* actor) override;
+    virtual std::string serialize(std::ostream &os) const override;
+
+    void setConsumable(bool);
+    void setUsed(bool);
 };
 
 
