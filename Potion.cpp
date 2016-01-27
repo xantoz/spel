@@ -3,12 +3,24 @@
 #include "Serialize.hpp"
 #include <iostream>
 #include <string>
+#include <map>
 
 // Potion::Potion(const std::string &name, const std::string &desc, unsigned int weight, int lvl) :
 //     Item(name, desc, weight), hpHeals(10*lvl), level(lvl)
 // {
 //     consumable = true;
 // }
+
+static std::string GenPotionName(int lvl) 
+{
+    static std::map<int, int> counter;
+    return "Lvl" + std::to_string(lvl) + "Potion" + std::to_string(++counter[lvl]);
+}
+
+Potion::Potion(int lvl) :
+    Potion(GenPotionName(lvl), lvl)
+{
+}
 
 Potion::Potion(const std::string &name, int lvl) :
     Item(name, "Potion that heals" + std::to_string(lvl*10) + "hp", 2*lvl), hpHeals(lvl*10), level(lvl)
@@ -24,6 +36,7 @@ Potion::~Potion()
 
 void Potion::use(Actor* actor)
 {
+    int preHP = actor->getHP();
     int maxHP = actor->getStats().maxhp;
     if(actor->getHP() + hpHeals > maxHP)
     {
@@ -34,7 +47,7 @@ void Potion::use(Actor* actor)
         actor->setHP(actor->getHP() + hpHeals);
     }
     used = true;
-    std::cout << actor->getName() + " recovered hp!" << std::endl;
+    std::cout << actor->getName() + " recovered " << actor->getHP() - preHP << " hp!" << std::endl;
     return;
 }
 

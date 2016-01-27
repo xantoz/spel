@@ -493,6 +493,8 @@ int main(int argc, char** argv)
     widget->setConsumable(true);
     first->addItem(widget);
     Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
+    outside->addActor(new CallbackHuman("PotionLad", "A lad who gives you potions", "potiongiver1.script"));
+    outside->addActor(new CallbackHuman("PotionLady", "A lady who gives you potions.", "potiongiver2.script"));
     Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
     Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);
     Room* park = new Room("Park", "The biggest park in this city. \nThere's a big tree in the middle", "south", street,nullptr);

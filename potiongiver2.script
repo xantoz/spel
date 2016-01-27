@@ -1,0 +1,4 @@
+:MESSAGE "Here, have a strong potion.\nShe puts a lvl 3 potion on the floor."
+Room:GET-ROOM-FROM-ACTOR THIS
+Potion:MAKE-POTION 3
+:ADD-ITEM Room Potion

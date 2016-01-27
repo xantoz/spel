@@ -14,6 +14,7 @@ private:
     
 public:
     // Potion(const std::string &name, const std::string &desc, unsigned int weight, int lvl);
+    Potion(int lvl);
     Potion(const std::string &name, int lvl);
     
     virtual ~Potion() override;

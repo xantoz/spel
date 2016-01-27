@@ -1,0 +1,4 @@
+:MESSAGE "Here, have a potion.\nHe puts a lvl 1 potion on the floor."
+Room:GET-ROOM-FROM-ACTOR THIS
+Potion:MAKE-POTION 1
+:ADD-ITEM Room Potion

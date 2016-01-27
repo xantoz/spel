@@ -456,7 +456,12 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
             }
         },
         {"MAKE-POTION", [&](const std::vector<std::string> &args) {
-                return new Potion(args.at(0), std::stoi(args.at(1)));
+                switch (args.size())
+                {
+                    case 1: return new Potion(std::stoi(args.at(0)));
+                    case 2: return new Potion(args.at(0), std::stoi(args.at(1)));
+                    default: throw InvalidFileException(row, "Wrong amount of args.");
+                }
             }
         },
         {"MAKE-KEY", [&](const std::vector<std::string> &args) {
