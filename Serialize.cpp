@@ -188,10 +188,10 @@ EncounterProbability parseEncounterProbs(const std::string &str)
     return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
 }
 
-// note that this is a very stupid format and there are lots of undefined scenarios that may make
-// the whole program crash, leak memory or worse. Like not creating a Player instance in the world
-// file, creating a Player in a callback file, creating an Item and not assigning it to an
-// ItemOwner, or creating an Actor without assigning it to a Room and probably more.
+// note that this is a very stupid format and there are lots of undefined scenarios that may
+// make the whole program crash, leak memory or worse. Like not creating a Player instance in
+// the world file, creating an Item and not assigning it to an ItemOwner, or creating an Actor
+// without assigning it to a Room and probably more.
 void load(std::istream &is, std::initializer_list<std::pair<const std::string, GameObject*>> predef_vars)
 {
     unsigned row = 1; // program counter that also doubles as indicating row for printouts. NOTE: indexed from 1!!
@@ -351,7 +351,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
                 // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
-                if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER several times (but why would you?)
+                if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER multiple times without leaking memory (but why would you?)
                 if      (args.size() == 3) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)));
                 else if (args.size() == 4) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
                 else                       throw InvalidFileException(row, "Wrong amount of args.");

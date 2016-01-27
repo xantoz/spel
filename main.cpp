@@ -194,6 +194,28 @@ void drop(string arg)
 
 void equip(string arg)
 {
+    Item *item = player->getItem(arg);
+    if (item == nullptr)
+    {
+        cout << "No such item." << endl;
+        return;
+    }
+
+    if (dynamic_cast<Sword*>(item) != nullptr)
+        player->equipSword(arg);
+    else if (dynamic_cast<Shield*>(item) != nullptr)
+        player->equipShield(arg);
+    else if (dynamic_cast<Shoes*>(item) != nullptr)
+        player->equipShoes(arg);
+    else if (dynamic_cast<Armor*>(item) != nullptr)
+        player->equipArmor(arg);
+    else
+        cout << "Not equippable." << endl;
+}
+
+/*
+void equip(string arg)
+{
     boost::trim_all(arg);
     size_t first_space = arg.find_first_of(' ');
     if (first_space == string::npos)
@@ -248,6 +270,7 @@ void equip(string arg)
 
     cout << "Equipped " << what << "." << endl;
 }
+*/
 
 void unequip(string arg)
 {
