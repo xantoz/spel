@@ -306,10 +306,12 @@ void Actor::die()
         unequipShield();
         unequipSword();
         unequipShoes();
-        for (Item *item: this->getItems())
+        for (auto it = getItems().begin(); it != getItems().end(); )
         {
-            std::cout << getName() << " dropped " << item->getName() << std::endl;
-            room->addItem(item);
+            std::cout << getName() << " dropped " << (*it)->getName() << std::endl;
+            // Ensure we have a reference to the iterator one step after the one that'll be
+            // removed (moved to rooms list of items)
+            room->addItem(*it++); 
         }
     }
     

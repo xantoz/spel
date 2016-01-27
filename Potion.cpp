@@ -23,7 +23,7 @@ Potion::Potion(int lvl) :
 }
 
 Potion::Potion(const std::string &name, int lvl) :
-    Item(name, "Potion that heals" + std::to_string(lvl*10) + "hp", 2*lvl), hpHeals(lvl*10), level(lvl)
+    Item(name, "Potion that heals " + std::to_string(lvl*10) + " HP", 2*lvl), hpHeals(lvl*10), level(lvl)
 {
     consumable = true;
 }
