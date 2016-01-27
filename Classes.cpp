@@ -220,3 +220,42 @@ std::string Human::serialize(std::ostream &os) const
     return sym;
 }
 
+
+CallbackHuman::CallbackHuman(const std::string &name, const std::string &desc, const std::string &callback_path) :
+    Human(name, desc, "unused"), Callback(callback_path)
+{
+}
+
+CallbackHuman::CallbackHuman(const std::string &name, const std::string &desc, const Stats &stats, const std::string &callback_path) :
+    Human(name, desc, stats, "unused"), Callback(callback_path)
+{
+}
+
+CallbackHuman::CallbackHuman(const std::string &name, const std::string &desc, const Stats &stats, int hp, const std::string &callback_path) :
+    Human(name, desc, stats, hp, "unused"), Callback(callback_path)
+{
+}
+
+CallbackHuman::~CallbackHuman()
+{
+    std::cerr << "CallbackHuman<" << this->getName() << "> destructor" << std::endl;
+}
+
+
+void CallbackHuman::talk()
+{
+    runCallback({{"THIS", this}});
+}
+
+std::string CallbackHuman::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-CALLBACK-HUMAN "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << stats.serializeString() << " "
+       << hp << " "
+       << stringify(getCallback()) << std::endl;
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
+}
