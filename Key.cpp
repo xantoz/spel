@@ -81,9 +81,9 @@ std::string Key::serialize(std::ostream &os, const std::unordered_map<const Room
        << getWeight();
     if (fromRoom != nullptr)
     {
-        os << " " << room_to_sym.at(fromRoom) << " " << fromRoomDirection;
+        os << " " << room_to_sym.at(fromRoom) << " " << stringify(fromRoomDirection);
         if (toRoom != nullptr)
-            os << " " << room_to_sym.at(toRoom) << " " << toRoomDirection;
+            os << " " << room_to_sym.at(toRoom) << " " << stringify(toRoomDirection);
     }
     os << std::endl;
     return itemSym;

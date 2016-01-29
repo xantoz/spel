@@ -75,6 +75,12 @@ public:
     virtual void talk() override;
     virtual std::string serialize(std::ostream &os) const override;
 };
+
+
+class LastBoss : public Human 
+{
+    
+};
     
     
 
