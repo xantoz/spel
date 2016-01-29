@@ -117,7 +117,7 @@ std::string stringify(const std::string &string)
     return ss.str();
 }
 
-static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::string> &args)
+static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::string> &args, int row=-1)
 {
     args.clear();
     
@@ -150,7 +150,7 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
                 }
                 prevChar = *it;
             }
-            throw InvalidFileException("Row ended inside string.");
+            throw InvalidFileException(row, "Row ended inside string.");
         }
         else if (*it == ' ')
         {
@@ -167,27 +167,6 @@ static void parseCmd(const std::string &str, std::string &cmd, std::vector<std::
     }
 }
 
-Stats parseStats(const std::string &str)
-{
-    std::vector<std::string> strings; strings.reserve(7);
-    std::vector<int> numbers;         numbers.reserve(7);
-    boost::split(strings, str, boost::is_any_of(";"));
-    std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stoi(a); });
-    if (numbers.size() != 7) throw InvalidFileException("Stats-param of wrong length");
-    Stats stats = {numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3), numbers.at(4), numbers.at(5), numbers.at(6)};
-    return stats;
-}
-
-EncounterProbability parseEncounterProbs(const std::string &str)
-{
-    std::vector<std::string> strings; strings.reserve(4);
-    std::vector<double> numbers;      numbers.reserve(4);
-    boost::split(strings, str, boost::is_any_of(";"));
-    std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stod(a); });
-    if (numbers.size() != 4) throw InvalidFileException("EncounterProbability-param of wrong length");
-    return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
-}
-
 // note that this is a very stupid format and there are lots of undefined scenarios that may
 // make the whole program crash, leak memory or worse. Like not creating a Player instance in
 // the world file, creating an Item and not assigning it to an ItemOwner, or creating an Actor
@@ -196,9 +175,28 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
 {
     unsigned row = 1; // program counter that also doubles as indicating row for printouts. NOTE: indexed from 1!!
 
+    auto parseStats = [&](const std::string &str) -> Stats {
+        std::vector<std::string> strings; strings.reserve(7);
+        std::vector<int> numbers;         numbers.reserve(7);
+        boost::split(strings, str, boost::is_any_of(";"));
+        std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stoi(a); });
+        if (numbers.size() != 7) throw InvalidFileException(row, "Stats-param of wrong length");
+        Stats stats = {numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3), numbers.at(4), numbers.at(5), numbers.at(6)};
+        return stats;
+    };
+
+    auto parseEncounterProbs = [&](const std::string &str) -> EncounterProbability {
+        std::vector<std::string> strings; strings.reserve(4);
+        std::vector<double> numbers;      numbers.reserve(4);
+        boost::split(strings, str, boost::is_any_of(";"));
+        std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stod(a); });
+        if (numbers.size() != 4) throw InvalidFileException(row, "EncounterProbability-param of wrong length");
+        return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
+    };
+
     std::unordered_map<std::string, unsigned> labels;
     std::unordered_map<std::string, GameObject*> vars(predef_vars);
-    auto get_label = [&] (const std::string label) {
+    auto get_label = [&](const std::string label) {
         auto it = labels.find(label);
         if (it == labels.end()) throw InvalidFileException(row, "Jumping to non-existant label.");
         return it->second - 1; // compensate for row being iterated directly after an executed command
@@ -652,7 +650,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
             {
                 var_name = std::string(line.begin(), colon);
             }
-            parseCmd(std::string(colon+1, line.end()), cmd_name, args);
+            parseCmd(std::string(colon+1, line.end()), cmd_name, args, row);
         }
         
         lines.emplace_back(std::move(var_name), std::move(cmd_name), std::move(args));
