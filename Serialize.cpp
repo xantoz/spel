@@ -204,6 +204,9 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         return it->second - 1; // compensate for row being iterated directly after an executed command
     };
     std::unordered_map<std::string, std::function<GameObject*(const std::vector<std::string> &)> > cmds = {
+        // Ignore all args and return NULL. Use for comments.
+        {"REM", [&](const std::vector<std::string> &args) { return nullptr; }},
+        // Unconditional jump
         {"GOTO", [&](const std::vector<std::string> &args) {
                 row = get_label(args.at(0)); // change current row.
                 return nullptr;

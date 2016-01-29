@@ -2,6 +2,7 @@
 :MESSAGE "Did you think something else would happen this time?"
 :MESSAGE "Well it ... it ... it will actually..."
 SummonTroll:GET-ACTOR-GLOBAL "SummonTroll"
+:REM This is a comment, yay.
 :IF SummonTroll have_troll no_troll
 :MESSAGE "This row never happens"
 have_troll.:MESSAGE "But not until you show you can kill the troll I spawned."
