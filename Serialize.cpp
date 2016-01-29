@@ -313,6 +313,19 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         // We might need to summon a null now that we have conditionals and stuff
         {"GET-NULL", [&](const std::vector<std::string> &args) {
+                if (args.size() != 0) throw InvalidFileException(row, "Too many args.");
+                return nullptr;
+            }
+        },
+        // :SET-DESCRIPTION <ActorRef> <Description (string)>
+        {"SET-DESCRIPTION", [&](const std::vector<std::string> &args) {
+                vars.at(args.at(0))->setDescription(args.at(1));
+                return nullptr;
+            }
+        },
+        // :APPEND-DESCRIPTION <ActorRef> <Description (string)>
+        {"APPEND-DESCRIPTION", [&](const std::vector<std::string> &args) {
+                vars.at(args.at(0))->appendDescription(args.at(1));
                 return nullptr;
             }
         },
@@ -506,7 +519,6 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
              return nullptr;
          }
         },
-        
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
                 if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-DROP.");

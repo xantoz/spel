@@ -19,6 +19,21 @@ std::string GameObject::getDescription() const
     return description;
 }
 
+void GameObject::setDescription(const std::string &newdesc)
+{
+    description = newdesc;
+}
+
+void GameObject::setDescription(std::string &&newdesc)
+{
+    description = newdesc;
+}
+
+void GameObject::appendDescription(const std::string &appdesc)
+{
+    description = description + "\n" + appdesc;
+}
+
 const std::string &GameObject::getName() const
 {
     return name;
