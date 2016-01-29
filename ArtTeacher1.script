@@ -1,0 +1,18 @@
+Room:GET-ROOM-FROM-ACTOR THIS
+Corridor4:GET-ROOM-BY-NAME "Corridor 2 end"
+ArtRoom:GET-ROOM-BY-NAME "Art room"
+
+Act1:GET-ACTOR Room "Big troll"
+Act2:GET-ACTOR Room "Big dragon"
+Act3:GET-ACTOR Room "Big golem"
+Act4:GET-ACTOR Room "Big thief"
+:IF Act1 not_empty
+:IF Act2 not_empty
+:IF Act3 not_empty
+:IF Act4 not_empty
+Key:MAKE-KEY "Gray key" "school key" 5 Corridor4 "art room" ArtRoom "corridor"
+:ADD-ITEM Room Key
+:MESSAGE "Thank you for saving me from the monsters! Here use this key to get to the art room!"
+:SET-CALLBACK THIS ArtTeacher2.script
+:STOP
+not_empty.:MESSAGE "Those monsters"
