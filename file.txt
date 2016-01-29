@@ -4,12 +4,12 @@ RMyBathroom:MAKE-ROOM "Bathroom" "This is the bath room, there's a toilet and a 
 Potion1:MAKE-POTION "Potion1" 2
 :ADD-ITEM RMyBathroom Potion1
 RMyCorridor2:MAKE-ROOM "Corridor2" "This is the end of the corridor" 0;0;0;0
-IMyBoots:MAKE-SHOES "Boots" 0;0;0;2;1;0;1
-IMySneakers:MAKE-SHOES "Sneakers" 0;0;0;0;3;0;2
+IMyBoots:MAKE-SHOES "Boots" "Your boots" 40 0;0;0;2;1;0;1
+IMySneakers:MAKE-SHOES "Sneakers" "Your sneakers" 30 0;0;0;0;3;0;2
 :ADD-ITEM RMyCorridor2 IMyBoots
 :ADD-ITEM RMyCorridor2 IMySneakers
 RMyLivingroom:MAKE-ROOM "Living room" "This is the living room, your mother is standing by the tv" 0;0;0;0
-AMyMother:MAKE-HUMAN "Mother" "It's your mother" 30;8;4;4;10;5;5;0 50 "Good morning my son, it's dangerous outside!"
+AMyMother:MAKE-HUMAN "Mother" "It's your mother" 30;8;4;4;10;5;5 50 "Good morning my son, it's dangerous outside!"
 :ADD-ACTOR RMyLivingroom AMyMother
 RMyKitchen:MAKE-ROOM "Kitchen" "This is the kitchen, there's some food on the table"
 IBanana1:MAKE-POTION "Banana" 1
@@ -28,7 +28,7 @@ IJuice1:MAKE-POTION "Juice" 1
 ROutside:MAKE-ROOM "Outside" "You are outside the house. Your father is standing there" 0;0;0;0
 :SET-EXIT RMyCorridor2 "south" ROutside
 :SET-EXIT ROutside "north" RMyCorridor2
-AMyFather:MAKE-HUMAN "Father" "It's your father" 35;10;6;5;10;4;4;0 40 "Where are you going my son?"
+AMyFather:MAKE-HUMAN "Father" "It's your father" 35;10;6;5;10;4;4 40 "Where are you going my son?"
 :ADD-ACTOR Outside AMyFather
 RMyStorage:MAKE-ROOM "Storage" "This is a storage room, there's some stuff on the floor" 0;0;0;0
 :SET-EXIT ROutside "west" RMyStorage
@@ -38,7 +38,7 @@ IAxe1:MAKE-SWORD "Axe" "A really heavy axe", 0;-5;30;0;-5;-5;-5
 RMartinOutside:MAKE-ROOM "Neighbors" "You're in your neighbors garden" 0;0;0;0
 :SET-EXIT ROutside "east" RMartinOutside
 :SET-EXIT RMartinOutside "west" ROutside
-Martin:MAKE-HUMAN "Martin" "Your best friend!" 20;8;5;8;3;3;0" "Hi! I was waiting for you. I have some useful weapons inside the house"
+Martin:MAKE-HUMAN "Martin" "Your best friend!" 20;8;5;8;3;3;1 "Hi! I was waiting for you. I have some useful weapons inside the house"
 :ADD-ACTOR RMartinOutside Martin
 
 RMartinInside:MAKE-ROOM "Inside" "This is inside Martin's house" 0;0;0;0
@@ -181,127 +181,3 @@ RSchoolCorridor5:MAKE-ROOM "Corridor 3" "Corridor of the second floor" 0.2;0.2;0
 :SET-DEATH-EXIT AMelta "corridor" RSchoolCorridor5
 :SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs2
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
-
-
-:SET-DROP G2 0
-:ADD-ACTOR G1 G2
-G3:MAKE-ROOM "Street" "The street" 0;0;0;0
-G4:MAKE-ROOM "Neighbor" "Outside of neighbors house" 0;0;0;0
-G5:MAKE-PLAYER "nils" "it's you" 20;10;10;10;10;10;20 20
-G6:MAKE-SHIELD "Gold shield" "An awesome shield" 40 0;0;40;-3;0;-2;0
-:ADD-ITEM G5 G6
-:EQUIP-SHIELD G5 "Gold shield"
-:SET-DROP G5 0
-:SET-KILLED-MONSTER 0:SET-NUMBER-KILLS 0:ADD-ACTOR G4 G5
-G7:MAKE-ROOM "Outside" "This is our garden" 0;0;0;0
-G8:MAKE-HUMAN "Rudolph" "It's your uncle" 50;10;20;5;10;10;0 50 "Good morning my son, where are you going?"
-:SET-DROP G8 0
-:ADD-ACTOR G7 G8
-G9:MAKE-ROOM "My room" "This is my room\n You see a yellow locked door to the east." 0;0;0;0
-G10:MAKE-ROOM "Secret Room" "Actually this is just your wardrobe." 0.5;0.3;0.4;0.6
-G11:MAKE-THIEF "thief26" "Thief level 3" 30;14;9;6;24;7;21 30
-:SET-DROP G11 0
-:ADD-ACTOR G10 G11
-G12:MAKE-DRAGON "dragon25" "Dragon level 1" 20;3;4;10;8;5;2 20
-:SET-DROP G12 0
-:ADD-ACTOR G10 G12
-G13:MAKE-GOLEM "golem24" "Golem level 2" 20;12;8;26;11;4;4 20
-:SET-DROP G13 0
-:ADD-ACTOR G10 G13
-G14:MAKE-DRAGON "dragon23" "Dragon level 2" 47;7;6;12;8;11;4 47
-:SET-DROP G14 0
-:ADD-ACTOR G10 G14
-G15:MAKE-TROLL "troll22" "Troll level 2" 20;2;12;8;40;4;7 20
-:SET-DROP G15 0
-:ADD-ACTOR G10 G15
-G16:MAKE-THIEF "thief21" "Thief level 2" 21;7;8;4;16;6;14 21
-:SET-DROP G16 0
-:ADD-ACTOR G10 G16
-G17:MAKE-TROLL "troll20" "Troll level 1" 11;1;11;4;20;2;2 11
-:SET-DROP G17 0
-:ADD-ACTOR G10 G17
-G18:MAKE-TROLL "troll19" "Troll level 1" 10;2;3;7;25;2;2 10
-:SET-DROP G18 0
-:ADD-ACTOR G10 G18
-G19:MAKE-GOLEM "golem18" "Golem level 2" 20;13;9;24;5;5;9 20
-:SET-DROP G19 0
-:ADD-ACTOR G10 G19
-G20:MAKE-THIEF "thief17" "Thief level 1" 11;2;3;3;8;9;7 11
-:SET-DROP G20 0
-:ADD-ACTOR G10 G20
-G21:MAKE-GOLEM "golem16" "Golem level 1" 10;15;4;12;2;2;2 10
-:SET-DROP G21 0
-:ADD-ACTOR G10 G21
-G22:MAKE-DRAGON "dragon15" "Dragon level 1" 21;3;3;6;8;5;6 21
-:SET-DROP G22 0
-:ADD-ACTOR G10 G22
-G23:MAKE-TROLL "troll14" "Troll level 1" 10;1;3;5;25;5;2 10
-:SET-DROP G23 0
-:ADD-ACTOR G10 G23
-G24:MAKE-TROLL "troll13" "Troll level 1" 15;1;3;4;24;2;2 15
-:SET-DROP G24 0
-:ADD-ACTOR G10 G24
-G25:MAKE-TROLL "troll12" "Troll level 2" 20;6;6;10;42;4;5 20
-:SET-DROP G25 0
-:ADD-ACTOR G10 G25
-G26:MAKE-THIEF "thief11" "Thief level 2" 20;4;6;9;20;4;14 20
-:SET-DROP G26 0
-:ADD-ACTOR G10 G26
-G27:MAKE-DRAGON "dragon10" "Dragon level 3" 60;12;15;18;12;15;6 60
-:SET-DROP G27 0
-:ADD-ACTOR G10 G27
-G28:MAKE-TROLL "troll9" "Troll level 3" 39;3;9;12;60;6;6 39
-:SET-DROP G28 0
-:ADD-ACTOR G10 G28
-G29:MAKE-GOLEM "golem8" "Golem level 1" 11;6;11;12;3;2;2 11
-:SET-DROP G29 0
-:ADD-ACTOR G10 G29
-G30:MAKE-DRAGON "dragon7" "Dragon level 1" 22;8;5;6;4;5;2 22
-:SET-DROP G30 0
-:ADD-ACTOR G10 G30
-G31:MAKE-TROLL "troll6" "Troll level 1" 10;1;3;6;20;2;9 10
-:SET-DROP G31 0
-:ADD-ACTOR G10 G31
-G32:MAKE-GOLEM "golem5" "Golem level 2" 20;21;8;24;4;4;4 20
-:SET-DROP G32 0
-:ADD-ACTOR G10 G32
-G33:MAKE-TROLL "troll4" "Troll level 2" 20;2;7;8;40;12;4 20
-:SET-DROP G33 0
-:ADD-ACTOR G10 G33
-G34:MAKE-GOLEM "golem3" "Golem level 3" 32;20;12;36;11;6;6 32
-:SET-DROP G34 0
-:ADD-ACTOR G10 G34
-G35:MAKE-THIEF "thief2" "Thief level 1" 13;4;3;3;8;3;9 13
-:SET-DROP G35 0
-:ADD-ACTOR G10 G35
-G36:MAKE-DRAGON "dragon1" "Dragon level 3" 69;9;9;18;12;15;6 69
-:SET-DROP G36 0
-:ADD-ACTOR G10 G36
-G37:MAKE-ROOM "Kitchen" "This is the kitchen" 0;0;0;0
-G38:MAKE-TROLL "Troll1" "Troll level 2" 20;2;7;11;44;5;4 20
-:SET-DROP G38 0
-:ADD-ACTOR G37 G38
-G39:MAKE-SWORD "Axe" "A really heavy axe" 100 0;0;20;0;-10;-5;-5
-:ADD-ITEM G4 G39
-G40:MAKE-SHIELD "bronze shield" "a typical shield" 20 0;0;0;23;-2;0;-1
-:ADD-ITEM G9 G40
-G41:MAKE-KEY "yellowkey" "A yellow key" 5 G9 east G10 west
-:ADD-ITEM G9 G41
-G42:MAKE-POTION "Potion1" 2
-:ADD-ITEM G37 G42
-G43:MAKE-SWORD "dagger" "It's just your normal dagger." 10 0;0;10;0;0;1;2
-:ADD-ITEM G37 G43
-:SET-EXIT G0 "exit" G4
-:SET-EXIT G1 "south" G3
-:SET-EXIT G3 "north" G1
-:SET-EXIT G3 "northeast" G7
-:SET-EXIT G3 "northwest" G4
-:SET-EXIT G4 "east" G7
-:SET-EXIT G4 "northeast" G3
-:SET-EXIT G4 "shop" G0
-:SET-EXIT G7 "northwest" G3
-:SET-EXIT G7 "south" G37
-:SET-EXIT G7 "west" G4
-:SET-EXIT G9 "west" G37
-:SET-EXIT G37 "east" G9
-:SET-EXIT G37 "north" G7
