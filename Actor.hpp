@@ -61,7 +61,7 @@ public:
     const Shoes *getShoes() const;
 
     int getHP() const;
-    void setHP(int hp);
+    void setHP(int); // Sets HP constrained by stats.maxhp
 
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
@@ -80,7 +80,7 @@ public:
     
     const Stats &getStats() const;
     void setStats(const Stats &);
-
+    
     virtual std::string getDescription() const override;
 
     virtual std::string serialize(std::ostream &os) const;

@@ -190,6 +190,19 @@ const Stats &Actor::getStats() const
 void Actor::setStats(const Stats &newstats)
 {
     stats = newstats;
+    // check if current hp exceeds the new maxhp
+    if (hp > stats.maxhp)
+        hp = stats.maxhp;
+}
+
+int Actor::getHP() const
+{
+    return hp;
+}
+
+void Actor::setHP(int newhp)
+{
+    hp = (newhp > stats.maxhp) ? stats.maxhp : newhp;
 }
 
 std::string Actor::getDescription() const
@@ -413,12 +426,4 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     // sure all rooms have been created.
 }
 
-int Actor::getHP() const
-{
-    return hp;
-}
 
-void Actor::setHP(int hphp)
-{
-    hp = hphp;
-}
