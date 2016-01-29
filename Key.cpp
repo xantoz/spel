@@ -67,6 +67,8 @@ void Key::use(Actor *actor)
     used = true;
 
     std::cout << "A door going " << fromRoomDirection << " has openened.";
+    fromRoom->appendDescription("You opened a door to " + toRoom->getName() + " here.");
+    toRoom->appendDescription("You used a key to get here from " + fromRoom->getName() + ".");
     return;
 }
 

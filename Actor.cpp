@@ -187,6 +187,11 @@ const Stats &Actor::getStats() const
     return stats;
 }
 
+void Actor::setStats(const Stats &newstats)
+{
+    stats = newstats;
+}
+
 std::string Actor::getDescription() const
 {
     std::ostringstream ret;

@@ -317,7 +317,15 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
-        // :SET-DESCRIPTION <ActorRef> <Description (string)>
+        // :SET-STATS <ActorRef> <Stats>
+        {"SET-STATS", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Expect first argument to be Actor.");
+                actor->setStats(parseStats(args.at(1)));
+                return nullptr;
+            }
+        },
+        // :SET-DESCRIPTION <GameObjectRef> <Description (string)>
         {"SET-DESCRIPTION", [&](const std::vector<std::string> &args) {
                 vars.at(args.at(0))->setDescription(args.at(1));
                 return nullptr;
