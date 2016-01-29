@@ -1,7 +1,11 @@
 :MESSAGE "This is a widget that does crazy things"
+NameEq:NAME-EQ ACTOR "Rudolph"
+:IF NameEq used_on_rudolph
 Room:GET-ROOM-FROM-ACTOR ACTOR
 Troll:MAKE-TROLL "SummonTroll" 1
 :ADD-ACTOR Room Troll
 :MESSAGE "Oops, we summoned a nasty troll."
 :SET-CALLBACK THIS "widget2.script"
 :MESSAGE "Try using me again."
+:STOP
+used_on_rudolph.:MESSAGE "Why are you using me on Rudolph, you twat?"

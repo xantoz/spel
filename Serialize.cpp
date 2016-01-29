@@ -317,6 +317,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
+        // <VAR>:NAME-EQ <GameObjectRef> "String"
+        // Returns nullptr if name doesn't equal. Returns an undefined non-null ptr if name is
+        // equal (don't dereference this, strictly for use with IF)
+        {"NAME-EQ", [&](const std::vector<std::string> &args) {
+                return (vars.at(args.at(0))->getName() == args.at(1)) ? (GameObject*)(-1) : nullptr;
+         }
+        },
         // :SET-STATS <ActorRef> <Stats>
         {"SET-STATS", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
