@@ -1,5 +1,5 @@
 RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
-APlayer:MAKE-PLAYER "nils" "it's you" 20;10;10;10;10;10;20 20
+APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20
 :ADD-ACTOR RMyRoom APlayer
 RMyCorridor:MAKE-ROOM "Corridor" "This is a small corridor" 0;0;0;0
 RMyBathroom:MAKE-ROOM "Bathroom" "This is the bath room, there's a toilet and a shower" 0;0;0;0
