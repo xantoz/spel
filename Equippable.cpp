@@ -19,6 +19,11 @@ const Stats &Equippable::getStats() const
     return stats;
 }
 
+std::string Equippable::getDescription() const
+{
+    return getBaseDescription() + "\nSTATS: " + stats.toString();
+}
+
 void Equippable::serializeEquippableCommonConstructorParameters(std::ostream &os) const
 {
     os << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << getWeight() << " " << stats.serializeString() << std::endl;

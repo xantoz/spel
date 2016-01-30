@@ -20,6 +20,7 @@ public:
 
     const Stats &getStats() const;
 
+    virtual std::string getDescription() const override;
     virtual std::string serialize(std::ostream &os) const override;
 };
 #endif

@@ -176,7 +176,8 @@ void pickup(string arg)
      if (player->pickup(arg))
          cout << "Picked up " << arg << endl;
      else
-         cout << "I don't see any such thing." << endl;
+         cout << "Cannot pick up " << arg << "." << endl;
+         // cout << "I don't see any such thing." << endl;
 }
 
 void drop(string arg)
