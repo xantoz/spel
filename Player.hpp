@@ -12,8 +12,7 @@ class Player : public Actor
 {
 private:
     const static unsigned magisk_konstant = 10;
-    int kills;
-    bool killedMonster;
+    unsigned int kills;
     unsigned int money;
     
 protected:
@@ -31,9 +30,7 @@ public:
     std::string look(const std::string &actorOrItem) const;
     Stats addStats(const Stats &stats);
     int numberOfKills();
-    bool hasKilledMonster();
     void setKills(int k);
-    void setKilledMonster(bool k);
     void addMoney(int k);
     unsigned getMoney();
     

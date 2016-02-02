@@ -169,7 +169,7 @@ ISchoolBanana:MAKE-POTION "Banana" 4
 :ADD-ITEM RSchoolCafeteria ISchoolOrange
 :ADD-ITEM RSchoolCafeteria ISchoolBanana
 
-RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the first floor" 0.05;0.05;0;0
+RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the second floor" 0.05;0.05;0;0
 :SET-EXIT RSchoolStairs1 "up" RSchoolStairs2
 :SET-EXIT RSchoolStairs2 "down" RSchoolStairs1
 AMelta:MAKE-ACTOR "Melta" "Meltable enemy that doesn't die from regular attacks!\nHe is blocking the stairs up to the second floor." 100;20;20;10000;20;20;20
@@ -186,7 +186,7 @@ AStrongTroll:MAKE-TROLL "Strong troll" 6
 RSchoolChemistry:MAKE-ROOM "Chemistry room" "The chemistry room. The window is open" 0.04;0;0;0.04
 :REM :SET-EXIT RSchoolCorridor3 "chemistry room" RSchoolChemistry
 :REM :SET-EXIT RSchoolChemistry "corridor" RSchoolCorridor3
-IStrongAcid:MAKE-CALLBACK-ITEM "Strong-acid" "A really strong acid" 20 acid.script
+IStrongAcid:MAKE-CALLBACK-ITEM "Strong acid" "A really strong acid" 20 acid.script
 :ADD-ITEM RSchoolChemistry IStrongAcid
 RSchoolOffice:MAKE-ROOM "Office room" "The office room. There is something on the wall" 0.1;0.1;0.1;0.1
 :SET-EXIT RSchoolCorridor3 "office" RSchoolOffice
@@ -206,9 +206,9 @@ RSchoolArt:MAKE-ROOM "Art room" "This is the art room. There's a really strong e
 AStrongThief:MAKE-THIEF "Strong thief" 10
 :SET-NO-WANDER AStrongThief 1
 :SET-DROP AStrongThief 1
-IMusicKey:MAKE-KEY "Red-key" "Music room key" 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor"
+IMusicKey:MAKE-KEY "RedKey" "Music room key." 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor"
 :ADD-ITEM AStrongThief IMusicKey
-IChemistryKey:MAKE-KEY "Blue-key" "Chemistry room key" 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor"
+IChemistryKey:MAKE-KEY "BlueKey" "It is written \"Chemistry Room\" on a tag attached to the key." 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor"
 :ADD-ITEM AStrongThief IChemistryKey
 :ADD-ACTOR RSchoolArt AStrongThief
 RSchoolLecture:MAKE-ROOM "Lecture room" "A very big lecture room. There are a lot of strong enemies in this room" 0;0;0;0
@@ -235,7 +235,7 @@ RSchoolStairs3:MAKE-ROOM "Staircase 3" "The staircase leading up to the second f
 :SET-EXIT RSchoolStairs3 "corridor" RSchoolCorridor5
 :SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs3
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
-IRoofKey:MAKE-KEY "Purple-key" "Roof key" 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
+IRoofKey:MAKE-KEY "PurpleKey" "Key to the roof." 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
 :ADD-ITEM RSchoolOffice IRoofKey
 ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;10;10
 :ADD-ACTOR RSchoolRoof ABoss1

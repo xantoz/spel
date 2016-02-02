@@ -124,7 +124,7 @@ void use(string arg)
         Item *item = player->getItem(first);
         if (item->usedUp())
         {
-            std::cout << "You used up the " << item->getName() << std::endl;
+            std::cout << "You used up the " << item->getName() << "." << std::endl;
             delete item;
         }
 
@@ -489,6 +489,22 @@ void teleport(string arg)
     }
 }
 
+void imrich(string arg)
+{
+    try
+    {
+        player->addMoney(std::stoi(arg));
+    }
+    catch (invalid_argument &e)
+    {
+        cerr << e.what() << endl;
+    }
+    catch (out_of_range &e)
+    {
+        cerr << e.what() << endl;
+    }
+}
+
 void kill(string arg)
 {
     opponent->die();
@@ -515,12 +531,14 @@ int main(int argc, char** argv)
     cmds["die"] = &die;
     // CHEAT CMD, remove later
     cmds["teleport"] = &teleport;
+    cmds["i'mrich"] = &imrich;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &useBattle;
     battleCmds["run"] = &run;
     battleCmds["die"] = &die;
     battleCmds["kill"] = &kill;
+    
     shopCmds["list"] = &listItems;
     shopCmds["listinventory"] = &listItems;
     shopCmds["inventory"] = &listItems;
@@ -528,6 +546,13 @@ int main(int argc, char** argv)
     shopCmds["sell"] = &sell;
     shopCmds["go"] = &go;
     shopCmds["look"] = &look;
+    shopCmds["equip"] = &equip;
+    shopCmds["unequip"] = &unequip;
+    shopCmds["drop"] = &drop;
+    shopCmds["use"] = &use;
+    shopCmds["save"] = &save;
+    shopCmds["load"] = &load_world;
+
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));

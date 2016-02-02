@@ -22,9 +22,13 @@ ItemOwner::~ItemOwner()
     std::cerr << "ItemOwner<" << getName() << "> destructor" << std::endl;
         
 
-    // items will remove themselves from the ItemOwner
-    while (items.size() != 0)
-        delete items.front();
+    // // items will remove themselves from the ItemOwner
+    // while (items.size() != 0)
+    //     delete items.front();
+
+    auto it = items.begin();
+    while (it != items.end())
+        delete *it++; // deleting removes the item from the list
 }
 
 

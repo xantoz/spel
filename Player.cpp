@@ -9,17 +9,17 @@
 // }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats) :
-    Actor(name, description, stats), money(0)
+    Player(name, description, stats, stats.maxhp, 0)
 {
 }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats, int hp) :
-    Actor(name, description, stats, hp), money(0)
+    Player(name, description, stats, hp, 0)
 {
 }
 
 Player::Player(const std::string &name, const std::string &description, const Stats &stats, int hp, int dough) :
-    Actor(name, description, stats, hp), money(dough)
+    Actor(name, description, stats, hp), kills(0), money(dough)
 {
 }
 
@@ -95,19 +95,9 @@ int Player::numberOfKills()
     return kills;
 }
 
-bool Player::hasKilledMonster()
-{
-    return killedMonster;
-}
-
 void Player::setKills(int k)
 {
     kills = k;
-}
-
-void Player::setKilledMonster(bool k)
-{
-    killedMonster = k;
 }
 
 void Player::addMoney(int k)
@@ -127,7 +117,6 @@ std::string Player::serialize(std::ostream &os) const
     actorTypeIndependentSerializeConstructorParameters(os);
     os << " " << money << std::endl;
     actorTypeIndependentSerialize(os, playerSym);
-    os << ":SET-KILLED-MONSTER " << playerSym << " " << killedMonster << std::endl;
     os << ":SET-NUMBER-KILLS " << playerSym << " " << kills << std::endl;
     return playerSym;
 }
