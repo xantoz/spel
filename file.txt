@@ -125,7 +125,7 @@ IApple4:MAKE-POTION "Apple4" 10
 :ADD-ITEM RPark IApple2
 :ADD-ITEM RPark IApple3
 :ADD-ITEM RPark IApple4
-RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets. There is a big boulder blocking the path to the forest"
+RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets. There is a big boulder blocking the path to the forest."
 :SET-EXIT RStreet9 "west" RStreet10
 :SET-EXIT RStreet10 "east" RStreet9
 RPrincipalHouse:MAKE-ROOM "Principal's house" "This is your principal's house" 0;0;0;0
