@@ -41,7 +41,7 @@ const std::pair<Item*, unsigned>& Shop::getShopItem(const std::string &name) con
 
 std::string Shop::getDescription() const 
 {
-    return Room::getDescription() + "\n" + listInventory();
+    return Room::getDescription() + "\n\n" + listInventory();
 }
 
 std::string Shop::serialize(std::ostream &os) const
