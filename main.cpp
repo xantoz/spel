@@ -521,7 +521,7 @@ int main(int argc, char** argv)
 {
     std::map<string, function<void(string)>> cmds;
     std::map<string, function<void(string)>> battleCmds;
-    std::map<string, function<void(string)>> shopCmds;
+
     cmds["go"] = &go;
     cmds["look"] = &look;
     cmds["use"] = &use;
@@ -544,20 +544,16 @@ int main(int argc, char** argv)
     battleCmds["run"] = &run;
     battleCmds["die"] = &die;
     battleCmds["kill"] = &kill;
-    
+
+    // shopCmds consists of the normal cmds plus a few extra, minus saving and loading
+    std::map<string, function<void(string)>> shopCmds(cmds);
+    shopCmds.erase("save");
+    shopCmds.erase("load");
     shopCmds["list"] = &listItems;
     shopCmds["listinventory"] = &listItems;
     shopCmds["inventory"] = &listItems;
     shopCmds["buy"] = &buy;
     shopCmds["sell"] = &sell;
-    shopCmds["go"] = &go;
-    shopCmds["look"] = &look;
-    shopCmds["equip"] = &equip;
-    shopCmds["unequip"] = &unequip;
-    shopCmds["drop"] = &drop;
-    shopCmds["use"] = &use;
-    shopCmds["save"] = &save;
-    shopCmds["load"] = &load_world;
 
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
