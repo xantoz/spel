@@ -396,7 +396,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
             }
         },
         {"MESSAGE-NO-LF", [&](const std::vector<std::string> &args) {
-                std::cout << args.at(0);
+                std::cout << args.at(0) << std::flush;
                 return nullptr;
             }
         },
