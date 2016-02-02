@@ -297,7 +297,7 @@ RStreet12:MAKE-ROOM "Street 12" "North of street 11" 0;0.05;0.05;0
 RStorageHouse:MAKE-ROOM "Storage house" "Storage house that might contain some useful items" 0;0;0;0
 ILadder:MAKE-CALLBACK-ITEM "Ladder" "A ladder that might be useful somewhere." 70 "ladder.script"
 :SET-CONSUMABLE ILadder 1
-:ADD-ITEM ILadder RStorageHouse
+:ADD-ITEM RStorageHouse ILadder
 :SET-EXIT RStreet12 "west" RStorageHouse
 :SET-EXIT RStorageHouse "east" RStreet12
 RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05
@@ -323,23 +323,23 @@ RMuseumRoom2:MAKE-ROOM "Museum room 2" "Second room of the museum, there's a guy
 :SET-EXIT RMuseumRoom2 "south" RMuseumUpstairs
 ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;80;30;80;40;40
 :SET-DROP ASamurai 1
-IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 0;0;150;0;0;0;0
+IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 30 0;0;150;0;0;0;0
 :ADD-ITEM ASamurai IMasamune
 :ADD-ACTOR RMuseumRoom2 ASamurai
-:RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum, there's a woman with snakes in her hair blocking the door." 0;0;0;0
+RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a woman with snakes in her hair blocking the door." 0;0;0;0
 :SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
 :SET-EXIT RMuseumRoom3 "south" RMuseumRoom2
 AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
-ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion is increased." 0;0;0;40;0;0;40
+ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion is increased." 50 0;0;0;40;0;0;40
 :ADD-ITEM AMedusa ISnakeArmor
 :SET-DROP AMedusa 1
 :ADD-ACTOR RMuseumRoom3 AMedusa
-RMuseurmRoom4:MAKE-ROOM "Meseum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
+RMuseumRoom4:MAKE-ROOM "Meseum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
 
 
-RStreet15:MAKE-ROOM "Street 15" "west of Street14" 0;0;0;0.1
+RStreet15:MAKE-ROOM "Street 15" "West of Street14." 0;0;0;0.1
 :SET-EXIT RStreet14 "west" RStreet15
-:SET-EXIT RStreet15 "east" RStreet16
+:SET-EXIT RStreet15 "east" RStreet14
 :REM AMayorsHouse:MAKE-ROOM 
 
 
