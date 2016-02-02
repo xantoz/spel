@@ -595,21 +595,12 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                     throw InvalidFileException(row, "Wrong amount of arguments.");
             }
         },
-        {"SET-NUMBER-KILLS", [&](const std::vector<std::string> &args) 
-         {
-             Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
-             if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-NUMBER-KILLS.");
-             player->setKills(std::stoi(args.at(1)));
-             return nullptr;
-         }
-        },
-        {"SET-KILLED-MONSTER", [&](const std::vector<std::string> &args)
-         {
-             Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
-             if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-KILLED-MONSTER.");
-             player->setKilledMonster(std::stoi(args.at(1)));
-             return nullptr;
-         }
+        {"SET-NUMBER-KILLS", [&](const std::vector<std::string> &args) {
+                Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
+                if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-NUMBER-KILLS.");
+                player->setKills(std::stoi(args.at(1)));
+                return nullptr;
+            }
         },
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
