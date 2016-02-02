@@ -22,6 +22,7 @@ public:
     // Player(const std::string &name, const std::string &description);
     Player(const std::string &name, const std::string &description, const Stats &stats);
     Player(const std::string &name, const std::string &description, const Stats &stats, int hp);
+    Player(const std::string &name, const std::string &description, const Stats &stats, int hp, int money);
     virtual ~Player() override;
     virtual void attackResponse(Actor *actor) override;
     virtual std::string getDescription() const override;

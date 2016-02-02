@@ -397,10 +397,27 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
                 // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
                 if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER multiple times without leaking memory (but why would you?)
-                if      (args.size() == 3) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)));
-                else if (args.size() == 4) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
-                else                       throw InvalidFileException(row, "Wrong amount of args.");
-                return player;
+
+                switch (args.size())
+                {
+                    case 3:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2))));
+                    case 4:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2)),
+                                                    std::stoi(args.at(3))));
+                    case 5:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2)),
+                                                    std::stoi(args.at(3)),
+                                                    std::stoi(args.at(4))));
+                    default:
+                        throw InvalidFileException(row, "Wrong amount of args.");
+                }
             }
         },
         {"MAKE-TROLL", [&](const std::vector<std::string> &args) {
