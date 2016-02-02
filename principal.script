@@ -1,6 +1,6 @@
 Room:GET-ROOM-FROM-ACTOR THIS
 
-Boss1:GET-ACTOR Room "Nonag"
+Boss1:GET-ACTOR-GLOBAL "Nonag"
 
 :IF Boss1 not_empty
 
