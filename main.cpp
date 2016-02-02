@@ -489,6 +489,12 @@ void teleport(string arg)
     }
 }
 
+void kill(string arg)
+{
+    opponent->die();
+}
+
+
 int main(int argc, char** argv)
 {
     std::map<string, function<void(string)>> cmds;
@@ -514,7 +520,7 @@ int main(int argc, char** argv)
     battleCmds["use"] = &useBattle;
     battleCmds["run"] = &run;
     battleCmds["die"] = &die;
-
+    battleCmds["kill"] = &kill;
     shopCmds["list"] = &listItems;
     shopCmds["listinventory"] = &listItems;
     shopCmds["inventory"] = &listItems;
