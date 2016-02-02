@@ -136,7 +136,7 @@ APrincipal:MAKE-CALLBACK-HUMAN "Principal" "Your principal" principal.script
 :ADD-ACTOR RPrincipalHouse APrincipal
 
 RHighSchool:MAKE-ROOM "High school" "This is the school you are going to" 0.1;0.05;0;0
-:SET-EXIT RStreet6 "inside" RHighSchool
+:SET-EXIT RStreet6 "east" RHighSchool
 :SET-EXIT RHighSchool "west" RStreet6
 RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.05;0.02;0.05;0.01
 :SET-EXIT RHighSchool "east" RInsideSchool

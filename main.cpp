@@ -521,6 +521,7 @@ int main(int argc, char** argv)
     battleCmds["run"] = &run;
     battleCmds["die"] = &die;
     battleCmds["kill"] = &kill;
+    
     shopCmds["list"] = &listItems;
     shopCmds["listinventory"] = &listItems;
     shopCmds["inventory"] = &listItems;
@@ -528,6 +529,13 @@ int main(int argc, char** argv)
     shopCmds["sell"] = &sell;
     shopCmds["go"] = &go;
     shopCmds["look"] = &look;
+    shopCmds["equip"] = &equip;
+    shopCmds["unequip"] = &unequip;
+    shopCmds["drop"] = &drop;
+    shopCmds["use"] = &use;
+    shopCmds["save"] = &save;
+    shopCmds["load"] = &load_world;
+
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
