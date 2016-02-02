@@ -54,7 +54,9 @@ const std::list<Actor*>& Actor::getActors()
 }
 
 
-void Actor::update() {}
+void Actor::update()
+{
+}
 
 
 bool Actor::equipArmor(const std::string &name)

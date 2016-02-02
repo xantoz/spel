@@ -14,6 +14,9 @@
 #include <iostream>
 #include <typeinfo>
 
+//////////////
+//// ITEM ////
+//////////////
 Item::Item(const std::string &name, const std::string &description, unsigned w) :
     GameObject(name, description),
     weight(w),
@@ -51,26 +54,37 @@ bool Item::usedUp() const
 
 void Item::use(Actor* actor)
 {
-    static std::string asdf = "this item is useless";
+    static std::string asdf = "This item is useless.";
     std::cout << asdf << std::endl;
     return;
 }
 
+std::string Item::getDescription() const
+{
+    return GameObject::getDescription() + "\nWeight: " + std::to_string(weight);
+}
 
 std::string Item::serialize(std::ostream &os) const
 {
     std::string itemSym = gensym();
-    os << itemSym << ":MAKE-ITEM " << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << getWeight() << std::endl;
+    os << itemSym << ":MAKE-ITEM "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << getWeight() << std::endl;
     return itemSym;
 }
 
 
+//////////////////////
+//// CALLBACKITEM ////
+//////////////////////
 CallbackItem::CallbackItem(const std::string &name,
              const std::string &description,
              unsigned weight) :
     CallbackItem(name, description, weight, "")
 {
 }
+
 CallbackItem::CallbackItem(const std::string &name,
              const std::string &description,
              unsigned weight,

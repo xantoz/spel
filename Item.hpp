@@ -28,6 +28,7 @@ public:
     
     virtual void use(Actor* actor);
 
+    virtual std::string getDescription() const override;
     virtual std::string serialize(std::ostream &os) const;
     
     friend class ItemOwner;
