@@ -7,29 +7,9 @@
 #include <algorithm>
 #include <cstdlib>
 #include <sstream>
+
 // IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
 // unequipped. Item's destructor will otherwise explode.
-
-// Actor::Actor(const std::string &name, const std::string &description) :
-//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
-//     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
-// {
-//     actors.push_front(this);
-// }
-
-// Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
-//     stats(_stats), hp(_stats.maxhp), armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
-// {
-//     actors.push_front(this);
-// }
-
-// Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
-//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
-//     stats(_stats), hp(_hp), armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
-// {
-//     actors.push_front(this);
-// }
 
 Actor::Actor(const std::string &name, const std::string &description) :
     Actor(name, description, {}, {})
