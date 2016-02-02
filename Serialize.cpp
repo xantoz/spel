@@ -313,7 +313,8 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"DROP", [&](const std::vector<std::string> &args) {
                 Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
                 if (a == nullptr) throw InvalidFileException(row, "Expected an Actor in the first argument.");
-                return a->drop(args.at(1));
+                a->drop(args.at(1));
+                return nullptr;
             }
         },
         // We might need to summon a null now that we have conditionals and stuff
