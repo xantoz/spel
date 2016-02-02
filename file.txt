@@ -98,6 +98,7 @@ RStreet7:MAKE-ROOM "Street7" "South of street 6" 0.1;0.05;0;0.01
 :SET-EXIT RStreet6 "south" RStreet7
 :SET-EXIT RStreet7 "north" RStreet6
 AForestGuy:MAKE-HUMAN "Lumberjack" "A guy that seems to know a lot about the forest" 30;8;4;4;10;5;5 50 "It's easy to get lost in the forest. Go south, west, north, north, west to get past the forest!"
+:ADD-ACTOR RStreet7 AForestGuy
 RStreet8:MAKE-ROOM "Street8" "West of street 6" 0.05;0.05;0;0.01
 :SET-EXIT RStreet6 "west" RStreet8
 :SET-EXIT RStreet8 "east" RStreet6
@@ -125,10 +126,12 @@ IApple4:MAKE-POTION "Apple4" 10
 :ADD-ITEM RPark IApple2
 :ADD-ITEM RPark IApple3
 :ADD-ITEM RPark IApple4
-RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets. There is a big boulder blocking the path to the forest"
+RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets. There is a big boulder blocking the path to the forest" 0;0;0;0
 :SET-EXIT RStreet9 "west" RStreet10
 :SET-EXIT RStreet10 "east" RStreet9
 RPrincipalHouse:MAKE-ROOM "Principal's house" "This is your principal's house" 0;0;0;0
+:SET-EXIT RStreet10 "south" RPrincipalHouse
+:SET-EXIT RPrincipalHouse "north" RStreet10
 APrincipal:MAKE-CALLBACK-HUMAN "Principal" "Your principal" principal.script
 :ADD-ACTOR RPrincipalHouse APrincipal
 
@@ -178,6 +181,7 @@ RSchoolPhysics:MAKE-ROOM "Physics room" "The physics room. There seems to be a s
 :SET-EXIT RSchoolCorridor3 "physics room" RSchoolPhysics
 :SET-EXIT RSchoolPhysics "corridor" RSchoolCorridor3
 AStrongTroll:MAKE-TROLL "Strong troll" 6
+:SET-NO-WANDER AStrongTroll 1
 :ADD-ACTOR RSchoolPhysics AStrongTroll
 RSchoolChemistry:MAKE-ROOM "Chemistry room" "The chemistry room. The window is open" 0.04;0;0;0.04
 :REM :SET-EXIT RSchoolCorridor3 "chemistry room" RSchoolChemistry
@@ -270,4 +274,6 @@ RForest8:MAKE-ROOM "Forest end" "You made it through the forest" 0.1;0;0.05;0
 RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;0
 :SET-EXIT RForest8 "west" RStreet11
 :SET-EXIT RStreet11 "east" RForest8
+:SET-EXIT RForest8 "east" RForest2
 AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that"
+:ADD-ACTOR RStreet11 AOldMan
