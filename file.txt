@@ -288,14 +288,16 @@ ISwordDamocles:MAKE-SWORD "Damocles sword" "Legendary sword" 100 0;0;80;0;0;0;0
 ISpeedSword:MAKE-SWORD "Speed sword" "Sword that increases your speed" 80 0;0;50;0;20;0;0
 IGoldenAxe:MAKE-SWORD "Gold Axe" "Axe that's made of gold" 200 0;0;200;0;-15;-5;-5
 IPotion10:MAKE-POTION "Potion10" 10
-REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 IDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
+REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
 :SET-EXIT RStreet11 "west" REquipmentShop
 :SET-EXIT REquipmentShop "exit" RStreet11
 RStreet12:MAKE-ROOM "Street 12" "North of street 11" 0;0.05;0.05;0
 :SET-EXIT RStreet11 "north" RStreet12
 :SET-EXIT RStreet12 "south" RStreet11
 RStorageHouse:MAKE-ROOM "Storage house" "Storage house that might contain some useful items" 0;0;0;0
-ILadder:MAKE-KEY "Ladder" "Ladder that might be useful somewhere" Mountain1 "south" Mountain2 "north"
+ILadder:MAKE-CALLBACK-ITEM "Ladder" "A ladder that might be useful somewhere." 70 "ladder.script"
+:SET-CONSUMABLE ILadder 1
+:ADD-ITEM ILadder RStorageHouse
 :SET-EXIT RStreet12 "west" RStorageHouse
 :SET-EXIT RStorageHouse "east" RStreet12
 RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05

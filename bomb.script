@@ -54,3 +54,6 @@ KABOOM.:MESSAGE "You set the bomb near the boulder and take cover behind some bu
 
 :REM Original description of RStreet10: "This is the end of the southern streets. There is a big boulder blocking the path to the forest."
 :SET-DESCRIPTION RStreet10 "This is the end of the southern streets.\nThere is a path going west leading to a big forest.\nThere is a lot of rubble lying on the ground."
+
+:REM The bomb is used up now.
+:SET-USED THIS 1

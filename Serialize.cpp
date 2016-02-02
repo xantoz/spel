@@ -384,7 +384,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
-        // :APPEND-DESCRIPTION <ActorRef> <Description (string)>
+        // :APPEND-DESCRIPTION <GameObjectRef> <Description (string)>
         {"APPEND-DESCRIPTION", [&](const std::vector<std::string> &args) {
                 vars.at(args.at(0))->appendDescription(args.at(1));
                 return nullptr;
