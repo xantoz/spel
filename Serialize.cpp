@@ -213,6 +213,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
 
     std::unordered_map<std::string, unsigned> labels;
     std::unordered_map<std::string, GameObject*> vars(predef_vars);
+    std::unordered_map<unsigned, unsigned> repeat_counter;
     auto get_label = [&](const std::string label) {
         auto it = labels.find(label);
         if (it == labels.end()) throw InvalidFileException(row, "Jumping to non-existant label.");
@@ -225,6 +226,19 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"GOTO", [&](const std::vector<std::string> &args) {
                 row = get_label(args.at(0)); // change current row.
                 return nullptr;
+            }
+        },
+        // <BOOL>:REPEAT <label> <int>
+        // Unconditionally jump X times (it keeps a counter of how many times this particular
+        // REPEAT instruction has executed falling through the X+1th time)
+        // The return value is TRUE if the jump was taken, but FALSE if the jump fell through.
+        // Don't deref the return value.
+        {"REPEAT", [&](const std::vector<std::string> &args) {
+                if (std::stoul(args.at(1)) > ++repeat_counter[row]) {
+                    row = get_label(args.at(0)); // change current row.
+                    return (GameObject*)(-1);
+                }
+                return (GameObject*)(nullptr);
             }
         },
         // Conditional. In the two arg form it jumps to the label only if the first argument is

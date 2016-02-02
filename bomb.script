@@ -45,6 +45,12 @@ KABOOM.:MESSAGE "You set the bomb near the boulder and take cover behind some bu
 :SLEEP 50
 :MESSAGE-NO-LF "."
 :SLEEP 50
+dotloop.:MESSAGE-NO-LF "."
+:SLEEP 20
+:REPEAT dotloop 15
+dotloop2.:MESSAGE-NO-LF "."
+:SLEEP 5
+:REPEAT dotloop2 45
 :MESSAGE "\n\nKABOOOOOOOOM!!!!"
 :MESSAGE "Pieces of rock rain down on the pavement."
 :MESSAGE "A path to the forest opens."
