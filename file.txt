@@ -280,3 +280,64 @@ RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;
 :SET-EXIT RForest8 "east" RForest2
 AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that"
 :ADD-ACTOR RStreet11 AOldMan
+IArmorG:MAKE-ARMOR "Gold armor" "A good armor" 50 5;0;0;30;-2;0;0
+IShieldG:MAKE-SHIELD "Gold shield" "A good shield" 40 0;0;0;45;0;-2;0
+IHeavyShield:MAKE-SHIELD "Heavy shield" "Increase defense but lowers speed" 60 0;0;0;60;-20;0;0
+ISwordG:MAKE-SWORD "Gold dagger" "A good dagger" 40 0;0;30;0;0;1;-2
+ISwordDamocles:MAKE-SWORD "Damocles sword" "Legendary sword" 100 0;0;80;0;0;0;0
+ISpeedSword:MAKE-SWORD "Speed sword" "Sword that increases your speed" 80 0;0;50;0;20;0;0
+IGoldenAxe:MAKE-SWORD "Gold Axe" "Axe that's made of gold" 200 0;0;200;0;-15;-5;-5
+IPotion10:MAKE-POTION "Potion10" 10
+REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 IDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
+:SET-EXIT RStreet11 "west" REquipmentShop
+:SET-EXIT REquipmentShop "exit" RStreet11
+RStreet12:MAKE-ROOM "Street 12" "North of street 11" 0;0.05;0.05;0
+:SET-EXIT RStreet11 "north" RStreet12
+:SET-EXIT RStreet12 "south" RStreet11
+RStorageHouse:MAKE-ROOM "Storage house" "Storage house that might contain some useful items" 0;0;0;0
+ILadder:MAKE-KEY "Ladder" "Ladder that might be useful somewhere" Mountain1 "south" Mountain2 "north"
+:SET-EXIT RStreet12 "west" RStorageHouse
+:SET-EXIT RStorageHouse "east" RStreet12
+RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05
+:SET-EXIT RStreet12 "north" RStreet13
+:SET-EXIT RStreet13 "south" RStreet12
+RStreet14:MAKE-ROOM "Street14" "West of street 13" 0;0;0;0
+:SET-EXIT RStreet13 "west" RStreet13
+:SET-EXIT RStreet14 "east" RStreet13
+RMuseumEntrance:MAKE-ROOM "Museum" "The museum which seems to be locked" 0;0;0.05;0.05
+:SET-EXIT RStreet14 "north" RMuseumEntrance
+:SET-EXIT RMuseumEntrance "south" RStreet14
+RMuseumInside:MAKE-ROOM "Inside museum" "Inside the museum, there are a lot of paintings and sculpture where some has been destroyed." 0;0;0;0
+RMuseumUpstairs:MAKE-ROOM "First floor" "The main door is blocked by a beastly dog" 0;0;0;0
+:SET-EXIT RMuseumInside "upstairs" RMuseumUpstairs
+:SET-EXIT RMuseumUpstairs "downstairs" RMuseumInside
+ABeastDog:MAKE-ACTOR "Beastly dog" "A dog that seems to not belong to this world" 200;20;40;40;40;40;40
+IPotion20:MAKE-POTION 20
+:ADD-ITEM ABeastDog IPotion20
+:SET-DROP ABeastDog 1
+:ADD-ACTOR RMuseumUpstairs ABeastDog
+RMuseumRoom2:MAKE-ROOM "Museum room 2" "Second room of the museum, there's a guy blocking the door to the next room." 0;0;0;0
+:SET-DEATH-EXIT ABeastDog "north" RMuseumRoom2
+:SET-EXIT RMuseumRoom2 "south" RMuseumUpstairs
+ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;80;30;80;40;40
+:SET-DROP ASamurai 1
+IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 0;0;150;0;0;0;0
+:ADD-ITEM ASamurai IMasamune
+:ADD-ACTOR RMuseumRoom2 ASamurai
+:RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum, there's a woman with snakes in her hair blocking the door." 0;0;0;0
+:SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
+:SET-EXIT RMuseumRoom3 "south" RMuseumRoom2
+AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
+ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion is increased." 0;0;0;40;0;0;40
+:ADD-ITEM AMedusa ISnakeArmor
+:SET-DROP AMedusa 1
+:ADD-ACTOR RMuseumRoom3 AMedusa
+RMuseurmRoom4:MAKE-ROOM "Meseum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
+
+
+RStreet15:MAKE-ROOM "Street 15" "west of Street14" 0;0;0;0.1
+:SET-EXIT RStreet14 "west" RStreet15
+:SET-EXIT RStreet15 "east" RStreet16
+:REM AMayorsHouse:MAKE-ROOM 
+
+
