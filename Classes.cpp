@@ -82,6 +82,7 @@ std::string Troll::serialize(std::ostream &os) const
     std::string sym = gensym();
     os << sym << ":MAKE-TROLL ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << std::endl;
     actorTypeIndependentSerialize(os, sym);
     return sym;
 }
@@ -113,6 +114,7 @@ std::string Dragon::serialize(std::ostream &os) const
     std::string sym = gensym();
     os << sym << ":MAKE-DRAGON ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << std::endl;
     actorTypeIndependentSerialize(os, sym);
     return sym;
 }
@@ -143,6 +145,7 @@ std::string Thief::serialize(std::ostream &os) const
     std::string sym = gensym();
     os << sym << ":MAKE-THIEF ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << std::endl;
     actorTypeIndependentSerialize(os, sym);
     return sym;
 }
@@ -174,6 +177,7 @@ std::string Golem::serialize(std::ostream &os) const
     std::string sym = gensym();
     os << sym << ":MAKE-GOLEM ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << std::endl;
     actorTypeIndependentSerialize(os, sym);
     return sym;
 }

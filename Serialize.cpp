@@ -28,8 +28,25 @@
 #include <exception>
 #include <algorithm>
 #include <limits>
+
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+
+
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__) || defined(__TOS_WIN__)
+#include <windows.h>
+static inline void delay(unsigned long ms)
+{
+    Sleep(ms);
+}
+#else  /* presume POSIX */
+#include <unistd.h>
+static inline void delay(unsigned long ms)
+{
+    usleep(ms*1000);
+}
+#endif 
+
 
 
 std::string gensym()
@@ -309,6 +326,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return io->getItem(args.at(1));
             }
         },
+        // :SLEEP <Milliseconds (int)> 
+        {"SLEEP", [&](const std::vector<std::string> &args) {
+                if (args.size() != 1) throw InvalidFileException(row, "Wrong amount of args to SLEEP.");
+                delay(std::stoi(args[0]));
+                return nullptr;
+            }
+        },
         // :DROP <actorref> "<item name (string)>"
         {"DROP", [&](const std::vector<std::string> &args) {
                 Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
@@ -327,7 +351,15 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         // Returns nullptr if name doesn't equal. Returns an undefined non-null ptr if name is
         // equal (don't dereference this, strictly for use with IF)
         {"NAME-EQ", [&](const std::vector<std::string> &args) {
+                if (args.size() != 2) throw InvalidFileException(row, "Wrong amount of args to NAME-EQ.");
                 return (vars.at(args.at(0))->getName() == args.at(1)) ? (GameObject*)(-1) : nullptr;
+            }
+        },
+        // <VAR>:EQ <GameObjectRef> <GameObjectRef>
+        // Pointer compare. Compares if arguments are the same object. Don't deref the result of this.
+        {"EQ", [&](const std::vector<std::string> &args) {
+                if (args.size() != 2) throw InvalidFileException(row, "Wrong amount of args to EQ.");
+                return (vars.at(args.at(0)) == vars.at(args.at(1))) ? (GameObject*)(-1) : nullptr;
             }
         },
         // :SET-STATS <ActorRef> <Stats>
@@ -360,6 +392,11 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         {"MESSAGE", [&](const std::vector<std::string> &args) {
                 std::cout << args.at(0) << std::endl;
+                return nullptr;
+            }
+        },
+        {"MESSAGE-NO-LF", [&](const std::vector<std::string> &args) {
+                std::cout << args.at(0);
                 return nullptr;
             }
         },
@@ -397,10 +434,27 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
                 // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
                 if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER multiple times without leaking memory (but why would you?)
-                if      (args.size() == 3) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)));
-                else if (args.size() == 4) player = new Player(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)));
-                else                       throw InvalidFileException(row, "Wrong amount of args.");
-                return player;
+
+                switch (args.size())
+                {
+                    case 3:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2))));
+                    case 4:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2)),
+                                                    std::stoi(args.at(3))));
+                    case 5:
+                        return (player = new Player(args.at(0),
+                                                    args.at(1),
+                                                    parseStats(args.at(2)),
+                                                    std::stoi(args.at(3)),
+                                                    std::stoi(args.at(4))));
+                    default:
+                        throw InvalidFileException(row, "Wrong amount of args.");
+                }
             }
         },
         {"MAKE-TROLL", [&](const std::vector<std::string> &args) {

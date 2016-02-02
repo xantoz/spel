@@ -18,6 +18,11 @@ Player::Player(const std::string &name, const std::string &description, const St
 {
 }
 
+Player::Player(const std::string &name, const std::string &description, const Stats &stats, int hp, int dough) :
+    Actor(name, description, stats, hp), money(dough)
+{
+}
+
 Player::~Player()
 {
     std::cerr << "Player<" << getName() << "> destructor" << std::endl;
@@ -120,6 +125,7 @@ std::string Player::serialize(std::ostream &os) const
     std::string playerSym = gensym();
     os << playerSym << ":MAKE-PLAYER ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << " " << money << std::endl;
     actorTypeIndependentSerialize(os, playerSym);
     os << ":SET-KILLED-MONSTER " << playerSym << " " << killedMonster << std::endl;
     os << ":SET-NUMBER-KILLS " << playerSym << " " << kills << std::endl;

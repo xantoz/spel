@@ -382,16 +382,15 @@ std::string Actor::serialize(std::ostream &os) const
     std::string actorSym = gensym();
     os << actorSym << ":MAKE-ACTOR ";
     actorTypeIndependentSerializeConstructorParameters(os);
+    os << std::endl;
     actorTypeIndependentSerialize(os, actorSym);
     return actorSym;
 }
 
 void Actor::actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const
 {
-    os << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << stats.serializeString() << " " << hp << std::endl;
-    // os << "\"" << getName() << "\" \"" << getBaseDescription() << "\"" << " " << stats.serializeString() << " " << hp << std::endl;
+    os << stringify(getName()) << " " << stringify(getBaseDescription()) << " " << stats.serializeString() << " " << hp;
 }
-
 
 void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const
 {

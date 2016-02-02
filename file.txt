@@ -126,7 +126,7 @@ IApple4:MAKE-POTION "Apple4" 10
 :ADD-ITEM RPark IApple2
 :ADD-ITEM RPark IApple3
 :ADD-ITEM RPark IApple4
-RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets. There is a big boulder blocking the path to the forest" 0;0;0;0
+RStreet10:MAKE-ROOM "Street10" "This is the end of the southern streets.\nThere is a big boulder blocking the path to the forest." 0;0;0;0
 :SET-EXIT RStreet9 "west" RStreet10
 :SET-EXIT RStreet10 "east" RStreet9
 RPrincipalHouse:MAKE-ROOM "Principal's house" "This is your principal's house" 0;0;0;0
@@ -278,7 +278,7 @@ RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;
 :SET-EXIT RForest8 "west" RStreet11
 :SET-EXIT RStreet11 "east" RForest8
 :SET-EXIT RForest8 "east" RForest2
-AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that"
+AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that."
 :ADD-ACTOR RStreet11 AOldMan
 IArmorG:MAKE-ARMOR "Gold armor" "A good armor" 50 5;0;0;30;-2;0;0
 IShieldG:MAKE-SHIELD "Gold shield" "A good shield" 40 0;0;0;45;0;-2;0
