@@ -16,7 +16,7 @@
 #include "Key.hpp"
 #include "Shop.hpp"
 #include "Callback.hpp"
-
+#include "CashCard.hpp"
 // #include <map>
 #include <vector>
 #include <tuple>
@@ -499,6 +499,10 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                     case 2: return new Potion(args.at(0), std::stoi(args.at(1)));
                     default: throw InvalidFileException(row, "Wrong amount of args.");
                 }
+            }
+        },
+        {"MAKE-CASHCARD", [&](const std::vector<std::string> &args) {
+                return new CashCard(args.at(0), std::stoi(args.at(1)));
             }
         },
         {"MAKE-KEY", [&](const std::vector<std::string> &args) {

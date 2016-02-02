@@ -4,9 +4,20 @@
 
 #include <algorithm>
 #include <sstream>
+
 Shop::Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms) : Room(name, description, nullptr), inventory(itms) 
 {
 }
+
+Shop::~Shop()
+{
+    std::cerr << "Shop<" << getName() << "> destructor" << std::endl;
+    for (auto item : inventory)
+    {
+        delete item.first;
+    }
+}
+
 std::string Shop::listInventory() const 
 {
     std::ostringstream os;
