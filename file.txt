@@ -25,7 +25,9 @@ IJuice1:MAKE-POTION "Juice" 1
 :SET-EXIT RMyBathroom "west" RMyCorridor
 :SET-EXIT RMyCorridor2 "north" RMyCorridor
 :SET-EXIT RMyCorridor2 "west" RMyLivingroom
+:SET-EXIT RMyLivingroom "east" RMyCorridor2
 :SET-EXIT RMyCorridor2 "east" RMyKitchen
+:SET-EXIT RMyKitchen "west" RMyCorridor2
 
 ROutside:MAKE-ROOM "Outside" "You are outside the house. Your father is standing there" 0;0;0;0
 :SET-EXIT RMyCorridor2 "south" ROutside
@@ -37,7 +39,7 @@ RMyStorage:MAKE-ROOM "Storage" "This is a storage room, there's some stuff on th
 :SET-EXIT RMyStorage "east" ROutside
 IAxe1:MAKE-SWORD "Axe" "A really heavy axe" 100 0;-5;30;0;-5;-5;-5
 :ADD-ITEM RMyStorage IAxe1
-RMartinOutside:MAKE-ROOM "Neighbors" "You're in your neighbors garden" 0;0;0;0
+RMartinOutside:MAKE-ROOM "Neighbors" "You're in your neighbors garden. You see their house to the north." 0;0;0;0
 :SET-EXIT ROutside "east" RMartinOutside
 :SET-EXIT RMartinOutside "west" ROutside
 Martin:MAKE-HUMAN "Martin" "Your best friend!" 20;8;5;8;3;3;1 "Hi! I was waiting for you. I have some useful weapons inside the house"
@@ -46,7 +48,7 @@ Martin:MAKE-HUMAN "Martin" "Your best friend!" 20;8;5;8;3;3;1 "Hi! I was waiting
 RMartinInside:MAKE-ROOM "Inside" "This is inside Martin's house" 0;0;0;0
 :SET-EXIT RMartinOutside "north" RMartinInside
 :SET-EXIT RMartinInside "south" RMartinOutside
-RMartinRoom:MAKE-ROOM "Martin's room" "This is Martin's room, there are some useful stuff"
+RMartinRoom:MAKE-ROOM "Martin's room" "This is Martin's room, there is some useful stuff laying about."
 :SET-EXIT RMartinInside "north" RMartinRoom
 :SET-EXIT RMartinRoom "south" RMartinInside
 IKnife1:MAKE-SWORD "Knife" "Sharp knife" 20 0;0;5;0;0;0;0
