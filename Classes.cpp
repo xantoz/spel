@@ -37,7 +37,6 @@ static void updateActor(Actor* actor)
                 //std::cout << "not broken" << std::endl;
             }
             
-            
             break;
         }
     }
@@ -73,8 +72,9 @@ Troll::~Troll()
 }
 
 void Troll::update()
-{ 
-    updateActor(this);
+{
+    if (!noWander)
+        updateActor(this);
 }
 
 std::string Troll::serialize(std::ostream &os) const
@@ -103,7 +103,8 @@ Dragon::~Dragon()
 
 void Dragon::update()
 {
-    updateActor(this);
+    if (!noWander)
+        updateActor(this);
 }
 
 
@@ -133,7 +134,8 @@ Thief::~Thief()
 
 void Thief::update()
 {
-    updateActor(this);
+    if (!noWander)
+        updateActor(this);
 }
 
 std::string Thief::serialize(std::ostream &os) const
@@ -163,9 +165,9 @@ Golem::~Golem()
 
 void Golem::update()
 {
-    updateActor(this);
+    if (!noWander)
+        updateActor(this);
 }
-
 
 std::string Golem::serialize(std::ostream &os) const
 {
@@ -191,7 +193,6 @@ Human::Human(const std::string &name, const std::string &desc, const Stats &stat
     Actor(name, desc, stats, hp), text(t)
 {
 }
-
 
 Human::~Human()
 {
@@ -219,7 +220,6 @@ std::string Human::serialize(std::ostream &os) const
     actorTypeIndependentSerialize(os, sym);
     return sym;
 }
-
 
 CallbackHuman::CallbackHuman(const std::string &name, const std::string &desc, const std::string &callback_path) :
     Human(name, desc, "unused"), Callback(callback_path)

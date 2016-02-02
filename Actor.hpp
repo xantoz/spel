@@ -21,15 +21,20 @@ private:
     Room *room;
     std::map<std::string, Room*> deathExits;
     bool dropItems; // if True we drop our items and equipment at death
-protected:    
+    
+protected:
     Stats stats;
-
     int hp;
-    bool dead;
+
     Armor *armor;
     Shield *shield;
     Sword *sword;
     Shoes *shoes;
+
+    bool dead;
+    bool noWander; // flag used by child classes implementing wandering behaviours, allowing to disable it
+
+    
     // To be used be inheriting classes when serializing
     void actorTypeIndependentSerializeConstructorParameters(std::ostream &os) const;
     void actorTypeIndependentSerialize(std::ostream &os, const std::string &actorSym) const;
@@ -65,6 +70,7 @@ public:
 
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
+    void setNoWander(bool noWander);
     
     void setDeathExit(const std::string &name, Room *room);
     const std::map<std::string, Room*> &getDeathExits() const;

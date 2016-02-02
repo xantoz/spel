@@ -564,6 +564,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
+        {"SET-NO-WANDER", [&](const std::vector<std::string> &args) {
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-NO-WANDER.");
+                actor->setNoWander(std::stoi(args.at(1)));
+                return nullptr;
+            }
+        },
         {"SET-EXIT", [&](const std::vector<std::string> &args) {
                 Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(0)));
                 Room *toRoom   = dynamic_cast<Room*>(vars.at(args.at(2)));

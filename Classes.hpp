@@ -48,7 +48,6 @@ public:
     virtual std::string serialize(std::ostream &os) const override;
 };
 
-
 class Human : public Actor
 {
 public:
@@ -75,7 +74,6 @@ public:
     virtual void talk() override;
     virtual std::string serialize(std::ostream &os) const override;
 };
-
 
 class LastBoss : public Human 
 {

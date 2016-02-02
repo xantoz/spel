@@ -10,27 +10,45 @@
 // IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
 // unequipped. Item's destructor will otherwise explode.
 
+// Actor::Actor(const std::string &name, const std::string &description) :
+//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
+//     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+// {
+//     actors.push_front(this);
+// }
+
+// Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
+//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
+//     stats(_stats), hp(_stats.maxhp), armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+// {
+//     actors.push_front(this);
+// }
+
+// Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
+//     ItemOwner(name, description), room(nullptr), dropItems(true), dead(false), noWander(false)
+//     stats(_stats), hp(_hp), armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+// {
+//     actors.push_front(this);
+// }
+
 Actor::Actor(const std::string &name, const std::string &description) :
-    ItemOwner(name, description), room(nullptr), dropItems(true), dead(false),
-    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+    Actor(name, description, {}, {})
 {
-    actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), room(nullptr), dropItems(true), stats(_stats), hp(_stats.maxhp), dead(false),
-    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+    Actor(name, description, _stats, _stats.maxhp)
 {
-    actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
-    ItemOwner(name, description), room(nullptr), dropItems(true), stats(_stats), hp(_hp), dead(false),
-    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
+    ItemOwner(name, description), room(nullptr), dropItems(true),
+    stats(_stats), hp(_hp), 
+    armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr),
+    dead(false), noWander(false)
 {
     actors.push_front(this);
 }
-
 
 Actor::~Actor()
 {
@@ -375,6 +393,11 @@ void Actor::setDrop(bool drop)
     dropItems = drop;
 }
 
+void Actor::setNoWander(bool flag)
+{
+    noWander = flag;
+}
+
 std::string Actor::serialize(std::ostream &os) const
 {
     std::string actorSym = gensym();
@@ -421,6 +444,7 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     }
 
     os << ":SET-DROP " << actorSym << " " << dropItems << std::endl;
+    os << ":SET-NO-WANDER " << actorSym << " " << noWander << std::endl;
 
     // The rest of the Items owned by actor (currently in inventory) is taken care of in the
     // ItemOwner pass in serialize after we're certain all rooms have been created.

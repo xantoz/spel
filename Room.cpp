@@ -19,7 +19,6 @@ EncounterProbability::EncounterProbability() :
 {
 }
 
-
 EncounterProbability::EncounterProbability(double dr, double th, double gol, double tr) :
     dragon(dr), thief(th), golem(gol), troll(tr)
 {
