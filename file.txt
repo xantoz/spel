@@ -334,12 +334,20 @@ ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's s
 :ADD-ITEM AMedusa ISnakeArmor
 :SET-DROP AMedusa 1
 :ADD-ACTOR RMuseumRoom3 AMedusa
-RMuseumRoom4:MAKE-ROOM "Meseum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
+RMuseumRoom4:MAKE-ROOM "Museum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
 
 
 RStreet15:MAKE-ROOM "Street 15" "West of Street14." 0;0;0;0.1
 :SET-EXIT RStreet14 "west" RStreet15
 :SET-EXIT RStreet15 "east" RStreet14
-:REM AMayorsHouse:MAKE-ROOM 
+RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
+:SET-EXIT RMayorsHouse RStreet15
+:SET-EXIT RStreet15 RMayorsHouse
+AMayor:MAKE-CALLBACK-HUMAN "The mayor" "The mayor who also owns the museum" mayor.script
+:ADD-ACTOR RMayorsHouse AMayor
+RStreet16:MAKE-ROOM "Street 16" "south of "Street15" 0;0;0;0.2
+:SET-EXIT RStreet15 "south" RStreet16
+:SET-EXIT RStreet16 "north" RStreet15
+
 
 
