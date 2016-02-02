@@ -437,10 +437,16 @@ void buy(string arg)
             pair<Item*, unsigned> item = shop->getShopItem(arg);
             if(player->getMoney() >= item.second)
             {
-                shop->removeShopItem(item);
-                player->addMoney(-item.second);
-                player->addItem(item.first);
-                cout << "You bought the " << item.first->getName()  << "!" << endl;
+                if (player->addItem(item.first))
+                {
+                    shop->removeShopItem(item);
+                    player->addMoney(-item.second);
+                    cout << "You bought the " << item.first->getName()  << "!" << endl;
+                }
+                else
+                {
+                    cout << "Sorry, but it looks you can't carry that right now." << endl;
+                }
             }
             else 
             {

@@ -164,7 +164,7 @@ bool Actor::pickup(const std::string &itemName)
     if (i == nullptr) return false;
     bool res = this->addItem(i);
     if (res == false)
-        std::cout << "Can't carry any more" << std::endl;
+        std::cout << "Can't carry any more." << std::endl;
     return res;
 }
 

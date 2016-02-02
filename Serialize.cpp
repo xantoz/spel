@@ -651,8 +651,21 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
                 if (itemOwner == nullptr) throw InvalidFileException(row, "Expected ItemOwner as first arg to ADD-ITEM.");
                 if (item == nullptr) throw InvalidFileException(row, "Expected Item as second arg to ADD-ITEM.");
-                itemOwner->addItem(item);
+                itemOwner->addItemNoFail(item);
                 return nullptr;
+            }
+        },
+        // <BOOL>:ADD-ITEM-CAN-FAIL <ActorRef> <ItemRef>
+        // This can fail, it's thus very important to check the return value whether the item
+        // was added or not so you can take measures (like adding the item elsewhere) against leakage.
+        {"ADD-ITEM-CAN-FAIL", [&](const std::vector<std::string> &args) {
+                ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
+                Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
+                if (itemOwner == nullptr) throw InvalidFileException(row, "Expected ItemOwner as first arg to ADD-ITEM.");
+                if (item == nullptr) throw InvalidFileException(row, "Expected Item as second arg to ADD-ITEM.");
+                bool res = itemOwner->addItem(item);
+                if (!res) std::cout << itemOwner->getName() << " can't carry "  << item->getName() << "." << std::endl;
+                return (res) ? (GameObject*)(-1) : nullptr;
             }
         },
         {"EQUIP-SWORD", [&](const std::vector<std::string> &args) {
