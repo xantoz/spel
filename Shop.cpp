@@ -2,6 +2,7 @@
 #include "exceptions.hpp"
 #include "Serialize.hpp"
 
+#include <iostream>
 #include <algorithm>
 #include <sstream>
 
