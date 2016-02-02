@@ -192,7 +192,13 @@ const std::list<Actor*> &Room::getActors() const
 std::string Room::getDescription() const
 {
     std::string desc = GameObject::getDescription();
-    if(getItems().size() > 0 || getActors().size() > 0)
+
+    std::vector<Actor*> actors_minus_player;
+    // won't have any troubles even if player is NULL since it's not being dereffed
+    std::remove_copy(getActors().begin(), getActors().end(),
+                     std::back_inserter(actors_minus_player), player);
+    
+    if(getItems().size() > 0 || actors_minus_player.size() > 0)
     {
         desc += "\nYou see: ";
     }
@@ -207,10 +213,7 @@ std::string Room::getDescription() const
         desc += " on the floor.";
     }
     
-    std::vector<Actor*> actors_minus_player;
-    // won't have any troubles even if player is NULL since it's not being dereffed
-    std::remove_copy(getActors().begin(), getActors().end(),
-                     std::back_inserter(actors_minus_player), player);
+
     if(actors_minus_player.size() > 0)
     {
         if(getItems().size() > 0)
