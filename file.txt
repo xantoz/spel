@@ -104,14 +104,14 @@ RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.3;0.3;0.1;0.1
 AMathTeacher:MAKE-HUMAN "Teacher" "Your math teacher" 30;10;4;4;10;4;4 "Hi Nils, it's too dangerous here! You should go home!"
 :ADD-ACTOR RInsideSchool AMathTeacher
 RSchoolCorridor1:MAKE-ROOM "Corridor 1" "The long corridor of the bottom floor" 0.3;0.1;0;0
-:SET-EXIT RInsideSchool "Corridor" RSchoolCorridor1 
+:SET-EXIT RInsideSchool "corridor" RSchoolCorridor1 
 :SET-EXIT RSchoolCorridor1 "Entrance" RInsideSchool
 RSchoolClassroom1:MAKE-ROOM "Classroom 1" "The classroom you usually have classes in" 0.1;0.1;0;0
 :SET-EXIT RSchoolCorridor1 "Classroom 1" RSchoolClassroom1
-:SET-EXIT RSchoolClassroom1 "Corridor" RSchoolCorridor1
+:SET-EXIT RSchoolClassroom1 "corridor" RSchoolCorridor1
 RSchoolClassroom2:MAKE-ROOM "Classroom 2" "A classroom you usually don't have classes in" 0.1;0.1;0;0
 :SET-EXIT RSchoolCorridor1 "Classroom 2" RSchoolClassroom2
-:SET-EXIT RSchoolClassroom2 "Corridor" RSchoolCorridor1
+:SET-EXIT RSchoolClassroom2 "corridor" RSchoolCorridor1
 RSchoolCorridor2:MAKE-ROOM "Corridor end" "The end of the corridor" 0.2;0.2;0;0
 :SET-EXIT RSchoolCorridor1 "south" RSchoolCorridor2
 :SET-EXIT RSchoolCorridor2 "north" RSchoolCorridor1
