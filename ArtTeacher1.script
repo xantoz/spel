@@ -10,7 +10,7 @@ Act4:GET-ACTOR Room "Big thief"
 :IF Act2 not_empty
 :IF Act3 not_empty
 :IF Act4 not_empty
-Key:MAKE-KEY "Gray key" "school key" 5 Corridor4 "art room" ArtRoom "corridor"
+Key:MAKE-KEY "Gray-key" "school key" 5 Corridor4 "art room" ArtRoom "corridor"
 :ADD-ITEM Room Key
 :MESSAGE "Thank you for saving me from the monsters! Here use this key to get to the art room!"
 :SET-CALLBACK THIS ArtTeacher2.script

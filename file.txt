@@ -136,10 +136,10 @@ APrincipal:MAKE-CALLBACK-HUMAN "Principal" "Your principal" principal.script
 :ADD-ACTOR RPrincipalHouse APrincipal
 
 RHighSchool:MAKE-ROOM "High school" "This is the school you are going to" 0.1;0.05;0;0
-:SET-EXIT RStreet6 "inside" RHighSchool
+:SET-EXIT RStreet6 "east" RHighSchool
 :SET-EXIT RHighSchool "west" RStreet6
 RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.05;0.02;0.05;0.01
-:SET-EXIT RHighSchool "east" RInsideSchool
+:SET-EXIT RHighSchool "inside" RInsideSchool
 :SET-EXIT RInsideSchool "exit" RHighSchool
 AMathTeacher:MAKE-HUMAN "Teacher" "Your math teacher" 30;10;4;4;10;4;4 "Hi Nils, it's too dangerous here! You should go home!"
 :ADD-ACTOR RInsideSchool AMathTeacher
@@ -169,7 +169,7 @@ ISchoolBanana:MAKE-POTION "Banana" 4
 :ADD-ITEM RSchoolCafeteria ISchoolOrange
 :ADD-ITEM RSchoolCafeteria ISchoolBanana
 
-RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the second floor" 0.05;0.05;0;0
+RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the first floor" 0.05;0.05;0;0
 :SET-EXIT RSchoolStairs1 "up" RSchoolStairs2
 :SET-EXIT RSchoolStairs2 "down" RSchoolStairs1
 AMelta:MAKE-ACTOR "Melta" "Meltable enemy that doesn't die from regular attacks!\nHe is blocking the stairs up to the second floor." 100;20;20;10000;20;20;20
@@ -186,7 +186,7 @@ AStrongTroll:MAKE-TROLL "Strong troll" 6
 RSchoolChemistry:MAKE-ROOM "Chemistry room" "The chemistry room. The window is open" 0.04;0;0;0.04
 :REM :SET-EXIT RSchoolCorridor3 "chemistry room" RSchoolChemistry
 :REM :SET-EXIT RSchoolChemistry "corridor" RSchoolCorridor3
-IStrongAcid:MAKE-CALLBACK-ITEM "Strong acid" "A really strong acid" 20 acid.script
+IStrongAcid:MAKE-CALLBACK-ITEM "Strong-acid" "A really strong acid" 20 acid.script
 :ADD-ITEM RSchoolChemistry IStrongAcid
 RSchoolOffice:MAKE-ROOM "Office room" "The office room. There is something on the wall" 0.1;0.1;0.1;0.1
 :SET-EXIT RSchoolCorridor3 "office" RSchoolOffice
@@ -206,9 +206,9 @@ RSchoolArt:MAKE-ROOM "Art room" "This is the art room. There's a really strong e
 AStrongThief:MAKE-THIEF "Strong thief" 10
 :SET-NO-WANDER AStrongThief 1
 :SET-DROP AStrongThief 1
-IMusicKey:MAKE-KEY "Red key" "Music room key" 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor"
+IMusicKey:MAKE-KEY "Red-key" "Music room key" 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor"
 :ADD-ITEM AStrongThief IMusicKey
-IChemistryKey:MAKE-KEY "Blue key" "Chemistry room key" 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor"
+IChemistryKey:MAKE-KEY "Blue-key" "Chemistry room key" 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor"
 :ADD-ITEM AStrongThief IChemistryKey
 :ADD-ACTOR RSchoolArt AStrongThief
 RSchoolLecture:MAKE-ROOM "Lecture room" "A very big lecture room. There are a lot of strong enemies in this room" 0;0;0;0
@@ -229,10 +229,13 @@ ArtTeacher:MAKE-CALLBACK-HUMAN "Art teacher" "Your art teacher" ArtTeacher1.scri
 :ADD-ACTOR RSchoolLecture ABigGolem
 :ADD-ACTOR RSchoolLecture ABigThief
 RSchoolCorridor5:MAKE-ROOM "Corridor 3" "Corridor of the second floor. There's a door leading to the roof of the school." 0.05;0.05;0.05;0.05
-:SET-DEATH-EXIT AMelta "corridor" RSchoolCorridor5
-:SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs2
+RSchoolStairs3:MAKE-ROOM "Staircase 3" "The staircase leading up to the second floor" 0;0;0;0
+:SET-DEATH-EXIT AMelta "up" RSchoolStairs3
+:SET-EXIT RSchoolStairs3 "down" RSchoolStairs2
+:SET-EXIT RSchoolStairs3 "corridor" RSchoolCorridor5
+:SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs3
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
-IRoofKey:MAKE-KEY "Purple key" "Roof key" 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
+IRoofKey:MAKE-KEY "Purple-key" "Roof key" 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
 :ADD-ITEM RSchoolOffice IRoofKey
 ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;10;10
 :ADD-ACTOR RSchoolRoof ABoss1
@@ -304,7 +307,7 @@ RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05
 :SET-EXIT RStreet12 "north" RStreet13
 :SET-EXIT RStreet13 "south" RStreet12
 RStreet14:MAKE-ROOM "Street14" "West of street 13" 0;0;0;0
-:SET-EXIT RStreet13 "west" RStreet13
+:SET-EXIT RStreet13 "west" RStreet14
 :SET-EXIT RStreet14 "east" RStreet13
 RMuseumEntrance:MAKE-ROOM "Museum" "The museum which seems to be locked" 0;0;0.05;0.05
 :SET-EXIT RStreet14 "north" RMuseumEntrance
