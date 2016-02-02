@@ -51,7 +51,6 @@ const std::list<Actor*>& Actor::getActors()
     return Actor::actors;
 }
 
-
 void Actor::update()
 {
 }
