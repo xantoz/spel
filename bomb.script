@@ -1,0 +1,56 @@
+CurrentRoom:GET-ROOM-FROM-ACTOR ACTOR
+RForest:GET-ROOM-BY-NAME "Forest"
+RStreet10:GET-ROOM-BY-NAME "Street10"
+
+CorrectRoom:EQ CurrentRoom RStreet10
+:IF CorrectRoom KABOOM
+
+:MESSAGE "There's nothing to blow up."
+:STOP
+
+KABOOM.:MESSAGE "You set the bomb near the boulder and take cover behind some bushes."
+:MESSAGE "You wait a few seconds"
+:SLEEP 500
+:MESSAGE-NO-LF "."
+:SLEEP 500
+:MESSAGE-NO-LF "."
+:SLEEP 500
+:MESSAGE "."
+:SLEEP 1500
+:MESSAGE-NO-LF "."
+:SLEEP 500
+:MESSAGE-NO-LF "."
+:SLEEP 400
+:MESSAGE-NO-LF "."
+:SLEEP 350
+:MESSAGE-NO-LF "."
+:SLEEP 300
+:MESSAGE-NO-LF "."
+:SLEEP 200
+:MESSAGE-NO-LF "."
+:SLEEP 100
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE-NO-LF "."
+:SLEEP 50
+:MESSAGE "\n\nKABOOOOOOOOM!!!!"
+:MESSAGE "Pieces of rock rain down on the pavement."
+:MESSAGE "A path to the forest opens."
+
+:SET-EXIT RForest "east" RForest
+:SET-EXIT RStreet10 "west" RForest
+
+:REM Original description of RStreet10: "This is the end of the southern streets. There is a big boulder blocking the path to the forest."
+:SET-DESCRIPTION RStreet10 "This is the end of the southern streets.\nThere is a path going west leading to a big forest.\nThere is a lot of rubble lying on the ground."

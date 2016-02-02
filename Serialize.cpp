@@ -28,8 +28,25 @@
 #include <exception>
 #include <algorithm>
 #include <limits>
+
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
+
+
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32) || defined(__WINDOWS__) || defined(__TOS_WIN__)
+#include <windows.h>
+static inline void delay(unsigned long ms)
+{
+    Sleep(ms);
+}
+#else  /* presume POSIX */
+#include <unistd.h>
+static inline void delay(unsigned long ms)
+{
+    usleep(ms*1000);
+}
+#endif 
+
 
 
 std::string gensym()
@@ -309,6 +326,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return io->getItem(args.at(1));
             }
         },
+        // :SLEEP <Milliseconds (int)> 
+        {"SLEEP", [&](const std::vector<std::string> &args) {
+                if (args.size() != 1) throw InvalidFileException(row, "Wrong amount of args to SLEEP.");
+                delay(std::stoi(args[0]));
+                return nullptr;
+            }
+        },
         // :DROP <actorref> "<item name (string)>"
         {"DROP", [&](const std::vector<std::string> &args) {
                 Actor *a = dynamic_cast<Actor*>(vars.at(args.at(0)));
@@ -327,7 +351,15 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         // Returns nullptr if name doesn't equal. Returns an undefined non-null ptr if name is
         // equal (don't dereference this, strictly for use with IF)
         {"NAME-EQ", [&](const std::vector<std::string> &args) {
+                if (args.size() != 2) throw InvalidFileException(row, "Wrong amount of args to NAME-EQ.");
                 return (vars.at(args.at(0))->getName() == args.at(1)) ? (GameObject*)(-1) : nullptr;
+            }
+        },
+        // <VAR>:EQ <GameObjectRef> <GameObjectRef>
+        // Pointer compare. Compares if arguments are the same object. Don't deref the result of this.
+        {"EQ", [&](const std::vector<std::string> &args) {
+                if (args.size() != 2) throw InvalidFileException(row, "Wrong amount of args to EQ.");
+                return (vars.at(args.at(0)) == vars.at(args.at(1))) ? (GameObject*)(-1) : nullptr;
             }
         },
         // :SET-STATS <ActorRef> <Stats>
@@ -360,6 +392,11 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         {"MESSAGE", [&](const std::vector<std::string> &args) {
                 std::cout << args.at(0) << std::endl;
+                return nullptr;
+            }
+        },
+        {"MESSAGE-NO-LF", [&](const std::vector<std::string> &args) {
+                std::cout << args.at(0);
                 return nullptr;
             }
         },
