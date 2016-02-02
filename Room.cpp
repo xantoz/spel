@@ -1,5 +1,6 @@
 #include "Room.hpp"
 
+#include "main.hpp"
 #include "Key.hpp"
 #include "Classes.hpp"
 #include "exceptions.hpp"
@@ -11,6 +12,7 @@
 #include <sstream>
 #include <random>
 #include <chrono>
+#include <vector>
 
 EncounterProbability::EncounterProbability() :
     dragon(0.0), thief(0.0), golem(0.0), troll(0.0)
@@ -205,19 +207,36 @@ std::string Room::getDescription() const
             desc += ", " + (*it)->getName();
         desc += " on the floor.";
     }
-    if(getActors().size() > 0)
+    
+    std::vector<Actor*> actors_minus_player;
+    // won't have any troubles even if player is NULL since it's not being dereffed
+    std::remove_copy(getActors().begin(), getActors().end(),
+                     std::back_inserter(actors_minus_player), player);
+    if(actors_minus_player.size() > 0)
     {
         if(getItems().size() > 0)
             desc += " and ";
-        auto it = getActors().begin();
+        auto it = actors_minus_player.begin();
         desc += (*it)->getName();
         ++it;
-        for (; it != getActors().end(); ++it)
+        for (; it != actors_minus_player.end(); ++it)
             desc += ", " + (*it)->getName();
     }
-    desc += "\n\nObvious Exits are:";
-    for (auto &exit: exits)
-        desc += " " + exit.first;
+
+    if (exits.size() > 0)
+    {
+        desc += "\n\nObvious Exits are: ";
+        auto it = exits.begin();
+        desc += it->first;
+        ++it;
+        for (; it != exits.end(); ++it)
+            desc += ", " + it->first;
+    }
+    else
+    {
+        desc += "\n\nYou see no immediate exits. You're trapped!";
+    }
+    
 
     return desc;
 }

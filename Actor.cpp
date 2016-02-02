@@ -11,21 +11,21 @@
 // unequipped. Item's destructor will otherwise explode.
 
 Actor::Actor(const std::string &name, const std::string &description) :
-    ItemOwner(name, description), room(nullptr), dropItems(false), dead(false),
+    ItemOwner(name, description), room(nullptr), dropItems(true), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
     actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats) :
-    ItemOwner(name, description), room(nullptr), dropItems(false), stats(_stats), hp(_stats.maxhp), dead(false),
+    ItemOwner(name, description), room(nullptr), dropItems(true), stats(_stats), hp(_stats.maxhp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
     actors.push_front(this);
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
-    ItemOwner(name, description), room(nullptr), dropItems(false), stats(_stats), hp(_hp), dead(false),
+    ItemOwner(name, description), room(nullptr), dropItems(true), stats(_stats), hp(_hp), dead(false),
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr)
 {
     actors.push_front(this);
@@ -54,7 +54,9 @@ const std::list<Actor*>& Actor::getActors()
 }
 
 
-void Actor::update() {}
+void Actor::update()
+{
+}
 
 
 bool Actor::equipArmor(const std::string &name)

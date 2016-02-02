@@ -571,25 +571,14 @@ int main(int argc, char** argv)
     {
         try
         {
-            if(player->isDead())
+            if (player->isDead())
             {
                 cout << "Game over" << endl;
                 return 0;
             }
-            vector<Actor*> actorList;
-            for(Room *room : Room::getRooms())
-            {
-                for(Actor *actor : room->getActors())
-                {
-                    actorList.push_back(actor);
-                }
-                room->update();
-            }
-            for(Actor *actor : actorList)
-            {
+            
+            for (Actor *actor : Actor::getActors())
                 actor->update();
-            }
-            // randomSpawn();
             
             cout << "\n> ";
             getline(cin, str);
