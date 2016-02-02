@@ -477,8 +477,17 @@ void sell(string arg)
     }       
 }
 
-
-
+// cheat cmd for debugging
+void teleport(string arg)
+{
+    auto it = std::find_if(Room::getRooms().begin(), Room::getRooms().end(),
+                           [&](Room *r) { return r->getName() == arg; });
+    if (it != Room::getRooms().end())
+    {
+        std::cout << "Teleporting to " << (*it)->getName() << std::endl;
+        (*it)->addActor(player);
+    }
+}
 
 int main(int argc, char** argv)
 {
@@ -498,6 +507,8 @@ int main(int argc, char** argv)
     cmds["save"] = &save;
     cmds["load"] = &load_world;
     cmds["die"] = &die;
+    // CHEAT CMD, remove later
+    cmds["teleport"] = &teleport;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &useBattle;
@@ -505,9 +516,12 @@ int main(int argc, char** argv)
     battleCmds["die"] = &die;
 
     shopCmds["list"] = &listItems;
+    shopCmds["listinventory"] = &listItems;
+    shopCmds["inventory"] = &listItems;
     shopCmds["buy"] = &buy;
     shopCmds["sell"] = &sell;
     shopCmds["go"] = &go;
+    shopCmds["look"] = &look;
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
     Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
