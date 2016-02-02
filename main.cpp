@@ -124,7 +124,7 @@ void use(string arg)
         Item *item = player->getItem(first);
         if (item->usedUp())
         {
-            std::cout << "You used up the " << item->getName() << std::endl;
+            std::cout << "You used up the " << item->getName() << "." << std::endl;
             delete item;
         }
 
@@ -489,6 +489,22 @@ void teleport(string arg)
     }
 }
 
+void imrich(string arg)
+{
+    try
+    {
+        player->addMoney(std::stoi(arg));
+    }
+    catch (invalid_argument &e)
+    {
+        cerr << e.what() << endl;
+    }
+    catch (out_of_range &e)
+    {
+        cerr << e.what() << endl;
+    }
+}
+
 void kill(string arg)
 {
     opponent->die();
@@ -515,6 +531,7 @@ int main(int argc, char** argv)
     cmds["die"] = &die;
     // CHEAT CMD, remove later
     cmds["teleport"] = &teleport;
+    cmds["i'mrich"] = &imrich;
     
     battleCmds["attack"] = &attack;
     battleCmds["use"] = &useBattle;

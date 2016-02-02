@@ -415,10 +415,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         {"MAKE-SHOP", [&](const std::vector<std::string> &args) {
                 std::list<std::pair<Item*, unsigned>> items;
+                if (args.size() < 2) throw InvalidFileException(row, "Too few args to MAKE-SHOP.");
+                if ((args.size() % 2) != 0) throw InvalidFileException(row, "Uneven amount of arguments to MAKE-SHOP.");
+                                         
                 for(std::size_t i = 2; i < args.size(); i+=2)
                 {
-                    Item* item = dynamic_cast<Item*>(vars.at(args[i]));
-                    items.emplace_back(item, std::stoi(args[i+1]));
+                    Item* item = dynamic_cast<Item*>(vars.at(args.at(i)));
+                    items.emplace_back(item, std::stoi(args.at(i+1)));
                 }
              
                 return new Shop(args.at(0), args.at(1), items);
