@@ -139,7 +139,7 @@ RHighSchool:MAKE-ROOM "High school" "This is the school you are going to" 0.1;0.
 :SET-EXIT RStreet6 "east" RHighSchool
 :SET-EXIT RHighSchool "west" RStreet6
 RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.05;0.02;0.05;0.01
-:SET-EXIT RHighSchool "east" RInsideSchool
+:SET-EXIT RHighSchool "inside" RInsideSchool
 :SET-EXIT RInsideSchool "exit" RHighSchool
 AMathTeacher:MAKE-HUMAN "Teacher" "Your math teacher" 30;10;4;4;10;4;4 "Hi Nils, it's too dangerous here! You should go home!"
 :ADD-ACTOR RInsideSchool AMathTeacher
@@ -229,8 +229,11 @@ ArtTeacher:MAKE-CALLBACK-HUMAN "Art teacher" "Your art teacher" ArtTeacher1.scri
 :ADD-ACTOR RSchoolLecture ABigGolem
 :ADD-ACTOR RSchoolLecture ABigThief
 RSchoolCorridor5:MAKE-ROOM "Corridor 3" "Corridor of the second floor. There's a door leading to the roof of the school." 0.05;0.05;0.05;0.05
-:SET-DEATH-EXIT AMelta "corridor" RSchoolCorridor5
-:SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs2
+RSchoolStairs3:MAKE-ROOM "Staircase 3" "The staircase leading up to the second floor" 0;0;0;0
+:SET-DEATH-EXIT AMelta "up" RSchoolStairs3
+:SET-EXIT RSchoolStairs3 "down" RSchoolStairs2
+:SET-EXIT RSchoolStairs3 "corridor" RSchoolCorridor5
+:SET-EXIT RSchoolCorridor5 "stairs" RSchoolStairs3
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
 IRoofKey:MAKE-KEY "PurpleKey" "Key to the roof." 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
 :ADD-ITEM RSchoolOffice IRoofKey
@@ -304,7 +307,7 @@ RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05
 :SET-EXIT RStreet12 "north" RStreet13
 :SET-EXIT RStreet13 "south" RStreet12
 RStreet14:MAKE-ROOM "Street14" "West of street 13" 0;0;0;0
-:SET-EXIT RStreet13 "west" RStreet13
+:SET-EXIT RStreet13 "west" RStreet14
 :SET-EXIT RStreet14 "east" RStreet13
 RMuseumEntrance:MAKE-ROOM "Museum" "The museum which seems to be locked" 0;0;0.05;0.05
 :SET-EXIT RStreet14 "north" RMuseumEntrance
