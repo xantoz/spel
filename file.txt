@@ -337,7 +337,15 @@ RMuseurmRoom4:MAKE-ROOM "Meseum final room" "There are high valued paintings dec
 
 RStreet15:MAKE-ROOM "Street 15" "west of Street14" 0;0;0;0.1
 :SET-EXIT RStreet14 "west" RStreet15
-:SET-EXIT RStreet15 "east" RStreet16
-:REM AMayorsHouse:MAKE-ROOM 
+:SET-EXIT RStreet15 "east" RStreet14
+RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
+:SET-EXIT RMayorsHouse RStreet15
+:SET-EXIT RStreet15 RMayorsHouse
+AMayor:MAKE-CALLBACK-HUMAN "The mayor" "The mayor who also owns the museum" mayor.script
+:ADD-ACTOR RMayorsHouse AMayor
+RStreet16:MAKE-ROOM "Street 16" "south of "Street15" 0;0;0;0.2
+:SET-EXIT RStreet15 "south" RStreet16
+:SET-EXIT RStreet16 "north" RStreet15
+
 
 

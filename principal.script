@@ -1,13 +1,12 @@
 Room:GET-ROOM-FROM-ACTOR THIS
-Street10:GET-ROOM-BY-NAME "Street10"
-Forest:GET-ROOM-BY-NAME "Forest"
-
-Boss1:GET-ACTOR Room "Nonag"
+Boss1:GET-ACTOR-GLOBAL "Nonag"
 
 :IF Boss1 not_empty
 
 Bomb:MAKE-CALLBACK-ITEM "Bomb" "Bomb capable of blowing up boulders" bomb.script
+:SET-CONSUMABLE 1
 :ADD-ITEM Room Bomb
 :MESSAGE "I heard that you took care of the monsters in the school. I did not know you had such power!\nHere use this bomb to blow up the boulder leading to the forest!"
+:SET-CALLBACK principal2.script
 :STOP
 not_empty.:MESSAGE "The school is attacked by those monsters.\nThere is no hope anymore!"
