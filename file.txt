@@ -268,6 +268,9 @@ RForest8:MAKE-ROOM "Forest end" "You made it through the forest" 0.1;0;0.05;0
 :SET-EXIT RForest7 "south" RForest3
 :SET-EXIT RForest7 "east" RForest2
 RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;0
+:REM This leads you directly back to RForest2, skipping the maze
+:SET RForest8 "east" RForest2
+:REM To the Street
 :SET-EXIT RForest8 "west" RStreet11
 :SET-EXIT RStreet11 "east" RForest8
 AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that"
