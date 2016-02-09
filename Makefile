@@ -7,6 +7,7 @@
 CC    = g++
 # CXXFLAGS = -std=c++11 -g -Wall -pedantic
 CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
+LDFLAGS = -lreadline
 
 
 # %.o: %.cpp
