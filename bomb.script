@@ -55,7 +55,7 @@ dotloop2.:MESSAGE-NO-LF "."
 :MESSAGE "Pieces of rock rain down on the pavement."
 :MESSAGE "A path to the forest opens."
 
-:SET-EXIT RForest "east" RForest
+:SET-EXIT RForest "east" RStreet10
 :SET-EXIT RStreet10 "west" RForest
 
 :REM Original description of RStreet10: "This is the end of the southern streets. There is a big boulder blocking the path to the forest."
