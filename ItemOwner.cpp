@@ -31,18 +31,22 @@ ItemOwner::~ItemOwner()
         delete *it++; // deleting removes the item from the list
 }
 
-
 bool ItemOwner::addItem(Item *i)
 {
     if (!this->can_carry(i))
         return false;
-                
+
+    addItemNoFail(i);
+
+    return true;
+}
+
+void ItemOwner::addItemNoFail(Item *i)
+{
     items.push_front(i);
     if (i->owner != nullptr) // items can be ownerless (though normally only directly after being constructed
         i->owner->removeItem(i);
     i->owner = this;
-
-    return true;
 }
 
 void ItemOwner::removeItem(Item *i)

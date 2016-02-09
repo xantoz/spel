@@ -21,6 +21,8 @@ protected:
 public:
     /// Returns false if unable to add item
     bool addItem(Item *i);
+    /// Will add the item even if the ItemOwner cannot carry more
+    void addItemNoFail(Item *i); 
     /// throws NoSuchItemException if Item doesn't exist
     void removeItem(Item* i);
 
