@@ -9,8 +9,8 @@ CorrectRoom:EQ CurrentRoom Mountain1
 :STOP
 
 LADDERING.:MESSAGE "You place the ladder over the crevice.\nYou can now use it as a bridge."
-:SET-EXIT Mountain1 "south" Mountain2
-:SET-EXIT Mountain2 "north" Mountain1
+:SET-EXIT Mountain1 "north" Mountain2
+:SET-EXIT Mountain2 "south" Mountain1
 :APPEND-DESCRIPTION Mountain1 "There's a ladder laid as a bridge over the crevice."
 :APPEND-DESCRIPTION Mountain2 "There's a ladder laid as a bridge over the crevice."
 

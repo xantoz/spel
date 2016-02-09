@@ -311,7 +311,7 @@ IPotion10:MAKE-POTION "Potion10" 10
 REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
 :SET-EXIT RStreet11 "west" REquipmentShop
 :SET-EXIT REquipmentShop "exit" RStreet11
-RStreet12:MAKE-ROOM "Street 12" "North of street 11" 0;0.05;0.05;0
+RStreet12:MAKE-ROOM "Street12" "North of street 11" 0;0.05;0.05;0
 :SET-EXIT RStreet11 "north" RStreet12
 :SET-EXIT RStreet12 "south" RStreet11
 RStorageHouse:MAKE-ROOM "Storage house" "Storage house that might contain some useful items" 0;0;0;0
@@ -360,7 +360,7 @@ RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here
 AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
 :ADD-ACTOR RMuseumRoom4 AFinalBoss
 
-RStreet15:MAKE-ROOM "Street 15" "West of Street14." 0;0;0;0.1
+RStreet15:MAKE-ROOM "Street15" "West of Street14." 0;0;0;0.1
 :SET-EXIT RStreet14 "west" RStreet15
 :SET-EXIT RStreet15 "east" RStreet14
 RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
@@ -368,7 +368,7 @@ RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
 :SET-EXIT RStreet15 "south" RMayorsHouse
 AMayor:MAKE-CALLBACK-HUMAN "The mayor" "The mayor who also owns the museum" mayor.script
 :ADD-ACTOR RMayorsHouse AMayor
-RStreet16:MAKE-ROOM "Street 16" "south of Street15" 0;0;0;0.2
+RStreet16:MAKE-ROOM "Street16" "south of Street15" 0;0;0;0.2
 :SET-EXIT RStreet14 "south" RStreet16
 :SET-EXIT RStreet16 "north" RStreet14
 
@@ -383,7 +383,7 @@ IAppleJuice:MAKE-POTION "Apple-juice" 5
 RRestaurant:MAKE-SHOP "Restaurant" "There's plenty of food here." IBeefSteak 50 IFriedChicken 75 ISalmon 100 IRaspberryPie 30 IIceCream 30 ICake 20 IOrangeJuice 20 IAppleJuice 20
 :SET-EXIT RStreet16 "west" RRestaurant
 :SET-EXIT RRestaurant "exit" RStreet16
-RStreet17:MAKE-ROOM "Street 17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.2
+RStreet17:MAKE-ROOM "Street17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.2
 :SET-EXIT RStreet16 "south" RStreet17
 :SET-EXIT RStreet17 "north" RStreet16
 RMountainPath1:MAKE-ROOM "Mountain path 1" "Path leading up to the top of the mountain" 0;0;0.1;0.1
@@ -436,7 +436,7 @@ ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
 :SET-NO-WANDER ASkyDragon 1
 :ADD-ACTOR RMountainPath6 ASkyDragon 
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
-:SET-EXIT RMountainPath6 "top" RMountainTop
+:SET-DEATH-EXIT ASkyDragon "top" RMountainTop
 :SET-EXIT RMountainTop "down" RMountainPath6
 
 :TELEPORT APlayer RMuseumRoom4
