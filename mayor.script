@@ -3,6 +3,8 @@ RMuseumEntrance:GET-ROOM-BY-NAME "Museum"
 RMuseumInside:GET-ROOM-BY-NAME "Inside museum"
 
 :MESSAGE "I heard from my friend that you have taken care of a lot of monsters.\nThe museum has been conquered by evil monsters!\nUse this key to enter the museum and kill all the monsters to save this world!"
+IMuseumKey:MAKE-KEY "MuseumKey" "Museum key" 5 RMuseumEntrance "inside" RMuseumInside "outside"
+:ADD-ITEM Room IMuseumKey
 :SET-CALLBACK THIS mayor2.script
 :STOP
 

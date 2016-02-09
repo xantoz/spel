@@ -354,7 +354,9 @@ ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's s
 :ADD-ITEM AMedusa ISnakeArmor
 :SET-DROP AMedusa 1
 :ADD-ACTOR RMuseumRoom3 AMedusa
-RMuseumRoom4:MAKE-ROOM "Museum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
+RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here.\nThere are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
+:SET-DEATH-EXIT AMedusa "north" RMuseumRoom4
+:SET-EXIT RMuseumRoom4 "south" RMuseumRoom3
 AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
 :ADD-ACTOR RMuseumRoom4 AFinalBoss
 
@@ -367,8 +369,8 @@ RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
 AMayor:MAKE-CALLBACK-HUMAN "The mayor" "The mayor who also owns the museum" mayor.script
 :ADD-ACTOR RMayorsHouse AMayor
 RStreet16:MAKE-ROOM "Street 16" "south of Street15" 0;0;0;0.2
-:SET-EXIT RStreet15 "south" RStreet16
-:SET-EXIT RStreet16 "north" RStreet15
+:SET-EXIT RStreet14 "south" RStreet16
+:SET-EXIT RStreet16 "north" RStreet14
 
 IBeefSteak:MAKE-POTION "Beef-steak" 10
 IFriedChicken:MAKE-POTION "Fried-chicken" 15
@@ -404,6 +406,8 @@ IGoldenLump5:MAKE-CASHCARD "Big-gold-lump" 10
 :ADD-ITEM RMountainCave IGoldenLump4
 :ADD-ITEM RMountainCave IGoldenLump5
 RMountainPath3:MAKE-ROOM "Mountain path 3" "Path leading up. There's a big rock blocking the path up." 0;0;0;0
+:SET-EXIT RMountainPath2 "up" RMountainPath3
+:SET-EXIT RMountainPath3 "down" RMountainPath2
 AGolemRock:MAKE-GOLEM "Rock golem" 15
 :SET-NO-WANDER AGolemRock 1
 :ADD-ACTOR RMountainPath3 AGolemRock 
@@ -434,3 +438,5 @@ ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
 :SET-EXIT RMountainPath6 "top" RMountainTop
 :SET-EXIT RMountainTop "down" RMountainPath6
+
+:TELEPORT APlayer RMuseumRoom4
