@@ -575,6 +575,9 @@ int main(int argc, char** argv)
 				cout << "You beat the game!" << endl;
 				return 0;
 			}
+
+            for (Room *room: Room::getRooms())
+                room->update();
             
             for (Actor *actor : Actor::getActors())
                 actor->update();
