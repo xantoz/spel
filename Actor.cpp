@@ -22,10 +22,10 @@ Actor::Actor(const std::string &name, const std::string &description, const Stat
 }
 
 Actor::Actor(const std::string &name, const std::string &description, const Stats &_stats, int _hp) :
-    ItemOwner(name, description), room(nullptr), dropItems(true),
+    ItemOwner(name, description), room(nullptr), dropItems(true), deathDescription(""),
     stats(_stats), hp(_hp), 
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr),
-    dead(false), noWander(false), deathDescription("")
+    dead(false), noWander(false)
 {
     actors.push_front(this);
 }
