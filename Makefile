@@ -7,8 +7,9 @@
 CC    = g++
 # CXXFLAGS = -std=c++11 -g -Wall -pedantic
 CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
+
 ifdef USE_READLINE
-LDFLAGS = -lreadline
+LDFLAGS += -lreadline
 CXXFLAGS += -DUSE_READLINE
 endif
 

@@ -9,6 +9,7 @@
 #include "Key.hpp"
 #include "Shop.hpp"
 
+#include <cctype>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -16,6 +17,7 @@
 #include <fstream>
 #include <functional>
 #include <memory>
+#include <vector>
 
 #include <boost/algorithm/string/trim_all.hpp>
 
@@ -320,7 +322,7 @@ void unequip(string arg)
 void battle(string arg)
 {
     if(arg == "")
-        cout << "Battle who?" << endl;
+        cout << "Battle whom?" << endl;
     else 
     {
         Actor *actor = player->getRoom()->getActor(arg);
@@ -539,7 +541,7 @@ void *xmalloc(int size)
     if (!buf)
     {
         fprintf(stderr, "Error: Out of memory. Exiting.'n");
-        exit (1);
+        exit(1);
     }
  
     return buf;
@@ -566,11 +568,124 @@ static char const **cmd_from_map(const map<const string, Whatever> &map)
     return cmd;
 }
 
-char *my_generator(const char* text, int state)
+static char const **cmd_from_vector(const vector<const char*> &v)
+{
+    char const **cmd = new const char*[(v.size() + 1)];
+    char const **p = cmd;
+    for (const char *str: v)
+        *p++ = str;
+    *p = nullptr;
+    return cmd;
+}
+
+static char const **cmd_look()
+{
+    vector<const char*> stuff;
+    stuff.push_back("self");
+    stuff.push_back("myself");
+    for (Actor *a: player->getRoom()->getActors())
+        stuff.push_back(a->getName().c_str());
+    for (Item *i: player->getRoom()->getItems())
+        stuff.push_back(i->getName().c_str());
+    for (Item *i: player->getItems())
+        stuff.push_back(i->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_room_items()
+{
+    vector<const char*> stuff;
+    for (Item *i: player->getRoom()->getItems())
+        stuff.push_back(i->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_player_items()
+{
+    vector<const char*> stuff;
+    for (Item *i: player->getItems())
+        stuff.push_back(i->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_player_equippables()
+{
+    vector<const char*> stuff;
+    for (Item *i: player->getItems())
+        if (dynamic_cast<Equippable*>(i) != nullptr)
+            stuff.push_back(i->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_room_actors()
+{
+    vector<const char*> stuff;
+    for (Actor *a: player->getRoom()->getActors())
+        stuff.push_back(a->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_room_exits()
+{
+    vector<const char*> stuff;
+    for (auto &item: player->getRoom()->getExits())
+        stuff.push_back(item.first.c_str());
+    return cmd_from_vector(stuff);
+}
+
+static char const **cmd_rooms()
+{
+    vector<const char*> stuff;
+    for (Room *room: Room::getRooms())
+        stuff.push_back(room->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
+enum generator_mode
+{
+    CMD, LOOK, USE, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO
+};
+
+static inline char *generator_helper(const char* text, int state, enum generator_mode genmode)
 {
     // char* cmd [] = {"hello", "world", "hell" ,"word", "quit", NULL};
-    unique_ptr<const char*[]> cmd(cmd_from_map((mode == BATTLE) ? battleCmds :
-                                               (mode == SHOP)   ? shopCmds : cmds));
+    const char** tmp = nullptr;
+    switch (genmode)
+    {
+        default:
+        case CMD:
+            tmp = (cmd_from_map((mode == BATTLE) ? battleCmds :
+                                (mode == SHOP)   ? shopCmds : cmds));
+            break;
+        case LOOK:
+            tmp = cmd_look();
+            break;
+        // case USE:
+        //     break;
+        case PICKUP:
+            tmp = cmd_room_items();
+            break;
+        case EQUIP:
+            tmp = cmd_player_equippables();
+            break;
+        case UNEQUIP:
+            tmp = new const char*[5]{"sword", "shield", "shoes", "armor", NULL};
+            break;
+        case DROP:
+            tmp = cmd_player_items();
+            break;
+        case BATTLECMD:
+            tmp = cmd_room_actors();
+            break;
+        case GO:
+            tmp = cmd_room_exits();
+            break;
+        case TELEPORT:
+            tmp = cmd_rooms();
+            break;
+    }
+    if (tmp == nullptr) return nullptr;
+    unique_ptr<const char*[]> cmd(tmp);
     
     static int list_index, len;
     const char *name;
@@ -593,6 +708,54 @@ char *my_generator(const char* text, int state)
     return ((char *)NULL);
 }
 
+char *generate_cmd(const char* text, int state) { return generator_helper(text, state, CMD); }
+char *generate_look(const char* text, int state) { return generator_helper(text, state, LOOK); }
+char *generate_use(const char* text, int state) { return generator_helper(text, state, USE); }
+char *generate_pickup(const char* text, int state) { return generator_helper(text, state, PICKUP); }
+char *generate_equip(const char* text, int state) { return generator_helper(text, state, EQUIP); }
+char *generate_unequip(const char* text, int state) { return generator_helper(text, state, UNEQUIP); }
+char *generate_drop(const char* text, int state) { return generator_helper(text, state, DROP); }
+char *generate_battle(const char* text, int state) { return generator_helper(text, state, BATTLECMD); }
+char *generate_teleport(const char* text, int state) { return generator_helper(text, state, TELEPORT); }
+char *generate_go(const char* text, int state) { return generator_helper(text, state, GO); }
+
+bool first_word_eq(const char *a, const char *b)
+{
+    while ((*a != '\0' && !isspace(*a)) && (*b != '\0' && !isspace(*b)))
+    {
+        if (*a != *b)
+            return false;
+        
+        ++a; ++b;
+    }
+    return true;
+}
+
+unsigned wordcount(const char *a)
+{
+    unsigned count = 0;
+    bool inword = false;
+    
+    while (*a != '\0')
+    {
+        if (isspace(*a))
+        {
+            if (inword)
+            {
+                inword = false;
+                ++count;
+            }
+        }
+        else
+        {
+            inword = true;
+        }
+        ++a;
+    }
+
+    return count;
+}
+
 static char **my_completion(const char *text , int start,  int end)
 {
     char **matches;
@@ -602,12 +765,29 @@ static char **my_completion(const char *text , int start,  int end)
     // cout << "DERP:" << start << endl;
     // cout << "HERP:" << text << endl;
     // cout << "MERP:" << rl_line_buffer << endl;
+
+    unsigned wc = wordcount(rl_line_buffer);
  
     if (start == 0)
-        matches = rl_completion_matches((char*)text, &my_generator);
-    else if(false)
-    {
-    }
+        matches = rl_completion_matches((char*)text, &generate_cmd);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "unequip"))
+        matches = rl_completion_matches((char*)text, &generate_unequip);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "look"))
+        matches = rl_completion_matches((char*)text, &generate_look);
+    else if (wc == 1 && (first_word_eq(rl_line_buffer, "pickup") || first_word_eq(rl_line_buffer, "get")))
+        matches = rl_completion_matches((char*)text, &generate_pickup);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "use"))
+        matches = rl_completion_matches((char*)text, &generate_use);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "equip"))
+        matches = rl_completion_matches((char*)text, &generate_equip);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "drop"))
+        matches = rl_completion_matches((char*)text, &generate_drop);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "battle"))
+        matches = rl_completion_matches((char*)text, &generate_battle);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "teleport"))
+        matches = rl_completion_matches((char*)text, &generate_teleport);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "go"))
+        matches = rl_completion_matches((char*)text, &generate_go);
     else
         rl_bind_key('\t',rl_abort);
     
@@ -663,7 +843,7 @@ int main(int argc, char** argv)
     while (nullptr != (inpt = readline("\n> ")))
     #else
     while (!cin.eof())
-    #endif        
+    #endif
     {
         #ifdef USE_READLINE
         rl_bind_key('\t',rl_complete);
@@ -672,6 +852,14 @@ int main(int argc, char** argv)
         
         try
         {
+            #ifdef USE_READLINE
+            str = inpt;
+            free(inpt);
+            #else
+            cout << "\n> ";
+            getline(cin, str);
+            #endif
+            
             if (player->isDead())
             {
                 cout << "Game over" << endl;
@@ -688,14 +876,6 @@ int main(int argc, char** argv)
             
             for (Actor *actor : Actor::getActors())
                 actor->update();
-
-            #ifdef USE_READLINE
-            str = inpt;
-            free(inpt);
-            #else
-            cout << "\n> ";
-            getline(cin, str);
-            #endif
 
             boost::trim_all(str);
             size_t first_space = str.find_first_of(' ');
