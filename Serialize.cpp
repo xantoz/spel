@@ -206,7 +206,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         std::vector<std::string> strings; strings.reserve(4);
         std::vector<double> numbers;      numbers.reserve(4);
         boost::split(strings, str, boost::is_any_of(";"));
-        std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> int { return std::stod(a); });
+        std::transform(strings.begin(), strings.end(), back_inserter(numbers), [](const std::string &a) -> double { return std::stod(a); });
         if (numbers.size() != 4) throw InvalidFileException(row, "EncounterProbability-param of wrong length");
         return EncounterProbability(numbers.at(0), numbers.at(1), numbers.at(2), numbers.at(3));;
     };
@@ -523,9 +523,9 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
             }
         },
 		{"MAKE-LAST-BOSS", [&](const std::vector<std::string> &args) {
-                if      (args.size() == 3) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), args.at(2)));
-                else if (args.size() == 4) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), parseStats(args.at(2)), args.at(3)));
-                else if (args.size() == 5) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)), args.at(4)));
+                if      (args.size() == 3) return new LastBoss(args.at(0), args.at(1), args.at(2));
+                else if (args.size() == 4) return new LastBoss(args.at(0), args.at(1), parseStats(args.at(2)), args.at(3));
+                else if (args.size() == 5) return new LastBoss(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)), args.at(4));
                 else                       throw InvalidFileException(row, "Wrong amount of args.");
             }
         },
