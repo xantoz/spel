@@ -556,77 +556,10 @@ int main(int argc, char** argv)
     shopCmds["inventory"] = &listItems;
     shopCmds["buy"] = &buy;
     shopCmds["sell"] = &sell;
-
     
-    Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
-    Room* secret = new Room("Secret Room", "Actually this is just your wardrobe.", EncounterProbability(0.5, 0.3, 0.4, 0.6));
-    Room* first = new Room("My room", "This is my room\n You see a yellow locked door to the east.", "west", kitchen, nullptr);
-    first->addItem(new Key("yellowkey", "A yellow key", 5, first, "east", secret, "west"));
-    auto *widget = new CallbackItem("widget", "A magical talking widget", 4, "widget.script");
-    widget->setConsumable(true);
-    first->addItem(widget);
-    Room* outside = new Room("Outside", "This is our garden", "south", kitchen, nullptr);
-    outside->addActor(new CallbackHuman("PotionLad", "A lad who gives you potions", "potiongiver1.script"));
-    outside->addActor(new CallbackHuman("PotionLady", "A lady who gives you potions.", "potiongiver2.script"));
-    Room* neighbor = new Room("Neighbor", "Outside of neighbors house", "east", outside, nullptr);
-    Room* street = new Room("Street", "The street", "northwest", neighbor, "northeast", outside,nullptr);
-    Room* park = new Room("Park", "The biggest park in this city. \nThere's a big tree in the middle", "south", street,nullptr);
-    outside->setExit("west", neighbor);
-    outside->setExit("northwest", street);
-    neighbor->setExit("northeast", street);
-    street->setExit("north", park);
-
-    std::list<std::pair<Item*, unsigned>> shop1List;
-    Stats goldshieldstats = {0, 0, 40, -3, 0, -2};
-    Stats golddaggerstats = {0, 0, 30, 0, 0, 1, 4};
-            
-    shop1List.push_back(std::pair<Item*, unsigned>(new Shield("Gold shield", "An awesome shield", 40, goldshieldstats), 90));
-    shop1List.push_back(std::pair<Item*, unsigned>(new Sword("Gold dagger", "An awesome dagger", 50, golddaggerstats), 100));
-    shop1List.push_back(std::pair<Item*, unsigned>(new Potion("GoldPotion", 4), 30));                              
-    Shop* shop = new Shop("Shop", "The shop, type look to list all items", shop1List );
-    kitchen->setExit("north", outside);
-    kitchen->setExit("east", first);
-    neighbor->setExit("shop", shop);
-    shop->setExit("exit", neighbor);
-    
-    Stats shieldstats = {0, 0, 0, 23, -2, 0, -1};
-    first->addItem(new Shield("bronze shield", "a typical shield", 20, shieldstats));
-    Stats daggerstats = {0, 0, 10, 0, 0, 1, 2};
-    kitchen->addItem(new Sword("dagger", "It's just your normal dagger.", 10, daggerstats));
-    kitchen->addItem(new Potion("Potion1", 2));
-    
-    Stats oldmanstats = {50, 10, 20, 5, 10, 10};        
-    Human* oldman = new Human("Rudolph", "It's your uncle", oldmanstats, "Good morning my son, where are you going?");
-    outside ->addActor(oldman);
-
-    Stats nilsstats = { 20, 10, 10, 10, 10, 10, 20 };
-    player = new Player("nils", "it's you", nilsstats);
-    first->addActor(player);
-    Troll* troll = new Troll("Troll1", 2);
-    kitchen->addActor(troll);
-    Stats bigTreeStats = {1000, 10, 100, 10, 10, 10, 1};
-
-    Stats axestats = {0, 0, 20, 0, -10,-5,-5};
-    neighbor->addItem(new Sword("Axe", "A really heavy axe", 100, axestats));
-    
-    Actor* yTree = new Actor("BigTree", "The tree looks really old", bigTreeStats);
-    park->addActor(yTree);
-    cout << player->getRoom()->getName() << endl;
-    cout << player->getRoom()->getDescription() << endl;
-    player->addMoney(100);
-	cout << "Welcome to the game!" << endl;
-	cout << "In this world there is a very popular online game where the players actually are inside the game." << endl;
-	cout << "This way, people can actually feel how it is fighting monsters and travelling the world in a fantasy game." << endl;
-	cout << "However, the company that developed this popular game had a rather bad debugging team." << endl;
-	cout << "While you can get inside the game world, the opposite is also possible!" << endl;
-	cout << "The monsters from the game has therefore escaped to the real world and the world is in deep trouble!" << endl;
-	cout << "Monsters are spawned everywhere and there seems to be no hope!" << endl;
-	cout << "However, the way the game was programmed. It's actually only necessary to kill the last boss." << endl;
-	cout << "Killing the last boss would free all other monsters and stuff from the game and therefore from this world too." << endl;
-	cout << "You're an experienced player and people have all their hopes on you!" << endl;
-	cout << "You have to find the last boss and kill it!";
-	
-    load_world("file.txt");
+    ifstream ifs("file.txt");
+    load(ifs);
+    ifs.close();
     string str;
     while(!cin.eof())
     {

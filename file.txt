@@ -1,3 +1,15 @@
+:MESSAGE "Welcome to the game!"
+:MESSAGE "In this world there is a very popular online game where the players actually are inside the game."
+:MESSAGE "This way, people can actually feel how it is fighting monsters and travelling the world in a fantasy game."
+:MESSAGE "However, the company that developed this popular game had a rather bad debugging team."
+:MESSAGE "While you can get inside the game world, the opposite is also possible!"
+:MESSAGE "The monsters from the game has therefore escaped to the real world and the world is in deep trouble!"
+:MESSAGE "Monsters are spawned everywhere and there seems to be no hope!"
+:MESSAGE "However, the way the game was programmed. It's actually only necessary to kill the last boss."
+:MESSAGE "Killing the last boss would free all other monsters and stuff from the game and therefore from this world too."
+:MESSAGE "You're an experienced player and people have all their hopes on you!"
+:MESSAGE "You have to find the last boss and kill it!"
+
 RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
 ICashCard1:MAKE-CASHCARD "Cashcard1" 2
 :ADD-ITEM RMyRoom ICashCard1
@@ -361,7 +373,7 @@ IIceCream:MAKE-POTION "Ice-cream" 5
 ICake:MAKE-POTION "Cake" 5
 IOrangeJuice:MAKE-POTION "Orange-juice" 5
 IAppleJuice:MAKE-POTION "Apple-juice" 5 
-RRestaurant:MAKE-SHOP "Restaurant" "There's plenty of food here." IBeefSteak 50 IFriedChicken 75 ISalmon 100 IRaspberryPie 30 IIceCream 30 ICake 20 IOrangeJuice 20 IAppleJuice 20 0;0;0;0
+RRestaurant:MAKE-SHOP "Restaurant" "There's plenty of food here." IBeefSteak 50 IFriedChicken 75 ISalmon 100 IRaspberryPie 30 IIceCream 30 ICake 20 IOrangeJuice 20 IAppleJuice 20
 :SET-EXIT RStreet16 "west" RRestaurant
 :SET-EXIT RRestaurant "exit" RStreet16
 RStreet17:MAKE-ROOM "Street 17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.2
@@ -369,18 +381,18 @@ RStreet17:MAKE-ROOM "Street 17" "This is the end of the street.\nA path leading 
 :SET-EXIT RStreet17 "north" RStreet16
 RMountainPath1:MAKE-ROOM "Mountain path 1" "Path leading up to the top of the mountain" 0;0;0.1;0.1
 :SET-EXIT RStreet17 "south" RMountainPath1
-:SET-EXIT RMountainPath1 RStreet17
+:SET-EXIT RMountainPath1 "north" RStreet17
 RMountainPath2:MAKE-ROOM "Mountain path 2" "Path leading up. A small cave can be seen" 0;0;0.1;0.1
 :SET-EXIT RMountainPath1 "up" RMountainPath2
 :SET-EXIT RMountainPath2 "down" RMountainPath1
 RMountainCave:MAKE-ROOM "Mountain cave" "This is a small cave, but there's lots of gold on the floor!" 0;0;0.1;0.1
 :SET-EXIT RMountainPath2 "cave" RMountainCave
 :SET-EXIT RMountainCave "outside" RMountainPath2
-IGoldenLump1:MAKE-CASHCARD: "Gold-lump1" 5
-IGoldenLump2:MAKE-CASHCARD: "Gold-lump2" 5
-IGoldenLump3:MAKE-CASHCARD: "Gold-lump3" 5
-IGoldenLump4:MAKE-CASHCARD: "Gold-lump4" 5
-IGoldenLump5:MAKE-CASHCARD: "Big-gold-lump" 10
+IGoldenLump1:MAKE-CASHCARD "Gold-lump1" 5
+IGoldenLump2:MAKE-CASHCARD "Gold-lump2" 5
+IGoldenLump3:MAKE-CASHCARD "Gold-lump3" 5
+IGoldenLump4:MAKE-CASHCARD "Gold-lump4" 5
+IGoldenLump5:MAKE-CASHCARD "Big-gold-lump" 10
 :ADD-ITEM RMountainCave IGoldenLump1
 :ADD-ITEM RMountainCave IGoldenLump2
 :ADD-ITEM RMountainCave IGoldenLump3
@@ -389,7 +401,7 @@ IGoldenLump5:MAKE-CASHCARD: "Big-gold-lump" 10
 RMountainPath3:MAKE-ROOM "Mountain path 3" "Path leading up. There's a big rock blocking the path up." 0;0;0;0
 AGolemRock:MAKE-GOLEM "Rock golem" 15
 :SET-NO-WANDER AGolemRock 1
-:ADD-ACTOR AGolemRock RMountainPath3
+:ADD-ACTOR RMountainPath3 AGolemRock 
 RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave." 0;0;0;0.10
 :SET-DEATH-EXIT AGolemRock "up" RMountainPath4
 :SET-EXIT RMountainPath4 "down" RMountainPath3
@@ -413,7 +425,7 @@ AFairy:MAKE-CALLBACK-HUMAN "Fairy" "A fairy who can heal your hp" fairy.script
 :ADD-ACTOR RMountainFairyCave AFairy
 ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
 :SET-NO-WANDER ASkyDragon 1
-:ADD-ACTOR ASkyDragon RMountainPath6
+:ADD-ACTOR RMountainPath6 ASkyDragon 
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
 :SET-EXIT RMountainPath6 "top" RMountainTop
 :SET-EXIT RMountainTop "down" RMountainPath6
