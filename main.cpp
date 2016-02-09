@@ -20,6 +20,7 @@
 #include <vector>
 
 #include <boost/algorithm/string/trim_all.hpp>
+#include <boost/algorithm/string/regex.hpp>
 
 #ifdef USE_READLINE
 #include <readline/readline.h>
@@ -34,15 +35,18 @@ enum Mode
 } mode;
 
 Player *player;
-Actor *opponent;
-CallbackHuman *finalBoss;
-Shop *shop;
+static Actor *opponent;
+static Shop *shop;
 
-std::map<const string, function<void(string)>> cmds;
-std::map<const string, function<void(string)>> battleCmds;
-std::map<const string, function<void(string)>> shopCmds(cmds);
+static std::map<const string, function<void(string)>> cmds;
+static std::map<const string, function<void(string)>> battleCmds;
+static std::map<const string, function<void(string)>> shopCmds(cmds);
 
-void destroy_everything()
+#include "Classes.hpp"
+
+
+
+static void destroy_everything()
 {
     while (Room::getRooms().size() > 0)
     {
@@ -53,10 +57,18 @@ void destroy_everything()
 
     player = nullptr;
     opponent = nullptr;
+    shop = nullptr;
     mode = NORMAL;
 }
 
-void enterBattleMode(Actor *actor)
+void win()
+{
+    cout << "You beat the game!" << endl;
+    destroy_everything();
+    exit(0);
+}
+
+static void enterBattleMode(Actor *actor)
 {
     mode = BATTLE;
     opponent = actor;
@@ -64,14 +76,14 @@ void enterBattleMode(Actor *actor)
     cout << "Opponent has Stats: " << opponent->getStats().toString() << endl;
 }
 
-void exitBattleMode()
+static void exitBattleMode()
 {   
     mode = NORMAL;
     opponent = nullptr;
     cout << "Exited battle" << endl;
 }
 
-void go(string arg)
+static void go(string arg)
 {
      if (arg == "")
      {
@@ -93,7 +105,7 @@ void go(string arg)
      }
 }
 
-void die(string arg)
+static void die(string arg)
 {
     if (arg == "")
     {
@@ -107,7 +119,7 @@ void die(string arg)
     
 }
 
-void look(string arg)
+static void look(string arg)
 {
     if (arg == "")
         cout << player->look() << endl;
@@ -115,7 +127,7 @@ void look(string arg)
         cout << player->look(arg) << endl;    
 }
 
-void use(string arg)
+static void use_impl(string arg, function<void(void)> callback)
 {
     if (arg == "")
     {
@@ -124,63 +136,37 @@ void use(string arg)
     }
     else 
     {
-        auto it = arg.begin();
-        for(; it != arg.end() && *it != ' '; ++it);
-        string first(arg.begin(), it);
-        for(; it != arg.end() && *it == ' '; ++it);
-        string second(it, arg.end());
-        if(second == "")
-            player->use(first);
+        vector<string> words;
+        boost::algorithm::split_regex(words, arg, boost::regex("\\s+on\\s+"));
+        if (words.size() == 1)
+            player->use(words.at(0));
         else
-            player->use(first, second);
+            player->use(words.at(0), words.at(1));
+
+        if (callback)
+            callback();
 
         // always non-null since we'd have triggered an exception with player->use for a non-existant item
-        Item *item = player->getItem(first);
+        Item *item = player->getItem(words.at(0));
         if (item->usedUp())
         {
             std::cout << "You used up the " << item->getName() << "." << std::endl;
             delete item;
         }
-
     }
-    
 }
 
-void useBattle(string arg)
+static void use(string arg)
 {
-    if (arg == "")
-    {
-        cout << "What do you want to use?" << endl;
-        return;
-    }
-    else 
-    {
-        auto it = arg.begin();
-        for(; it != arg.end() && *it != ' '; ++it);
-        string first(arg.begin(), it);
-        for(; it != arg.end() && *it == ' '; ++it);
-        string second(it, arg.end());
-        if(second == "")
-            player->use(first);
-        else
-        {
-            player->use(first, second);
-        }
-
-        opponent->attackResponse(player);
-
-        // always non-null since we'd have triggered an exception with player->use for a
-        // non-existant item
-        
-        Item *item = player->getItem(first);
-        if (item->usedUp())
-            delete item;
-
-    }
+    use_impl(arg, nullptr);
 }
 
+static void useBattle(string arg)
+{
+    use_impl(arg, [](){ opponent->attackResponse(player); });
+}
 
-void pickup(string arg)
+static void pickup(string arg)
 {
      if (arg == "")
      {
@@ -194,7 +180,7 @@ void pickup(string arg)
          // cout << "I don't see any such thing." << endl;
 }
 
-void drop(string arg)
+static void drop(string arg)
 {
     if (arg == "")
     {
@@ -207,7 +193,7 @@ void drop(string arg)
         cout << "I'm not carrying anything like that." << endl;
 }
 
-void equip(string arg)
+static void equip(string arg)
 {
     Item *item = player->getItem(arg);
     if (item == nullptr)
@@ -287,7 +273,7 @@ void equip(string arg)
 }
 */
 
-void unequip(string arg)
+static void unequip(string arg)
 {
     if (arg == "sword")
     {
@@ -319,7 +305,7 @@ void unequip(string arg)
     }
 }
 
-void battle(string arg)
+static void battle(string arg)
 {
     if(arg == "")
         cout << "Battle whom?" << endl;
@@ -333,14 +319,13 @@ void battle(string arg)
     }
 }
 
-
-void attack(string arg)
+static void attack(string arg)
 {
 
     player->attack(opponent);
 }
 
-void run(string arg)
+static void run(string arg)
 {
     if (opponent->getTotalStats().spd > player->getTotalStats().spd)
     {
@@ -363,10 +348,10 @@ void run(string arg)
     }
 }
 
-void talk(string arg)
+static void talk(string arg)
 {
     if(arg == "")
-        cout << "Talk who?" << endl;
+        cout << "Talk with whom?" << endl;
     else 
     {
         Actor *actor = player->getRoom()->getActor(arg);
@@ -383,36 +368,38 @@ void talk(string arg)
     }
 }
 
-// template <typename I>
-// I random_element(I begin, I end)
-// {
-//     const unsigned long n = std::distance(begin, end);
-//     const unsigned long divisor = (RAND_MAX + 1) / n;
+/*
+template <typename I>
+I random_element(I begin, I end)
+{
+    const unsigned long n = std::distance(begin, end);
+    const unsigned long divisor = (RAND_MAX + 1) / n;
 
-//     unsigned long k;
-//     do { k = std::rand() / divisor; } while (k >= n);
+    unsigned long k;
+    do { k = std::rand() / divisor; } while (k >= n);
 
-//     return std::advance(begin, k);
-// }
+    return std::advance(begin, k);
+}
 
-// void randomSpawn()
-// {
-//     static unsigned cntr = 0;
-//     if (rand() % 5 == 1)
-//     {
-//         Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
-//         auto rooms = Room::getRooms();
-//         // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
+void randomSpawn()
+{
+    static unsigned cntr = 0;
+    if (rand() % 5 == 1)
+    {
+        Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
+        auto rooms = Room::getRooms();
+        // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
                 
-//         unsigned cnt = rand() % rooms.size();
-//         auto it = rooms.begin();
-//         for (unsigned i = 0; i < cnt; ++i)
-//             ++it;
-//         (*it)->addActor(act);
-//     }
-// }
+        unsigned cnt = rand() % rooms.size();
+        auto it = rooms.begin();
+        for (unsigned i = 0; i < cnt; ++i)
+            ++it;
+        (*it)->addActor(act);
+    }
+}
+*/
 
-void save(string filename)
+static void save(string filename)
 {
     if (filename == "")
         filename = "quicksave.save";
@@ -421,7 +408,7 @@ void save(string filename)
     cout << "Saved world to " << filename << endl;
 }
 
-void load_world(string filename)
+static void load_world(string filename)
 {
     if (filename == "")
         filename = "quicksave.save";
@@ -433,12 +420,12 @@ void load_world(string filename)
 }
 
 // Shop functions
-void listItems(string arg)
+static void listItems(string arg)
 {
     cout << shop->listInventory();
 }
 
-void buy(string arg)
+static void buy(string arg)
 {
     if(arg == "")
     {
@@ -476,7 +463,7 @@ void buy(string arg)
     }
 }
 
-void sell(string arg)
+static void sell(string arg)
 {
     if(arg == "")
     {
@@ -499,7 +486,7 @@ void sell(string arg)
 }
 
 // cheat cmd for debugging
-void teleport(string arg)
+static void teleport(string arg)
 {
     auto it = std::find_if(Room::getRooms().begin(), Room::getRooms().end(),
                            [&](Room *r) { return r->getName() == arg; });
@@ -510,7 +497,7 @@ void teleport(string arg)
     }
 }
 
-void imrich(string arg)
+static void imrich(string arg)
 {
     try
     {
@@ -526,14 +513,14 @@ void imrich(string arg)
     }
 }
 
-void kill(string arg)
+static void kill(string arg)
 {
     opponent->die();
 }
 
 
 #ifdef USE_READLINE
-void *xmalloc(int size)
+static void *xmalloc(int size)
 {
     void *buf;
  
@@ -547,7 +534,7 @@ void *xmalloc(int size)
     return buf;
 }
 
-char *dupstr (const char* s)
+static char *dupstr (const char* s)
 {
     char *r;
  
@@ -625,6 +612,15 @@ static char const **cmd_room_actors()
     return cmd_from_vector(stuff);
 }
 
+static char const **cmd_room_humans()
+{
+    vector<const char*> stuff;
+    for (Actor *a: player->getRoom()->getActors())
+        if (dynamic_cast<Human*>(a) != nullptr)
+            stuff.push_back(a->getName().c_str());
+    return cmd_from_vector(stuff);
+}
+
 static char const **cmd_room_exits()
 {
     vector<const char*> stuff;
@@ -643,7 +639,7 @@ static char const **cmd_rooms()
 
 enum generator_mode
 {
-    CMD, LOOK, USE, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO
+    CMD, LOOK, USE1, USE2, USE3, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO, TALK
 };
 
 static inline char *generator_helper(const char* text, int state, enum generator_mode genmode)
@@ -660,8 +656,6 @@ static inline char *generator_helper(const char* text, int state, enum generator
         case LOOK:
             tmp = cmd_look();
             break;
-        // case USE:
-        //     break;
         case PICKUP:
             tmp = cmd_room_items();
             break;
@@ -671,17 +665,25 @@ static inline char *generator_helper(const char* text, int state, enum generator
         case UNEQUIP:
             tmp = new const char*[5]{"sword", "shield", "shoes", "armor", NULL};
             break;
-        case DROP:
-            tmp = cmd_player_items();
-            break;
-        case BATTLECMD:
-            tmp = cmd_room_actors();
-            break;
         case GO:
             tmp = cmd_room_exits();
             break;
+        case DROP:
+        case USE1:
+            tmp = cmd_player_items();
+            break;
+        case USE2:
+            tmp = new const char*[2]{"on", NULL};
+            break;
+        case BATTLECMD:
+        case USE3:
+            tmp = cmd_room_actors();
+            break;
         case TELEPORT:
             tmp = cmd_rooms();
+            break;
+        case TALK:
+            tmp = cmd_room_humans();
             break;
     }
     if (tmp == nullptr) return nullptr;
@@ -700,7 +702,9 @@ static inline char *generator_helper(const char* text, int state, enum generator
     {
         list_index++;
  
-        if (strncmp(name, text, len) == 0)
+        // if (strncmp(name, text, len) == 0)
+        //     return (dupstr(name));
+        if (strncasecmp(name, text, len) == 0)
             return (dupstr(name));
     }
  
@@ -708,18 +712,21 @@ static inline char *generator_helper(const char* text, int state, enum generator
     return ((char *)NULL);
 }
 
-char *generate_cmd(const char* text, int state) { return generator_helper(text, state, CMD); }
-char *generate_look(const char* text, int state) { return generator_helper(text, state, LOOK); }
-char *generate_use(const char* text, int state) { return generator_helper(text, state, USE); }
-char *generate_pickup(const char* text, int state) { return generator_helper(text, state, PICKUP); }
-char *generate_equip(const char* text, int state) { return generator_helper(text, state, EQUIP); }
-char *generate_unequip(const char* text, int state) { return generator_helper(text, state, UNEQUIP); }
-char *generate_drop(const char* text, int state) { return generator_helper(text, state, DROP); }
-char *generate_battle(const char* text, int state) { return generator_helper(text, state, BATTLECMD); }
-char *generate_teleport(const char* text, int state) { return generator_helper(text, state, TELEPORT); }
-char *generate_go(const char* text, int state) { return generator_helper(text, state, GO); }
+static char *generate_cmd(const char* text, int state) { return generator_helper(text, state, CMD); }
+static char *generate_look(const char* text, int state) { return generator_helper(text, state, LOOK); }
+static char *generate_use1(const char* text, int state) { return generator_helper(text, state, USE1); }
+static char *generate_use2(const char* text, int state) { return generator_helper(text, state, USE2); }
+static char *generate_use3(const char* text, int state) { return generator_helper(text, state, USE3); }
+static char *generate_pickup(const char* text, int state) { return generator_helper(text, state, PICKUP); }
+static char *generate_equip(const char* text, int state) { return generator_helper(text, state, EQUIP); }
+static char *generate_unequip(const char* text, int state) { return generator_helper(text, state, UNEQUIP); }
+static char *generate_drop(const char* text, int state) { return generator_helper(text, state, DROP); }
+static char *generate_battle(const char* text, int state) { return generator_helper(text, state, BATTLECMD); }
+static char *generate_teleport(const char* text, int state) { return generator_helper(text, state, TELEPORT); }
+static char *generate_go(const char* text, int state) { return generator_helper(text, state, GO); }
+static char *generate_talk(const char* text, int state) { return generator_helper(text, state, TALK); }
 
-bool first_word_eq(const char *a, const char *b)
+static bool first_word_eq(const char *a, const char *b)
 {
     while ((*a != '\0' && !isspace(*a)) && (*b != '\0' && !isspace(*b)))
     {
@@ -731,7 +738,22 @@ bool first_word_eq(const char *a, const char *b)
     return true;
 }
 
-unsigned wordcount(const char *a)
+// static bool first_word_eq(const char *a, const char *b)
+// {
+//     while ((*a != '\0') && (*b != '\0' && !isspace(*b)))
+//     {
+//         if (*a != *b)
+//             return false;
+
+//         if (isspace(*a) && (*b == '\0' || isspace(*b)))
+//             return true;
+            
+//         ++a; ++b;
+//     }
+//     return false;
+// }
+
+static unsigned wordcount(const char *a)
 {
     unsigned count = 0;
     bool inword = false;
@@ -776,8 +798,21 @@ static char **my_completion(const char *text , int start,  int end)
         matches = rl_completion_matches((char*)text, &generate_look);
     else if (wc == 1 && (first_word_eq(rl_line_buffer, "pickup") || first_word_eq(rl_line_buffer, "get")))
         matches = rl_completion_matches((char*)text, &generate_pickup);
-    else if (wc == 1 && first_word_eq(rl_line_buffer, "use"))
-        matches = rl_completion_matches((char*)text, &generate_use);
+    else if (first_word_eq(rl_line_buffer, "use"))
+    {
+        switch (wc)
+        {
+            case 1:
+                matches = rl_completion_matches((char*)text, &generate_use1);
+                break;
+            case 2:
+                matches = rl_completion_matches((char*)text, &generate_use2);
+                break;
+            case 3:
+                matches = rl_completion_matches((char*)text, &generate_use3);
+                break;
+        }
+    }
     else if (wc == 1 && first_word_eq(rl_line_buffer, "equip"))
         matches = rl_completion_matches((char*)text, &generate_equip);
     else if (wc == 1 && first_word_eq(rl_line_buffer, "drop"))
@@ -788,7 +823,9 @@ static char **my_completion(const char *text , int start,  int end)
         matches = rl_completion_matches((char*)text, &generate_teleport);
     else if (wc == 1 && first_word_eq(rl_line_buffer, "go"))
         matches = rl_completion_matches((char*)text, &generate_go);
-    else
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "talk"))
+        matches = rl_completion_matches((char*)text, &generate_talk);
+    else if (!(wc == 1 && (first_word_eq(rl_line_buffer, "load") || first_word_eq(rl_line_buffer, "save"))))
         rl_bind_key('\t',rl_abort);
     
     return matches;
@@ -797,8 +834,6 @@ static char **my_completion(const char *text , int start,  int end)
 
 int main(int argc, char** argv)
 {
-
-
     cmds["go"] = &go;
     cmds["look"] = &look;
     cmds["use"] = &use;
@@ -845,14 +880,11 @@ int main(int argc, char** argv)
     while (!cin.eof())
     #endif
     {
-        #ifdef USE_READLINE
-        rl_bind_key('\t',rl_complete);
-        add_history(inpt);
-        #endif
-        
         try
         {
             #ifdef USE_READLINE
+            rl_bind_key('\t', rl_complete);
+            add_history(inpt);
             str = inpt;
             free(inpt);
             #else
@@ -860,28 +892,11 @@ int main(int argc, char** argv)
             getline(cin, str);
             #endif
             
-            if (player->isDead())
-            {
-                cout << "Game over" << endl;
-                break;
-            }
-			if (finalBoss->isDead())
-			{
-				cout << "You beat the game!" << endl;
-				break;
-			}
-
-            for (Room *room: Room::getRooms())
-                room->update();
-            
-            for (Actor *actor : Actor::getActors())
-                actor->update();
-
             boost::trim_all(str);
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);
             string arg = (first_space == string::npos) ? "" : str.substr(first_space + 1);
-            
+
             if (mode == BATTLE)
             {
                 battleCmds.at(command)(arg);
@@ -901,7 +916,18 @@ int main(int argc, char** argv)
             {
                 cmds.at(command)(arg);
             }
-            // cout << "\"" << command << "\" \"" << arg << "\"" << endl;
+
+            if (player->isDead())
+            {
+                cout << "Game over" << endl;
+                break;
+            }
+            
+            for (Room *room: Room::getRooms())
+                room->update();
+            
+            for (Actor *actor : Actor::getActors())
+                actor->update();
         }
         catch(const out_of_range &e)
         {
@@ -923,5 +949,4 @@ int main(int argc, char** argv)
     destroy_everything();
         
     return 0;
-    
 }

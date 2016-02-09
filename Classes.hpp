@@ -75,9 +75,25 @@ public:
     virtual std::string serialize(std::ostream &os) const override;
 };
 
-class LastBoss : public Human 
+class LastBoss : public CallbackHuman
 {
-    
+public:
+    LastBoss(const std::string &name,
+             const std::string &desc,
+             const std::string &callback_path);
+    LastBoss(const std::string &name,
+             const std::string &desc,
+             const Stats &stats,
+             const std::string &callback_path);
+    LastBoss(const std::string &name,
+             const std::string &desc,
+             const Stats &stats,
+             int hp,
+             const std::string &callback_path);
+    ~LastBoss();
+
+    virtual void die() override;
+    virtual std::string serialize(std::ostream &os) const override;
 };
     
     

@@ -2,6 +2,8 @@
 #include "Serialize.hpp"
 #include "Room.hpp"
 #include "Shop.hpp"
+#include "main.hpp"
+
 #include <cstdlib>
 #include <array>
 #include <algorithm>
@@ -245,7 +247,6 @@ CallbackHuman::~CallbackHuman()
     std::cerr << "CallbackHuman<" << this->getName() << "> destructor" << std::endl;
 }
 
-
 void CallbackHuman::talk()
 {
     runCallback({{"THIS", this}});
@@ -255,6 +256,60 @@ std::string CallbackHuman::serialize(std::ostream &os) const
 {
     std::string sym = gensym();
     os << sym << ":MAKE-CALLBACK-HUMAN "
+       << stringify(getName()) << " "
+       << stringify(getBaseDescription()) << " "
+       << stats.serializeString() << " "
+       << hp << " "
+       << stringify(getCallback()) << std::endl;
+    actorTypeIndependentSerialize(os, sym);
+    return sym;
+}
+
+
+//////////////////
+//// LastBoss ////
+//////////////////
+LastBoss::LastBoss(const std::string &name,
+                   const std::string &desc,
+                   const std::string &callback_path) :
+    CallbackHuman(name, desc, callback_path)
+{
+}
+
+LastBoss::LastBoss(const std::string &name,
+                   const std::string &desc,
+                   const Stats &stats,
+                   const std::string &callback_path) :
+    CallbackHuman(name, desc, stats, callback_path)
+{
+}
+
+LastBoss::LastBoss(const std::string &name,
+                   const std::string &desc,
+                   const Stats &stats,
+                   int hp,
+                   const std::string &callback_path) :
+    CallbackHuman(name, desc, stats, hp, callback_path)
+{
+}
+
+LastBoss::~LastBoss()
+{
+    std::cerr << "LastBoss<" << this->getName() << "> destructor" << std::endl;
+}
+
+void LastBoss::die()
+{
+    CallbackHuman::die();
+    std::cout << "You have defeated the Last Boss, " << getName() << "." << std::endl;
+    
+    win();                                                  // You won the game.
+}
+
+std::string LastBoss::serialize(std::ostream &os) const
+{
+    std::string sym = gensym();
+    os << sym << ":MAKE-LAST-BOSS "
        << stringify(getName()) << " "
        << stringify(getBaseDescription()) << " "
        << stats.serializeString() << " "
