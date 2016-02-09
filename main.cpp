@@ -19,8 +19,10 @@
 
 #include <boost/algorithm/string/trim_all.hpp>
 
+#ifdef USE_READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
+#endif
 
 using namespace std;
 
@@ -528,6 +530,7 @@ void kill(string arg)
 }
 
 
+#ifdef USE_READLINE
 void *xmalloc(int size)
 {
     void *buf;
@@ -610,6 +613,7 @@ static char **my_completion(const char *text , int start,  int end)
     
     return matches;
 }
+#endif /* USE_READLINE */
 
 int main(int argc, char** argv)
 {
@@ -652,13 +656,19 @@ int main(int argc, char** argv)
     load(ifs);
     ifs.close();
     string str;
-    char *inpt;
 
+    #ifdef USE_READLINE
+    char *inpt;
     rl_attempted_completion_function = my_completion;
     while (nullptr != (inpt = readline("\n> ")))
+    #else
+    while (!cin.eof())
+    #endif        
     {
+        #ifdef USE_READLINE
         rl_bind_key('\t',rl_complete);
         add_history(inpt);
+        #endif
         
         try
         {
@@ -678,12 +688,15 @@ int main(int argc, char** argv)
             
             for (Actor *actor : Actor::getActors())
                 actor->update();
-            
-            // cout << "\n> ";
-            // getline(cin, str);
 
+            #ifdef USE_READLINE
             str = inpt;
             free(inpt);
+            #else
+            cout << "\n> ";
+            getline(cin, str);
+            #endif
+
             boost::trim_all(str);
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);
