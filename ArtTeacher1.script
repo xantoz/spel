@@ -15,4 +15,4 @@ Key:MAKE-KEY "Gray-key" "school key" 5 Corridor4 "art room" ArtRoom "corridor"
 :MESSAGE "Thank you for saving me from the monsters! Here use this key to get to the art room!"
 :SET-CALLBACK THIS ArtTeacher2.script
 :STOP
-not_empty.:MESSAGE "Those monsters"
+not_empty.:MESSAGE "Aaaaagh!! Get rid of those monsters!!!!!!"

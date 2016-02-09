@@ -17,6 +17,9 @@
 #include <functional>
 #include <boost/algorithm/string/trim_all.hpp>
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
 using namespace std;
 
 enum Mode 
@@ -561,8 +564,12 @@ int main(int argc, char** argv)
     load(ifs);
     ifs.close();
     string str;
-    while(!cin.eof())
+    char *inpt;
+    while(nullptr != (inpt = readline("\n> ")))
     {
+        rl_bind_key('\t',rl_complete);
+        add_history(inpt);
+        
         try
         {
             if (player->isDead())
@@ -582,8 +589,11 @@ int main(int argc, char** argv)
             for (Actor *actor : Actor::getActors())
                 actor->update();
             
-            cout << "\n> ";
-            getline(cin, str);
+            // cout << "\n> ";
+            // getline(cin, str);
+
+            str = inpt;
+            free(inpt);
             boost::trim_all(str);
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);

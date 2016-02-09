@@ -674,19 +674,6 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
-		{"MOVE-ACTOR", [&](const std::vector<std::string> &args) {
-                Room *room = dynamic_cast<Room*>(vars.at(args.at(0)));
-				Room *room2 = dynamic_cast<Room*>(vars.at(args.at(1)));
-                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(2)));
-				
-                if (room == nullptr) throw InvalidFileException(row, "Expected Room as first arg to MOVE-ACTOR.");
-				if (room2 == nullptr) throw InvalidFileException(row, "Expected Room as second arg to MOVE-ACTOR.");
-                if (actor == nullptr) throw InvalidFileException(row, "Expected Actor as third arg to MOVE-ACTOR.");
-                room->removeActor(actor);
-				room2->addActor(actor);
-                return nullptr;
-            }
-        },
         {"ADD-ITEM", [&](const std::vector<std::string> &args) {
                 ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
                 Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
