@@ -19,7 +19,7 @@ CashCard::CashCard(int lvl) :
 }
 
 CashCard::CashCard(const std::string &name, int lvl) :
-    Item(name, "CashCard that has the value of  " + std::to_string(lvl*10) + " gold", 10), level(lvl)
+    Item(name, "CashCard that has the value of " + std::to_string(lvl*10) + " gold", 10), level(lvl)
 {
     consumable = true;
 }
