@@ -481,9 +481,10 @@ void sell(string arg)
         }
         else 
         {
+            player->addMoney(item->getWeight());
             cout << "You sold the item for " << item->getWeight() << endl;
             player->removeItem(item);
-			player->addMoney(20);
+			
         }    
     }       
 }

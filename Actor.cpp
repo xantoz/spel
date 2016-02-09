@@ -314,7 +314,7 @@ void Actor::die()
     for (auto &ent: deathExits)
     {
         room->setExit(ent.first, ent.second);
-        std::cout << "A door opened to the " << ent.first << std::endl;
+        std::cout << "A path going " << ent.first << " revealed itself." << std::endl;
     }
 
     if (dropItems && room != nullptr)

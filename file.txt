@@ -98,10 +98,10 @@ RStreet4:MAKE-ROOM "Street4" "South of street 2, there's a shop nearby" 0.1;0.01
 :SET-EXIT RStreet2 "south" RStreet4
 :SET-EXIT RStreet4 "north" RStreet2
 
-IArmorB:MAKE-ARMOR "Bronze armor" "A good armor" 30 5;0;0;10;-2;0;0
-IShieldB:MAKE-SHIELD "Bronze shield" "A good shield" 20 0;0;0;15;0;-2;0
-ISwordB:MAKE-SWORD "Bronze dagger" "A good dagger" 20 0;0;10;0;0;1;-2
-IPotion3:MAKE-POTION "Good Potion" 3
+IArmorB:MAKE-ARMOR "Bronze-armor" "A good armor" 30 5;0;0;10;-2;0;0
+IShieldB:MAKE-SHIELD "Bronze-shield" "A good shield" 20 0;0;0;15;0;-2;0
+ISwordB:MAKE-SWORD "Bronze-dagger" "A good dagger" 20 0;0;10;0;0;1;-2
+IPotion3:MAKE-POTION "Good-Potion" 3
 RShop1:MAKE-SHOP "Shop" "The shop, type list to list all items" IArmorB 20 IShieldB 20 ISwordB 20 IPotion3 10
 :SET-EXIT RStreet4 "east" RShop1
 :SET-EXIT RShop1 "exit" RStreet4
@@ -128,7 +128,7 @@ RLake:MAKE-ROOM "Lake" "This is the big lake. There is a sea monster in the lake
 ANessie:MAKE-ACTOR "Nessie" "Big sea monster" 300;20;20;50;20;30;5
 :ADD-ACTOR RLake ANessie
 :SET-DROP ANessie 1
-INessieEgg:MAKE-POTION "Nessie egg" 100
+INessieEgg:MAKE-POTION "Nessie-egg" 100
 :ADD-ITEM ANessie INessieEgg
 RPark:MAKE-ROOM "Park" "This is a peaceful park" 0;0;0;0
 :SET-EXIT RStreet8 "south" RPark
