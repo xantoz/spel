@@ -863,12 +863,12 @@ int main(int argc, char** argv)
             if (player->isDead())
             {
                 cout << "Game over" << endl;
-                return 0;
+                break;
             }
 			if (finalBoss->isDead())
 			{
 				cout << "You beat the game!" << endl;
-				return 0;
+				break;
 			}
 
             for (Room *room: Room::getRooms())

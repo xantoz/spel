@@ -61,6 +61,8 @@ Room::Room(const std::string &name, const std::string &description, ...) :
 Room::Room(const std::string &name, const std::string &description, const EncounterProbability &enc) :
     ItemOwner(name, description), encounters(enc)
 {
+	//printf("%s: %f;%f;%f;%f\n", name.c_str(), enc.dragon, enc.thief, enc.golem, enc.troll);
+
     // Add ourselves to the list of rooms
     rooms.push_front(this);
 }
@@ -265,6 +267,8 @@ void Room::update()
     std::default_random_engine engine(seed);
     std::uniform_real_distribution<double> distr(0.0, 1.0);
     std::uniform_int_distribution<int> lvl(1,3);
+	
+	
 
     if (distr(engine) < encounters.dragon)
         this->addActor(new Dragon("dragon" + std::to_string(++cntr), lvl(engine)));
@@ -274,9 +278,11 @@ void Room::update()
     
     if (distr(engine) < encounters.golem)
         this->addActor(new Golem("golem" + std::to_string(++cntr), lvl(engine)));
-    
-    if (distr(engine) < encounters.troll)
+	
+	if (distr(engine) < encounters.troll)
         this->addActor(new Troll("troll" + std::to_string(++cntr), lvl(engine)));
+    
+    
 }
 
 std::string Room::serialize(std::ostream &os) const

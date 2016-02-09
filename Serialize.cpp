@@ -398,6 +398,16 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
+// :SET-DESCRIPTION <GameObjectRef> <Description (string)>
+        {"SET-DEATH-DESCRIPTION", [&](const std::vector<std::string> &args) {
+                Actor* act = dynamic_cast<Actor*>(vars.at(args.at(0)));
+                 if (act == nullptr)
+                    throw InvalidFileException(row, "Expected first arg to be a Actor");
+                    
+                act->setDeathDescription(args.at(1));
+                return nullptr;
+            }
+        },
         // :APPEND-DESCRIPTION <GameObjectRef> <Description (string)>
         {"APPEND-DESCRIPTION", [&](const std::vector<std::string> &args) {
                 vars.at(args.at(0))->appendDescription(args.at(1));

@@ -21,6 +21,7 @@ private:
     Room *room;
     std::map<std::string, Room*> deathExits;
     bool dropItems; // if True we drop our items and equipment at death
+    std::string deathDescription;
     
 protected:
     Stats stats;
@@ -73,6 +74,7 @@ public:
     void setNoWander(bool noWander);
     
     void setDeathExit(const std::string &name, Room *room);
+    void setDeathDescription(const std::string &name);
     const std::map<std::string, Room*> &getDeathExits() const;
     void removeDeathExit(const std::string &direction);
     void removeDeathExit(Room *exit);

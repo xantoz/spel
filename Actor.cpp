@@ -25,7 +25,7 @@ Actor::Actor(const std::string &name, const std::string &description, const Stat
     ItemOwner(name, description), room(nullptr), dropItems(true),
     stats(_stats), hp(_hp), 
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr),
-    dead(false), noWander(false)
+    dead(false), noWander(false), deathDescription("")
 {
     actors.push_front(this);
 }
@@ -317,6 +317,12 @@ void Actor::die()
         std::cout << "A path going " << ent.first << " revealed itself." << std::endl;
     }
 
+    if (deathDescription != "")
+    {
+        room->setDescription(deathDescription);
+    }
+    
+
     if (dropItems && room != nullptr)
     {
         unequipArmor();
@@ -344,7 +350,10 @@ void Actor::setDeathExit(const std::string &name, Room* room)
 {
     deathExits[name] = room;
 }
-
+void Actor::setDeathDescription(const std::string &desc)
+{
+    deathDescription = desc;
+}
 const std::map<std::string, Room*> &Actor::getDeathExits() const
 {
     return deathExits;
