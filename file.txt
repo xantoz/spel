@@ -1,4 +1,6 @@
+:MESSAGE ""
 :MESSAGE "Welcome to the game!"
+:MESSAGE ""
 :MESSAGE "In this world there is a very popular online game where the players"
 :MESSAGE "actually are inside the game. This way, people can actually feel how"
 :MESSAGE "it is fighting monsters and travelling the world in a fantasy game."
