@@ -1,0 +1,7 @@
+Room:GET-ROOM-FROM-ACTOR THIS
+APlayer:GET-PLAYER
+
+:MESSAGE "I will heal your hp to max."
+:SET-HP-MAX APlayer
+:STOP
+

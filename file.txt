@@ -1,7 +1,7 @@
 RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
 ICashCard1:MAKE-CASHCARD "Cashcard1" 2
 :ADD-ITEM RMyRoom ICashCard1
-APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20
+APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20 100
 :ADD-ACTOR RMyRoom APlayer
 RMyCorridor:MAKE-ROOM "Corridor" "This is a small corridor" 0;0;0;0
 RMyBathroom:MAKE-ROOM "Bathroom" "This is the bath room, there's a toilet and a shower" 0;0;0;0
@@ -281,7 +281,7 @@ RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;
 :SET-EXIT RForest8 "west" RStreet11
 :SET-EXIT RStreet11 "east" RForest8
 :SET-EXIT RForest8 "east" RForest2
-AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people do that."
+AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people have done that."
 :ADD-ACTOR RStreet11 AOldMan
 IArmorG:MAKE-ARMOR "Gold armor" "A good armor" 50 5;0;0;30;-2;0;0
 IShieldG:MAKE-SHIELD "Gold shield" "A good shield" 40 0;0;0;45;0;-2;0
@@ -333,12 +333,13 @@ RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a wom
 :SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
 :SET-EXIT RMuseumRoom3 "south" RMuseumRoom2
 AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
-ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion is increased." 50 0;0;0;40;0;0;40
+ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion are increased." 50 0;0;0;40;0;0;40
 :ADD-ITEM AMedusa ISnakeArmor
 :SET-DROP AMedusa 1
 :ADD-ACTOR RMuseumRoom3 AMedusa
 RMuseumRoom4:MAKE-ROOM "Museum final room" "There are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
-
+AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
+:ADD-ACTOR RMuseumRoom4 AFinalBoss
 
 RStreet15:MAKE-ROOM "Street 15" "West of Street14." 0;0;0;0.1
 :SET-EXIT RStreet14 "west" RStreet15
@@ -352,5 +353,67 @@ RStreet16:MAKE-ROOM "Street 16" "south of Street15" 0;0;0;0.2
 :SET-EXIT RStreet15 "south" RStreet16
 :SET-EXIT RStreet16 "north" RStreet15
 
-
-
+IBeefSteak:MAKE-POTION "Beef-steak" 10
+IFriedChicken:MAKE-POTION "Fried-chicken" 15
+ISalmon:MAKE-POTION "Salmon" 20
+IRaspberryPie:MAKE-POTION "Raspberry-pie" 5
+IIceCream:MAKE-POTION "Ice-cream" 5
+ICake:MAKE-POTION "Cake" 5
+IOrangeJuice:MAKE-POTION "Orange-juice" 5
+IAppleJuice:MAKE-POTION "Apple-juice" 5 
+RRestaurant:MAKE-SHOP "Restaurant" "There's plenty of food here." IBeefSteak 50 IFriedChicken 75 ISalmon 100 IRaspberryPie 30 IIceCream 30 ICake 20 IOrangeJuice 20 IAppleJuice 20 0;0;0;0
+:SET-EXIT RStreet16 "west" RRestaurant
+:SET-EXIT RRestaurant "exit" RStreet16
+RStreet17:MAKE-ROOM "Street 17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.2
+:SET-EXIT RStreet16 "south" RStreet17
+:SET-EXIT RStreet17 "north" RStreet16
+RMountainPath1:MAKE-ROOM "Mountain path 1" "Path leading up to the top of the mountain" 0;0;0.1;0.1
+:SET-EXIT RStreet17 "south" RMountainPath1
+:SET-EXIT RMountainPath1 RStreet17
+RMountainPath2:MAKE-ROOM "Mountain path 2" "Path leading up. A small cave can be seen" 0;0;0.1;0.1
+:SET-EXIT RMountainPath1 "up" RMountainPath2
+:SET-EXIT RMountainPath2 "down" RMountainPath1
+RMountainCave:MAKE-ROOM "Mountain cave" "This is a small cave, but there's lots of gold on the floor!" 0;0;0.1;0.1
+:SET-EXIT RMountainPath2 "cave" RMountainCave
+:SET-EXIT RMountainCave "outside" RMountainPath2
+IGoldenLump1:MAKE-CASHCARD: "Gold-lump1" 5
+IGoldenLump2:MAKE-CASHCARD: "Gold-lump2" 5
+IGoldenLump3:MAKE-CASHCARD: "Gold-lump3" 5
+IGoldenLump4:MAKE-CASHCARD: "Gold-lump4" 5
+IGoldenLump5:MAKE-CASHCARD: "Big-gold-lump" 10
+:ADD-ITEM RMountainCave IGoldenLump1
+:ADD-ITEM RMountainCave IGoldenLump2
+:ADD-ITEM RMountainCave IGoldenLump3
+:ADD-ITEM RMountainCave IGoldenLump4
+:ADD-ITEM RMountainCave IGoldenLump5
+RMountainPath3:MAKE-ROOM "Mountain path 3" "Path leading up. There's a big rock blocking the path up." 0;0;0;0
+AGolemRock:MAKE-GOLEM "Rock golem" 15
+:SET-NO-WANDER AGolemRock 1
+:ADD-ACTOR AGolemRock RMountainPath3
+RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave." 0;0;0;0.10
+:SET-DEATH-EXIT AGolemRock "up" RMountainPath4
+:SET-EXIT RMountainPath4 "down" RMountainPath3
+RMountainCave2:MAKE-ROOM "Mountain cave 2" "There is a small path leading in" 0;0;0.1;0.1
+:SET-EXIT RMountainPath4 "inside" RMountainCave2
+:SET-EXIT RMountainCave2 "outside" RMountainPath4
+RMountainCave2Path1:MAKE-ROOM "Mountain cave path" "There is a hole on the ground. You can't make it to the other side!" 0;0;0;0
+:SET-EXIT RMountainCave2 "north" RMountainCave2Path1
+:SET-EXIT RMountainCave2Path1 "south" RMountainCave2
+RMountainCave2Path2:MAKE-ROOM "Mountain cave path 2" "You see some light which looks like an exit!" 0;0;0.1;0.1
+RMountainPath5:MAKE-ROOM "Mountain path 5" "You are outside and there is not much left to reach the top" 0;0;0.1;0.1
+:SET-EXIT RMountainCave2Path2 "exit" RMountainPath5
+:SET-EXIT RMountainPath5 "inside" RMountainCave2Path2
+RMountainPath6:MAKE-ROOM "You're almost at the top. But there's a big dragon in the air that seems to guard the top" 0;0;0;0
+:SET-EXIT RMountainPath5 "up" RMountainPath6
+:SET-EXIT RMountainPath6 "down" RMountainPath5
+RMountainFairyCave:MAKE-ROOM "Fairy cave" "Inside the cave. There is a fairy inside the cave." 0;0;0;0
+:SET-EXIT RMountainPath6 "cave" RMountainFairyCave
+:SET-EXIT RMountainFairyCave "exit" RMountainPath6
+AFairy:MAKE-CALLBACK-HUMAN "Fairy" "A fairy who can heal your hp" fairy.script
+:ADD-ACTOR RMountainFairyCave AFairy
+ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
+:SET-NO-WANDER ASkyDragon 1
+:ADD-ACTOR ASkyDragon RMountainPath6
+RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
+:SET-EXIT RMountainPath6 "top" RMountainTop
+:SET-EXIT RMountainTop "down" RMountainPath6

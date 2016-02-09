@@ -1,6 +1,6 @@
 CurrentRoom:GET-ROOM-FROM-ACTOR ACTOR
-Mountain1:GET-ROOM-BY-NAME "Mountain 1"
-Mountain2:GET-ROOM-BY-NAME "Mountain 2"
+Mountain1:GET-ROOM-BY-NAME "Mountain cave path"
+Mountain2:GET-ROOM-BY-NAME "Mountain cave path 2"
 
 CorrectRoom:EQ CurrentRoom Mountain1
 :IF CorrectRoom LADDERING

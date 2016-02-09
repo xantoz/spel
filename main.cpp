@@ -26,6 +26,7 @@ enum Mode
 
 Player *player;
 Actor *opponent;
+CallbackHuman *finalBoss;
 Shop *shop;
 
 void destroy_everything()
@@ -437,10 +438,16 @@ void buy(string arg)
             pair<Item*, unsigned> item = shop->getShopItem(arg);
             if(player->getMoney() >= item.second)
             {
-                shop->removeShopItem(item);
-                player->addMoney(-item.second);
-                player->addItem(item.first);
-                cout << "You bought the " << item.first->getName()  << "!" << endl;
+                if (player->addItem(item.first))
+                {
+                    shop->removeShopItem(item);
+                    player->addMoney(-item.second);
+                    cout << "You bought the " << item.first->getName()  << "!" << endl;
+                }
+                else
+                {
+                    cout << "Sorry, but it looks you can't carry that right now." << endl;
+                }
             }
             else 
             {
@@ -473,6 +480,7 @@ void sell(string arg)
         {
             cout << "You sold the item for " << item->getWeight() << endl;
             player->removeItem(item);
+			player->addMoney(20);
         }    
     }       
 }
@@ -515,7 +523,7 @@ int main(int argc, char** argv)
 {
     std::map<string, function<void(string)>> cmds;
     std::map<string, function<void(string)>> battleCmds;
-    std::map<string, function<void(string)>> shopCmds;
+
     cmds["go"] = &go;
     cmds["look"] = &look;
     cmds["use"] = &use;
@@ -538,20 +546,16 @@ int main(int argc, char** argv)
     battleCmds["run"] = &run;
     battleCmds["die"] = &die;
     battleCmds["kill"] = &kill;
-    
+
+    // shopCmds consists of the normal cmds plus a few extra, minus saving and loading
+    std::map<string, function<void(string)>> shopCmds(cmds);
+    shopCmds.erase("save");
+    shopCmds.erase("load");
     shopCmds["list"] = &listItems;
     shopCmds["listinventory"] = &listItems;
     shopCmds["inventory"] = &listItems;
     shopCmds["buy"] = &buy;
     shopCmds["sell"] = &sell;
-    shopCmds["go"] = &go;
-    shopCmds["look"] = &look;
-    shopCmds["equip"] = &equip;
-    shopCmds["unequip"] = &unequip;
-    shopCmds["drop"] = &drop;
-    shopCmds["use"] = &use;
-    shopCmds["save"] = &save;
-    shopCmds["load"] = &load_world;
 
     
     Room* kitchen = new Room("Kitchen", "This is the kitchen", nullptr);
@@ -610,7 +614,19 @@ int main(int argc, char** argv)
     cout << player->getRoom()->getName() << endl;
     cout << player->getRoom()->getDescription() << endl;
     player->addMoney(100);
-    
+	cout << "Welcome to the game!" << endl;
+	cout << "In this world there is a very popular online game where the players actually are inside the game." << endl;
+	cout << "This way, people can actually feel how it is fighting monsters and travelling the world in a fantasy game." << endl;
+	cout << "However, the company that developed this popular game had a rather bad debugging team." << endl;
+	cout << "While you can get inside the game world, the opposite is also possible!" << endl;
+	cout << "The monsters from the game has therefore escaped to the real world and the world is in deep trouble!" << endl;
+	cout << "Monsters are spawned everywhere and there seems to be no hope!" << endl;
+	cout << "However, the way the game was programmed. It's actually only necessary to kill the last boss." << endl;
+	cout << "Killing the last boss would free all other monsters and stuff from the game and therefore from this world too." << endl;
+	cout << "You're an experienced player and people have all their hopes on you!" << endl;
+	cout << "You have to find the last boss and kill it!";
+	
+    load_world("file.txt");
     string str;
     while(!cin.eof())
     {
@@ -621,6 +637,11 @@ int main(int argc, char** argv)
                 cout << "Game over" << endl;
                 return 0;
             }
+			if (finalBoss->isDead())
+			{
+				cout << "You beat the game!" << endl;
+				return 0;
+			}
             
             for (Actor *actor : Actor::getActors())
                 actor->update();

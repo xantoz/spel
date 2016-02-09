@@ -213,6 +213,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
 
     std::unordered_map<std::string, unsigned> labels;
     std::unordered_map<std::string, GameObject*> vars(predef_vars);
+    std::unordered_map<unsigned, unsigned> repeat_counter;
     auto get_label = [&](const std::string label) {
         auto it = labels.find(label);
         if (it == labels.end()) throw InvalidFileException(row, "Jumping to non-existant label.");
@@ -225,6 +226,19 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"GOTO", [&](const std::vector<std::string> &args) {
                 row = get_label(args.at(0)); // change current row.
                 return nullptr;
+            }
+        },
+        // <BOOL>:REPEAT <label> <int>
+        // Unconditionally jump X times (it keeps a counter of how many times this particular
+        // REPEAT instruction has executed falling through the X+1th time)
+        // The return value is TRUE if the jump was taken, but FALSE if the jump fell through.
+        // Don't deref the return value.
+        {"REPEAT", [&](const std::vector<std::string> &args) {
+                if (std::stoul(args.at(1)) > ++repeat_counter[row]) {
+                    row = get_label(args.at(0)); // change current row.
+                    return (GameObject*)(-1);
+                }
+                return (GameObject*)(nullptr);
             }
         },
         // Conditional. In the two arg form it jumps to the label only if the first argument is
@@ -498,6 +512,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 else                       throw InvalidFileException(row, "Wrong amount of args.");
             }
         },
+		{"MAKE-LAST-BOSS", [&](const std::vector<std::string> &args) {
+                if      (args.size() == 3) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), args.at(2)));
+                else if (args.size() == 4) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), parseStats(args.at(2)), args.at(3)));
+                else if (args.size() == 5) return (finalBoss = new CallbackHuman(args.at(0), args.at(1), parseStats(args.at(2)), std::stoi(args.at(3)), args.at(4)));
+                else                       throw InvalidFileException(row, "Wrong amount of args.");
+            }
+        },
         {"MAKE-ITEM", [&](const std::vector<std::string> &args) {
                 return new Item(args.at(0), args.at(1), std::stoi(args.at(2)));
             }
@@ -605,6 +626,13 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
+		{"SET-HP-MAX", [&](const std::vector<std::string> &args) {
+                Player *player = dynamic_cast<Player*>(vars.at(args.at(0)));
+                if(player == nullptr) throw InvalidFileException(row, "Trying to pass non-Player to SET-HP-MAX.");
+                player->setHP(player->getStats().maxhp);
+                return nullptr;
+            }
+        },
         {"SET-DROP", [&](const std::vector<std::string> &args) {
                 Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(0)));
                 if (actor == nullptr) throw InvalidFileException(row, "Trying to pass non-Actor to SET-DROP.");
@@ -646,13 +674,39 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                 return nullptr;
             }
         },
+		{"MOVE-ACTOR", [&](const std::vector<std::string> &args) {
+                Room *room = dynamic_cast<Room*>(vars.at(args.at(0)));
+				Room *room2 = dynamic_cast<Room*>(vars.at(args.at(1)));
+                Actor *actor = dynamic_cast<Actor*>(vars.at(args.at(2)));
+				
+                if (room == nullptr) throw InvalidFileException(row, "Expected Room as first arg to MOVE-ACTOR.");
+				if (room2 == nullptr) throw InvalidFileException(row, "Expected Room as second arg to MOVE-ACTOR.");
+                if (actor == nullptr) throw InvalidFileException(row, "Expected Actor as third arg to MOVE-ACTOR.");
+                room->removeActor(actor);
+				room2->addActor(actor);
+                return nullptr;
+            }
+        },
         {"ADD-ITEM", [&](const std::vector<std::string> &args) {
                 ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
                 Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
                 if (itemOwner == nullptr) throw InvalidFileException(row, "Expected ItemOwner as first arg to ADD-ITEM.");
                 if (item == nullptr) throw InvalidFileException(row, "Expected Item as second arg to ADD-ITEM.");
-                itemOwner->addItem(item);
+                itemOwner->addItemNoFail(item);
                 return nullptr;
+            }
+        },
+        // <BOOL>:ADD-ITEM-CAN-FAIL <ActorRef> <ItemRef>
+        // This can fail, it's thus very important to check the return value whether the item
+        // was added or not so you can take measures (like adding the item elsewhere) against leakage.
+        {"ADD-ITEM-CAN-FAIL", [&](const std::vector<std::string> &args) {
+                ItemOwner *itemOwner = dynamic_cast<ItemOwner*>(vars.at(args.at(0)));
+                Item *item = dynamic_cast<Item*>(vars.at(args.at(1)));
+                if (itemOwner == nullptr) throw InvalidFileException(row, "Expected ItemOwner as first arg to ADD-ITEM.");
+                if (item == nullptr) throw InvalidFileException(row, "Expected Item as second arg to ADD-ITEM.");
+                bool res = itemOwner->addItem(item);
+                if (!res) std::cout << itemOwner->getName() << " can't carry "  << item->getName() << "." << std::endl;
+                return (res) ? (GameObject*)(-1) : nullptr;
             }
         },
         {"EQUIP-SWORD", [&](const std::vector<std::string> &args) {
