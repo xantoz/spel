@@ -15,7 +15,7 @@
 :MESSAGE "and people have all their hopes on you! You have to find the last boss"
 :MESSAGE "and kill it!"
 
-RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
+RMyRoom:MAKE-ROOM "Your room" "This is your room" 0.5;0.5;0.5;0.5
 ICashCard1:MAKE-CASHCARD "Cashcard1" 2
 :ADD-ITEM RMyRoom ICashCard1
 APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20 100
@@ -80,7 +80,7 @@ RStreet3:MAKE-ROOM "Street3" "This is the east end of the street" 0.1;0.05;0;0
 RStreet2:MAKE-ROOM "Street2" "This is the street south of your house" 0.1;0;0;0
 :SET-EXIT RStreet3 "west" RStreet2
 :SET-EXIT RStreet2 "east" RStreet3
-RStreet1:MAKE-ROOM "Street1" "This is the west end of the street" 0.1;0.01;0;01
+RStreet1:MAKE-ROOM "Street1" "This is the west end of the street" 0.1;0.01;0;0
 :SET-EXIT RStreet2 "west" RStreet1
 :SET-EXIT RStreet1 "east" RStreet2
 AChild1:MAKE-HUMAN "Child1" "Younger kid" 10;3;2;2;2;2;0 "The streets are filled with trolls, I can't go back home!"
@@ -266,6 +266,7 @@ AForestTroll:MAKE-TROLL "Forest troll" 20
 :ADD-ACTOR RForest2 AForestTroll
 RForest3:MAKE-ROOM "Forest main" "It's very easy to get lost in this part of the forest." 0;0;0;0
 :SET-DEATH-EXIT AForestTroll "west" RForest3
+:SET-DEATH-DESCRIPTION AForestTroll "There is a way to the west that was previously blocked by a troll."
 :SET-EXIT RForest3 "east" RForest2
 RForest4:MAKE-ROOM "Forest main" "It's very easy to get lost in this part of the forest." 0;0;0;0
 :SET-EXIT RForest3 "north" RForest3
@@ -340,6 +341,7 @@ IPotion20:MAKE-POTION 20
 :ADD-ACTOR RMuseumUpstairs ABeastDog
 RMuseumRoom2:MAKE-ROOM "Museum room 2" "Second room of the museum, there's a guy blocking the door to the next room." 0;0;0;0
 :SET-DEATH-EXIT ABeastDog "north" RMuseumRoom2
+:SET-DEATH-DESCRIPTION ABeastDog "First room of the museum."
 :SET-EXIT RMuseumRoom2 "south" RMuseumUpstairs
 ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;80;30;80;40;40
 :SET-DROP ASamurai 1
@@ -348,6 +350,7 @@ IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 30 0;0;150;0;0;0;0
 :ADD-ACTOR RMuseumRoom2 ASamurai
 RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a woman with snakes in her hair blocking the door." 0;0;0;0
 :SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
+:SET-DEATH-DESCRIPTION ASamurai "Second room of the museum."
 :SET-EXIT RMuseumRoom3 "south" RMuseumRoom2
 AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
 ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion are increased." 50 0;0;0;40;0;0;40
@@ -356,6 +359,7 @@ ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's s
 :ADD-ACTOR RMuseumRoom3 AMedusa
 RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here.\nThere are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0
 :SET-DEATH-EXIT AMedusa "north" RMuseumRoom4
+:SET-DEATH-DESCRIPTION AMedusa "Third room of the museum."
 :SET-EXIT RMuseumRoom4 "south" RMuseumRoom3
 AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
 :ADD-ACTOR RMuseumRoom4 AFinalBoss
@@ -413,6 +417,7 @@ AGolemRock:MAKE-GOLEM "Rock golem" 15
 :ADD-ACTOR RMountainPath3 AGolemRock 
 RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave." 0;0;0;0.10
 :SET-DEATH-EXIT AGolemRock "up" RMountainPath4
+:SET-DEATH-DESCRIPTION AGolemRock "Path leading up. There was a rock blocking the path here once but not anymore."
 :SET-EXIT RMountainPath4 "down" RMountainPath3
 RMountainCave2:MAKE-ROOM "Mountain cave 2" "There is a small path leading in" 0;0;0.1;0.1
 :SET-EXIT RMountainPath4 "inside" RMountainCave2
@@ -424,7 +429,7 @@ RMountainCave2Path2:MAKE-ROOM "Mountain cave path 2" "You see some light which l
 RMountainPath5:MAKE-ROOM "Mountain path 5" "You are outside and there is not much left to reach the top" 0;0;0.1;0.1
 :SET-EXIT RMountainCave2Path2 "exit" RMountainPath5
 :SET-EXIT RMountainPath5 "inside" RMountainCave2Path2
-RMountainPath6:MAKE-ROOM "You're almost at the top. But there's a big dragon in the air that seems to guard the top" 0;0;0;0
+RMountainPath6:MAKE-ROOM "Mountain path 6" "You're almost at the top. But there's a big dragon in the air that seems to guard the top" 0;0;0;0
 :SET-EXIT RMountainPath5 "up" RMountainPath6
 :SET-EXIT RMountainPath6 "down" RMountainPath5
 RMountainFairyCave:MAKE-ROOM "Fairy cave" "Inside the cave. There is a fairy inside the cave." 0;0;0;0
@@ -437,6 +442,5 @@ ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
 :ADD-ACTOR RMountainPath6 ASkyDragon 
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
 :SET-DEATH-EXIT ASkyDragon "top" RMountainTop
+:SET-DEATH-DESCRIPTION ASkyDragon "You're almost at the top. There was once a dragon guarding the path to the top but not anymore."
 :SET-EXIT RMountainTop "down" RMountainPath6
-
-:TELEPORT APlayer RMuseumRoom4
