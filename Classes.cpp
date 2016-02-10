@@ -34,7 +34,7 @@ static void updateActor(Actor* actor)
         {
             if(dynamic_cast<Shop*>(roomDirection.second) == nullptr)
             {
-                std::cout << actor->getName() << " moved to " << roomDirection.first << std::endl;
+                std::cerr << actor->getName() << " moved to " << roomDirection.first << std::endl;
                 roomDirection.second->addActor(actor);
                 //std::cout << "not broken" << std::endl;
             }

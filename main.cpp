@@ -52,7 +52,7 @@ static void destroy_everything()
     while (Room::getRooms().size() > 0)
     {
         Room *room = Room::getRooms().front();
-        cout << "==Deleting room " << room->getName() << "==" << endl;
+        cerr << "==Deleting room " << room->getName() << "==" << endl;
         delete room;
     }
 
