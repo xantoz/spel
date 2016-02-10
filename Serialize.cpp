@@ -459,9 +459,14 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
             }
         },
         {"MAKE-PLAYER", [&](const std::vector<std::string> &args) {
-                // This sets the player global variable. Remember that it's important to always MAKE-PLAYER in all files.
-                if (player != nullptr) delete player;       // this makes it possible to MAKE-PLAYER multiple times without leaking memory (but why would you?)
+                if (args.size() < 3 || args.size() > 5)
+                    throw InvalidFileException(row, "Wrong amount of args.");
 
+                // This sets the player global variable. Remember that it's important to always
+                // MAKE-PLAYER in all files. This row below makes it possible to MAKE-PLAYER multiple
+                // times without leaking memory (but why would you?)
+                if (player != nullptr) delete player;      
+                                                            
                 switch (args.size())
                 {
                     case 3:
@@ -479,8 +484,6 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                                                     parseStats(args.at(2)),
                                                     std::stoi(args.at(3)),
                                                     std::stoi(args.at(4))));
-                    default:
-                        throw InvalidFileException(row, "Wrong amount of args.");
                 }
             }
         },

@@ -37,6 +37,7 @@ enum Mode
 Player *player;
 static Actor *opponent;
 static Shop *shop;
+static bool winflag = false;
 
 static std::map<const string, function<void(string)>> cmds;
 static std::map<const string, function<void(string)>> battleCmds;
@@ -63,9 +64,7 @@ static void destroy_everything()
 
 void win()
 {
-    cout << "You beat the game!" << endl;
-    destroy_everything();
-    exit(0);
+    winflag = true;
 }
 
 static void enterBattleMode(Actor *actor)
@@ -116,7 +115,6 @@ static void die(string arg)
     {
         std::cout << "???" << std::endl;
     }
-    
 }
 
 static void look(string arg)
@@ -534,7 +532,7 @@ static void *xmalloc(int size)
     return buf;
 }
 
-static char *dupstr (const char* s)
+static char *dupstr(const char* s)
 {
     char *r;
  
@@ -873,7 +871,7 @@ int main(int argc, char** argv)
     string str;
 
     #ifdef USE_READLINE
-    char *inpt;
+    char *inpt = nullptr;
     rl_attempted_completion_function = my_completion;
     while (nullptr != (inpt = readline("\n> ")))
     #else
@@ -887,6 +885,7 @@ int main(int argc, char** argv)
             add_history(inpt);
             str = inpt;
             free(inpt);
+            inpt = nullptr;
             #else
             cout << "\n> ";
             getline(cin, str);
@@ -920,6 +919,12 @@ int main(int argc, char** argv)
             if (player->isDead())
             {
                 cout << "Game over" << endl;
+                break;
+            }
+
+            if (winflag)
+            {
+                cout << "You beat the game!" << endl;
                 break;
             }
             
