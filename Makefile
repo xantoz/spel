@@ -8,7 +8,7 @@ CC    = g++
 CXXFLAGS = -std=c++11 -g -Wall -pedantic
 # CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
 
-LDFLAGS = -R lib/ -lboost_regex
+LDFLAGS = -L lib/ -lboost_regex
 
 ifdef USE_READLINE
 LDFLAGS += -lreadline
