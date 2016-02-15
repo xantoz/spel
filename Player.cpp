@@ -35,7 +35,7 @@ unsigned Player::max_carry() const
 
 bool Player::can_carry(const Item *i) const
 {
-    return (getEncumberment() < max_carry());
+    return ((getEncumberment() + i->getWeight()) <= max_carry());
 }
 
 std::string Player::getDescription() const 
