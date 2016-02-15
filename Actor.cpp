@@ -445,7 +445,7 @@ void Actor::actorTypeIndependentSerialize(std::ostream &os, const std::string &a
     os << ":SET-NO-WANDER " << actorSym << " " << noWander << std::endl;
 
     if (deathDescription != "")
-        os << ":SET-DEATH-DESCRIPTION " << stringify(deathDescription) << std::endl;
+        os << ":SET-DEATH-DESCRIPTION " << actorSym << " " << stringify(deathDescription) << std::endl;
 
     // The rest of the Items owned by actor (currently in inventory) is taken care of in the
     // ItemOwner pass in serialize after we're certain all rooms have been created.
