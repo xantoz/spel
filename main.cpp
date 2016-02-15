@@ -18,7 +18,14 @@
 #include <functional>
 #include <memory>
 #include <vector>
+
+#ifdef USE_BOOST_REGEX
+#include <boost/algorithm/string/regex.hpp>
+namespace regex = boost;
+#else
 #include <regex>
+namespace regex = std;
+#endif
 
 #include <boost/algorithm/string/trim_all.hpp>
 
@@ -134,9 +141,9 @@ static void use_impl(string arg, function<void(void)> callback)
     }
     else 
     {
-        std::smatch results;
+        regex::smatch results;
         std::string itemname;
-        if (std::regex_match(arg, results, std::regex("(.*?)\\s+on\\s+(.*?)")))
+        if (regex::regex_match(arg, results, regex::regex("(.*?)\\s+on\\s+(.*?)")))
         {
             itemname = results[1];
             player->use(itemname, results[2]);

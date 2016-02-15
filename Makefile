@@ -4,13 +4,22 @@
 
 
 CXX = g++
+# CXX = clang++
 LD = $(CXX)
 CXXFLAGS = -std=c++11 -g -Wall -pedantic
 # CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
 
-ifdef USE_READLINE
+USE_READLINE = 1
+USE_BOOST_REGEX = 1
+
+ifneq ($(USE_READLINE), 0)
 LDFLAGS += -lreadline
 CXXFLAGS += -DUSE_READLINE
+endif
+
+ifneq ($(USE_BOOST_REGEX), 0)
+LDFLAGS += -lboost_regex
+CXXFLAGS += -DUSE_BOOST_REGEX
 endif
 
 
