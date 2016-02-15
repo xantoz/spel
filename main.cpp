@@ -352,33 +352,24 @@ static void buy(string arg)
     }
     else 
     {
-        try
+        pair<Item*, unsigned> item = shop->getShopItem(arg);
+        if(player->getMoney() >= item.second)
         {
-            pair<Item*, unsigned> item = shop->getShopItem(arg);
-            if(player->getMoney() >= item.second)
+            if (player->addItem(item.first))
             {
-                if (player->addItem(item.first))
-                {
-                    shop->removeShopItem(item);
-                    player->addMoney(-item.second);
-                    cout << "You bought the " << item.first->getName()  << "!" << endl;
-                }
-                else
-                {
-                    cout << "Sorry, but it looks you can't carry that right now." << endl;
-                }
+                shop->removeShopItem(item);
+                player->addMoney(-item.second);
+                cout << "You bought the " << item.first->getName()  << "!" << endl;
             }
-            else 
+            else
             {
-                cout << "Not enough money!" << endl;
+                cout << "Sorry, but it looks you can't carry that right now." << endl;
             }
-            
         }
-        catch (const NoSuchItemException &e)
+        else 
         {
-            cout << "No such item!" << endl;
+            cout << "Not enough money!" << endl;
         }
-        
     }
 }
 

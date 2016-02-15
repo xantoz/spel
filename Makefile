@@ -3,8 +3,8 @@
 # 	g++ -std=c++11 spel.cpp -o spel
 
 
-
-CC    = g++
+CXX   = g++
+CC    = $(CXX)
 CXXFLAGS = -std=c++11 -g -Wall -pedantic
 # CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
 
