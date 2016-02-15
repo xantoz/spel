@@ -268,7 +268,8 @@ void Room::update()
     std::uniform_real_distribution<double> distr(0.0, 1.0);
     std::uniform_int_distribution<int> lvl(1,3);
 	
-	
+    if (distr(engine) > 0.1)
+        return;
 
     if (distr(engine) < encounters.dragon)
         this->addActor(new Dragon("dragon" + std::to_string(++cntr), lvl(engine)));

@@ -484,6 +484,8 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                                                     parseStats(args.at(2)),
                                                     std::stoi(args.at(3)),
                                                     std::stoi(args.at(4))));
+                    default:
+                        throw InvalidFileException(row, "BLAH");
                 }
             }
         },
