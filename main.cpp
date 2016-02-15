@@ -562,7 +562,6 @@ static char const **cmd_shop_inventory()
     }
 }
 
-
 enum generator_mode
 {
     CMD, LOOK, USE1, USE2, USE3, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO, TALK, SELL, BUY
@@ -570,6 +569,7 @@ enum generator_mode
 
 static inline char *generator_helper(const char* text, int state, enum generator_mode genmode)
 {
+    // std::cerr << state << std::endl;
     // char* cmd [] = {"hello", "world", "hell" ,"word", "quit", NULL};
     const char** tmp = nullptr;
     switch (genmode)
@@ -658,15 +658,31 @@ static char *generate_talk(const char* text, int state) { return generator_helpe
 static char *generate_buy(const char* text, int state) { return generator_helper(text, state, BUY); }
 static char *generate_sell(const char* text, int state) { return generator_helper(text, state, SELL); }
 
+// static bool first_word_eq(const char *a, const char *b)
+// {
+//     while ((*a != '\0' && !isspace(*a)) && (*b != '\0' && !isspace(*b)))
+//     {
+//         if (*a != *b)
+//             return false;
+        
+//         ++a; ++b;
+//     }
+//     if (*b != '\0' || !isspace(*b))
+//         return false;
+//     return true;
+// }
+
 static bool first_word_eq(const char *a, const char *b)
 {
-    while ((*a != '\0' && !isspace(*a)) && (*b != '\0' && !isspace(*b)))
+    while ((*a != '\0' && !isspace(*a)) && (*b != '\0'))
     {
         if (*a != *b)
             return false;
         
         ++a; ++b;
     }
+    if (*b != '\0')
+        return false;
     return true;
 }
 
