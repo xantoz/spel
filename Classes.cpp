@@ -23,7 +23,6 @@ static Stats getRandomStats(int tmp2)
     std::random_shuffle(st.begin(), st.end());        
     Stats random_stats = {st[0], st[1], st[2], st[3], st[4], st[5], st[6]};
     return random_stats;
-    
 }
 
 static void updateActor(Actor* actor)

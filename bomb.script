@@ -52,6 +52,7 @@ dotloop2.:MESSAGE-NO-LF "."
 :SLEEP 5
 :REPEAT dotloop2 45
 :MESSAGE "\n\nKABOOOOOOOOM!!!!"
+:SLEEP 1000
 :MESSAGE "Pieces of rock rain down on the pavement."
 :MESSAGE "A path to the forest opens."
 
