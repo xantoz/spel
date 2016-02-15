@@ -730,7 +730,7 @@ static char **my_completion(const char *text , int start,  int end)
         matches = rl_completion_matches((char*)text, &generate_look);
     else if (wc == 1 && (first_word_eq(rl_line_buffer, "pickup") || first_word_eq(rl_line_buffer, "get")))
         matches = rl_completion_matches((char*)text, &generate_pickup);
-    else if (first_word_eq(rl_line_buffer, "use"))
+    else if (1 <= wc && wc <= 3 && first_word_eq(rl_line_buffer, "use"))
     {
         switch (wc)
         {
@@ -762,8 +762,6 @@ static char **my_completion(const char *text , int start,  int end)
     else if (wc == 1 && first_word_eq(rl_line_buffer, "sell"))
         matches = rl_completion_matches((char*)text, &generate_sell);
     else if (!(wc == 1 && (first_word_eq(rl_line_buffer, "load") || first_word_eq(rl_line_buffer, "save"))))
-        rl_bind_key('\t',rl_abort);
-    else
         rl_bind_key('\t',rl_abort);
     
     return matches;
