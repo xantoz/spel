@@ -28,19 +28,22 @@ Player::~Player()
     std::cerr << "Player<" << getName() << "> destructor" << std::endl;
 }
 
+unsigned Player::max_carry() const
+{
+    return stats.str*magisk_konstant;
+}
+
 bool Player::can_carry(const Item *i) const
 {
-	unsigned total_weight = 0;
-    for(Item *i: getItems())
-    	total_weight += i->getWeight();
-    
-    return (total_weight < stats.str*magisk_konstant);
+    return (getEncumberment() < max_carry());
 }
 
 std::string Player::getDescription() const 
 {
     std::string firstPart = Actor::getDescription();
-    return firstPart + "\nMoney: " + std::to_string(money);
+    return firstPart
+        + "\nMoney: " + std::to_string(money)
+        + "\nEncumberment: " + std::to_string(getEncumberment()) + "/" + std::to_string(max_carry());
 }
 
 

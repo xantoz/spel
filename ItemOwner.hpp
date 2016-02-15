@@ -26,7 +26,6 @@ public:
     /// throws NoSuchItemException if Item doesn't exist
     void removeItem(Item* i);
 
-    
     /// Returns nullptr when item doesn't exist
     Item *getItem(const std::string &name) const;
     const std::list<Item*> &getItems() const;

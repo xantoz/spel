@@ -14,6 +14,8 @@ private:
     const static unsigned magisk_konstant = 10;
     unsigned int kills;
     unsigned int money;
+
+    unsigned max_carry() const;
     
 protected:
     virtual bool can_carry(const Item *i) const override;

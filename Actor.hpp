@@ -66,6 +66,9 @@ public:
     const Sword *getSword() const;
     const Shoes *getShoes() const;
 
+    /// Gets total weight this actor is carrying
+    unsigned getEncumberment() const;
+
     int getHP() const;
     void setHP(int); // Sets HP constrained by stats.maxhp
 

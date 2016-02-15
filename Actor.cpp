@@ -386,6 +386,18 @@ void Actor::setNoWander(bool flag)
     noWander = flag;
 }
 
+unsigned Actor::getEncumberment() const
+{
+    unsigned total_weight = 0;
+    for(Item *i: getItems())
+    	total_weight += i->getWeight();
+    if (nullptr != armor) total_weight += armor->getWeight();
+    if (nullptr != shield) total_weight += shield->getWeight();
+    if (nullptr != sword) total_weight += sword->getWeight();
+    if (nullptr != shoes) total_weight += shoes->getWeight();
+    return total_weight;
+}
+
 std::string Actor::serialize(std::ostream &os) const
 {
     std::string actorSym = gensym();
