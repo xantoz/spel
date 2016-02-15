@@ -4,5 +4,5 @@ NameEq:NAME-EQ ACTOR "Melta"
 :STOP
 acid_works.:REM Use the acid on the Meltable Enemy
 :SET-STATS ACTOR 100;2;2;10;2;2;2
-:MESSAGE "You used the acid. He looks greatly weakened"
+:MESSAGE "You used the acid. He looks greatly weakened."
 :SET-USED THIS 1
