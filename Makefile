@@ -4,7 +4,8 @@
 
 
 
-CC    = g++
+CXX    = g++-4.9
+CC = gcc-4.9
 CXXFLAGS = -std=c++11 -g -Wall -pedantic
 # CXXFLAGS = -O0 -std=c++11 -g -Wall -pedantic
 
