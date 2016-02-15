@@ -841,7 +841,7 @@ int main(int argc, char** argv)
                 
                 if (opponent != nullptr && opponent->isDead())
                 {
-                    player->addStats((opponent->getStats())*0.3);
+                    player->addStats((opponent->getStats())*0.25);
                     delete opponent;
                     exitBattleMode();
                 }

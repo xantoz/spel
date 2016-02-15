@@ -182,9 +182,10 @@ RSchoolCafeteria:MAKE-ROOM "Cafeteria" "The cafeteria where you could buy food b
 :SET-EXIT RSchoolCafeteria "corridor" RSchoolCorridor1
 ISchoolOrange:MAKE-POTION "Orange" 3
 ISchoolBanana:MAKE-POTION "Banana" 4
+ISchoolMelon:MAKE-POTION "Melon" 6
 :ADD-ITEM RSchoolCafeteria ISchoolOrange
 :ADD-ITEM RSchoolCafeteria ISchoolBanana
-
+:ADD-ITEM RSchoolCafeteria ISchoolMelon
 RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the second floor" 0.05;0.05;0;0
 :SET-EXIT RSchoolStairs1 "up" RSchoolStairs2
 :SET-EXIT RSchoolStairs2 "down" RSchoolStairs1
@@ -233,13 +234,13 @@ IChemistryKey:MAKE-KEY "BlueKey" "It is written \"Chemistry Room\" on a tag atta
 RSchoolLecture:MAKE-ROOM "Lecture room" "A very big lecture room. There are a lot of strong enemies in this room" 0;0;0;0
 :SET-EXIT RSchoolCorridor4 "lecture hall" RSchoolLecture
 :SET-EXIT RSchoolLecture "corridor" RSchoolCorridor4
-ABigTroll:MAKE-TROLL "Big troll" 7
+ABigTroll:MAKE-TROLL "Big troll" 8
 :SET-NO-WANDER ABigTroll 1
-ABigDragon:MAKE-DRAGON "Big dragon" 6
+ABigDragon:MAKE-DRAGON "Big dragon" 8
 :SET-NO-WANDER ABigDragon 1
-ABigGolem:MAKE-GOLEM "Big golem" 6
+ABigGolem:MAKE-GOLEM "Big golem" 8
 :SET-NO-WANDER ABigGolem 1
-ABigThief:MAKE-THIEF "Big thief" 7
+ABigThief:MAKE-THIEF "Big thief" 8
 :SET-NO-WANDER ABigThief 1
 ArtTeacher:MAKE-CALLBACK-HUMAN "Art teacher" "Your art teacher" ArtTeacher1.script
 :ADD-ACTOR RSchoolLecture ArtTeacher
@@ -336,7 +337,7 @@ RMuseumInside:MAKE-ROOM "Inside museum" "Inside the museum, there are a lot of p
 RMuseumUpstairs:MAKE-ROOM "First floor" "The main door is blocked by a beastly dog" 0;0;0;0
 :SET-EXIT RMuseumInside "upstairs" RMuseumUpstairs
 :SET-EXIT RMuseumUpstairs "downstairs" RMuseumInside
-ABeastDog:MAKE-ACTOR "Beastly dog" "A dog that seems to not belong to this world" 200;20;40;40;40;40;40
+ABeastDog:MAKE-ACTOR "Beastly dog" "A dog that seems to not belong to this world" 200;20;100;100;40;80;40
 IPotion20:MAKE-POTION 20
 :ADD-ITEM ABeastDog IPotion20
 :SET-DROP ABeastDog 1
@@ -345,7 +346,7 @@ RMuseumRoom2:MAKE-ROOM "Museum room 2" "Second room of the museum, there's a guy
 :SET-DEATH-EXIT ABeastDog "north" RMuseumRoom2
 :SET-DEATH-DESCRIPTION ABeastDog "First room of the museum."
 :SET-EXIT RMuseumRoom2 "south" RMuseumUpstairs
-ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;80;30;80;40;40
+ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;100;100;80;150;80
 :SET-DROP ASamurai 1
 IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 30 0;0;150;0;0;0;0
 :ADD-ITEM ASamurai IMasamune
@@ -355,8 +356,8 @@ RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a wom
 :SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
 :SET-DEATH-DESCRIPTION ASamurai "Second room of the museum."
 :SET-EXIT RMuseumRoom3 "south" RMuseumRoom2
-AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
-ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion are increased." 50 0;0;0;40;0;0;40
+AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;150;150;50;200;200
+ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion are increased." 50 0;0;0;200;0;0;40
 :ADD-ITEM AMedusa ISnakeArmor
 :EQUIP-ARMOR AMedusa "Snake armor"
 :SET-DROP AMedusa 1
@@ -365,7 +366,7 @@ RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here
 :SET-DEATH-EXIT AMedusa "north" RMuseumRoom4
 :SET-DEATH-DESCRIPTION AMedusa "Third room of the museum."
 :SET-EXIT RMuseumRoom4 "south" RMuseumRoom3
-AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
+AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;200;1000;1000;300;300;10000 finalboss.script
 :ADD-ACTOR RMuseumRoom4 AFinalBoss
 
 RStreet15:MAKE-ROOM "Street15" "West of Street14." 0;0;0;0.05
@@ -441,7 +442,7 @@ RMountainFairyCave:MAKE-ROOM "Fairy cave" "Inside the cave. There is a fairy ins
 :SET-EXIT RMountainFairyCave "exit" RMountainPath6
 AFairy:MAKE-CALLBACK-HUMAN "Fairy" "A fairy who can heal your hp" fairy.script
 :ADD-ACTOR RMountainFairyCave AFairy
-ASkyDragon:MAKE-DRAGON "Sky Dragon" 25
+ASkyDragon:MAKE-DRAGON "Sky Dragon" 30
 :SET-NO-WANDER ASkyDragon 1
 :ADD-ACTOR RMountainPath6 ASkyDragon 
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0
