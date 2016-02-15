@@ -8,6 +8,7 @@
 #include "Potion.hpp"
 #include "Key.hpp"
 #include "Shop.hpp"
+#include "Classes.hpp"
 
 #include <cctype>
 #include <cstring>
@@ -34,6 +35,8 @@ namespace rx = std;
 #include <readline/history.h>
 #endif
 
+#define DEFAULT_WORLD_FILENAME "file.txt"
+
 using namespace std;
 
 enum Mode 
@@ -49,8 +52,6 @@ static bool winflag = false;
 static std::map<const string, function<void(string)>> cmds;
 static std::map<const string, function<void(string)>> battleCmds;
 static std::map<const string, function<void(string)>> shopCmds(cmds);
-
-#include "Classes.hpp"
 
 
 
@@ -338,10 +339,13 @@ static void load_world(string filename)
 {
     if (filename == "")
         filename = "quicksave.save";
+    
+    ifstream infile(filename);
+    if (!infile) throw NoSuchFileException(filename);
+    
     cout << "Ragnarök devours the known world." << std::endl;
     destroy_everything();
     cout << "Loading from " << filename << endl;
-    std::ifstream infile(filename);
     load(infile);
 }
 
@@ -826,7 +830,8 @@ int main(int argc, char** argv)
     shopCmds["buy"] = &buy;
     shopCmds["sell"] = &sell;
     
-    ifstream ifs("file.txt");
+    ifstream ifs(DEFAULT_WORLD_FILENAME);
+    if (!ifs) throw NoSuchFileException(DEFAULT_WORLD_FILENAME);
     load(ifs);
     ifs.close();
     string str;

@@ -1,6 +1,7 @@
 #include "Callback.hpp"
 
 #include "Serialize.hpp"
+#include "exceptions.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -25,5 +26,6 @@ void Callback::runCallback(std::initializer_list<std::pair<const std::string, Ga
 {
     // std::cerr << "Running callback " << callback_path << std::endl;
     std::ifstream infile(callback_path);
+    if (!infile) throw NoSuchFileException(callback_path);
     load(infile, predef_vars);
 }
