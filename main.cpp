@@ -933,12 +933,15 @@ int main(int argc, char** argv)
                 cout << "You beat the game!" << endl;
                 break;
             }
+
+            if (command != "look")                          // don't update on a look command
+            {
+                for (Room *room: Room::getRooms())
+                    room->update();
             
-            for (Room *room: Room::getRooms())
-                room->update();
-            
-            for (Actor *actor : Actor::getActors())
-                actor->update();
+                for (Actor *actor : Actor::getActors())
+                    actor->update();
+            }
         }
         catch(const out_of_range &e)
         {
