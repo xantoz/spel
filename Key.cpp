@@ -12,14 +12,6 @@ Key::Key(const std::string &name,
 }
 
 Key::Key(const std::string &name,
-    const std::string &description,
-    unsigned weight,
-    Room *fromRoom, const std::string &fromRoomDirection) :
-    Key(name, description, weight, fromRoom, fromRoomDirection, nullptr, "")
-{
-}
-
-Key::Key(const std::string &name,
          const std::string &description,
          unsigned weight,
          Room *fromRoom, const std::string &fromRoomDirection,

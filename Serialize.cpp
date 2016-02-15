@@ -614,13 +614,6 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         {"MAKE-KEY", [&](const std::vector<std::string> &args) {
                 if (args.size() == 3)
                     return new Key(args.at(0), args.at(1), std::stoi(args.at(2)));
-                else if (args.size() == 5)
-                {
-                    GameObject *fromGO = vars.at(args.at(3)); // we have to specially allow for null pointers to be passed
-                    Room *fromRoom = dynamic_cast<Room*>(fromGO);
-                    if (fromGO != nullptr && fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
-                    return new Key(args.at(0), args.at(1), std::stoi(args.at(2)), fromRoom, args.at(4));
-                }
                 else if (args.size() == 7)
                 {
                     GameObject *fromGO = vars.at(args.at(3)); // we have to specially allow for null to be passed
