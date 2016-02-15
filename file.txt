@@ -189,7 +189,7 @@ ISchoolMelon:MAKE-POTION "Melon" 6
 RSchoolStairs2:MAKE-ROOM "Staircase 2" "The staircase leading up to the second floor" 0.05;0.05;0;0
 :SET-EXIT RSchoolStairs1 "up" RSchoolStairs2
 :SET-EXIT RSchoolStairs2 "down" RSchoolStairs1
-AMelta:MAKE-ACTOR "Melta" "Meltable enemy that doesn't die from regular attacks!\nHe is blocking the stairs up to the second floor." 100;20;20;10000;20;20;20
+AMelta:MAKE-ACTOR "Melta" "Meltable enemy that doesn't die from regular attacks!\nHe is blocking the stairs up to the second floor." 100;20;50;10000;40;60;40
 :ADD-ACTOR RSchoolStairs2 AMelta
 RSchoolCorridor3:MAKE-ROOM "Corridor 2" "The long corridor of the first floor" 0.05;0.05;0.01;0.01
 :SET-EXIT RSchoolStairs2 "corridor" RSchoolCorridor3
@@ -209,7 +209,19 @@ IStrongAcid:MAKE-CALLBACK-ITEM "StrongAcid" "A really strong acid" 20 acid.scrip
 RSchoolOffice:MAKE-ROOM "Office room" "The office room. There is something on the wall" 0.1;0.1;0.1;0.1
 :SET-EXIT RSchoolCorridor3 "office" RSchoolOffice
 :SET-EXIT RSchoolOffice "corridor" RSchoolCorridor3
-RSchoolCorridor4:MAKE-ROOM "Corridor 2 end" "The end of the corridor on the first floor" 0.1;0.1;0.05;0.05
+
+RSchoolNurse:MAKE-ROOM "Nurse room" "This is the nurse room.\nThere are a lot of potions." 0.2;0.2;0;0
+:SET-EXIT RSchoolCorridor3 "nurse room" RSchoolNurse
+:SET-EXIT RSchoolNurse "corridor" RSchoolCorridor3
+IPotionN1:MAKE-POTION 5
+IPotionN2:MAKE-POTION 5
+IPotionN3:MAKE-POTION 5
+IPotionN4:MAKE-POTION 5
+:ADD-ITEM RSchoolNurse IPotionN1
+:ADD-ITEM RSchoolNurse IPotionN2
+:ADD-ITEM RSchoolNurse IPotionN3
+:ADD-ITEM RSchoolNurse IPotionN4
+RSchoolCorridor4:MAKE-ROOM "Corridor 2 end" "The end of the corridor of the first floor. The art room, chemistry room and the music room seems to be locked." 0.1;0.1;0.05;0.05
 :SET-EXIT RSchoolCorridor3 "south" RSchoolCorridor4
 :SET-EXIT RSchoolCorridor4 "north" RSchoolCorridor3
 RSchoolMusic:MAKE-ROOM "Music room" "This is the music room" 0.2;0.2;0;0
@@ -223,12 +235,12 @@ RSchoolComputer:MAKE-ROOM "Computer room" "This is the computer room. No compute
 RSchoolArt:MAKE-ROOM "Art room" "This is the art room. There's a really strong enemy in this room" 0;0;0;0
 :REM :SET-EXIT RSchoolCorridor4 "art room" RSchoolArt
 :REM :SET-EXIT RSchoolArt "corridor" RSchoolCorridor4
-AStrongThief:MAKE-THIEF "Strong thief" 10
+AStrongThief:MAKE-THIEF "Strong thief" 12
 :SET-NO-WANDER AStrongThief 1
 :SET-DROP AStrongThief 1
-IMusicKey:MAKE-KEY "RedKey" "Music room key." 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor"
+IMusicKey:MAKE-KEY "RedKey" "Music room key." 5 RSchoolCorridor4 "music room" RSchoolMusic "corridor" "This is the corridor."
 :ADD-ITEM AStrongThief IMusicKey
-IChemistryKey:MAKE-KEY "BlueKey" "It is written \"Chemistry Room\" on a tag attached to the key." 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor"
+IChemistryKey:MAKE-KEY "BlueKey" "It is written \"Chemistry Room\" on a tag attached to the key." 5 RSchoolCorridor4 "chemistry room" RSchoolChemistry "corridor" "This is the corridor."
 :ADD-ITEM AStrongThief IChemistryKey
 :ADD-ACTOR RSchoolArt AStrongThief
 RSchoolLecture:MAKE-ROOM "Lecture room" "A very big lecture room. There are a lot of strong enemies in this room" 0;0;0;0
@@ -257,7 +269,7 @@ RSchoolStairs3:MAKE-ROOM "Staircase 3" "The staircase leading up to the second f
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
 IRoofKey:MAKE-KEY "PurpleKey" "Key to the roof." 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
 :ADD-ITEM RSchoolOffice IRoofKey
-ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;100;100
+ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;70;70;70;100;100
 :ADD-ACTOR RSchoolRoof ABoss1
 
 RForest:MAKE-ROOM "Forest" "This is the forest leading to another city." 0.15;0;0;0
@@ -304,13 +316,13 @@ RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city. You see 
 :SET-EXIT RForest8 "east" RForest2
 AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it through the forest!\nNot many people have done that."
 :ADD-ACTOR RStreet11 AOldMan
-IArmorG:MAKE-ARMOR "Gold armor" "A good armor" 50 5;0;0;30;-2;0;0
-IShieldG:MAKE-SHIELD "Gold shield" "A good shield" 40 0;0;0;45;0;-2;0
-IHeavyShield:MAKE-SHIELD "Heavy shield" "Increase defense but lowers speed" 60 0;0;0;60;-20;0;0
-ISwordG:MAKE-SWORD "Gold dagger" "A good dagger" 40 0;0;80;0;0;1;-2
-ISwordDamocles:MAKE-SWORD "Damocles sword" "Legendary sword" 100 0;0;100;0;0;0;0
-ISpeedSword:MAKE-SWORD "Speed sword" "Sword that increases your speed" 80 0;0;70;0;20;0;0
-IGoldenAxe:MAKE-SWORD "Gold Axe" "Axe that's made of gold" 200 0;0;200;0;-15;-5;-5
+IArmorG:MAKE-ARMOR "Gold-armor" "A good armor" 50 5;0;0;60;-2;0;0
+IShieldG:MAKE-SHIELD "Gold-shield" "A good shield" 40 0;0;0;90;0;-2;0
+IHeavyShield:MAKE-SHIELD "Heavy-shield" "Increase defense but lowers speed" 60 0;0;0;60;-20;0;0
+ISwordG:MAKE-SWORD "Gold-dagger" "A good dagger" 40 0;0;80;0;0;1;-2
+ISwordDamocles:MAKE-SWORD "Damocles-sword" "Legendary sword" 100 0;0;100;0;0;0;0
+ISpeedSword:MAKE-SWORD "Speed-sword" "Sword that increases your speed" 80 0;0;70;0;20;0;0
+IGoldenAxe:MAKE-SWORD "Gold-Axe" "Axe that's made of gold" 200 0;0;200;0;-60;-150;-75
 IPotion10:MAKE-POTION "Potion10" 10
 REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
 :SET-EXIT RStreet11 "west" REquipmentShop
@@ -442,7 +454,7 @@ RMountainFairyCave:MAKE-ROOM "Fairy cave" "Inside the cave. There is a fairy ins
 :SET-EXIT RMountainFairyCave "exit" RMountainPath6
 AFairy:MAKE-CALLBACK-HUMAN "Fairy" "A fairy who can heal your hp" fairy.script
 :ADD-ACTOR RMountainFairyCave AFairy
-ASkyDragon:MAKE-DRAGON "Sky Dragon" 30
+ASkyDragon:MAKE-DRAGON "Sky Dragon" 40
 :SET-NO-WANDER ASkyDragon 1
 :ADD-ACTOR RMountainPath6 ASkyDragon 
 RMountainTop:MAKE-ROOM "Mountain top" "This is the top of the mountain" 0;0;0;0

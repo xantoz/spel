@@ -279,15 +279,17 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
     {
          if (stats.def != 0)
          {
-             damage = (int) (aStats.atk - (stats.def/3.0));
+             damage = (int) (aStats.atk - (stats.def/4.0));
              static int n = 20;
              int val1 = std::rand() % 20;
              int val2 = std::rand() % 20;
              int rand = (n-1) - (val1 + val2);
-             double val = 1 + rand/((n-1)*4);
+             double val = 1 + rand/((n-1)*4.0);
              damage = damage*val;
              damage = damage <= 0 ? 0 : damage;
              hp -= damage;
+             //std::cout << val << std::endl;
+             
          }
          else 
          {

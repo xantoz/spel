@@ -158,9 +158,9 @@ static void use_impl(string arg, function<void(void)> callback)
         if (callback)
             callback();
 
-        // always non-null since we'd have triggered an exception with player->use for a non-existant item
-        Item *item = player->getItem(itemname);
-        if (item->usedUp())
+        // contrary to expectation, not always non-null since player might've died or whatever during the callback
+        Item *item = (player != nullptr) ? player->getItem(itemname) : nullptr;
+        if (item != nullptr && item->usedUp())
         {
             std::cout << "You used up the " << item->getName() << "." << std::endl;
             delete item;

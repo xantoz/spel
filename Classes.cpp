@@ -49,8 +49,8 @@ static void updateActor(Actor* actor)
 }
 
 static const Stats troll_base_stats = {10, 1, 3, 5, 4, 4, 3};
-static const Stats dragon_base_stats = {20, 3, 3, 6, 4, 5, 3};
-static const Stats thief_base_stats = {10, 2, 3, 2, 8, 4, 7};
+static const Stats dragon_base_stats = {20, 3, 5, 6, 4, 5, 3};
+static const Stats thief_base_stats = {10, 2, 4, 2, 8, 4, 7};
 static const Stats golem_base_stats = {10, 6, 4, 12, 2, 4, 3};
 static const Stats human_base_stats = {20, 1, 2, 1, 1, 1, 1};
 static std::string classAndLevel(const std::string &c, int lvl)
