@@ -14,7 +14,7 @@
 :MESSAGE "You're an experienced player and people have all their hopes on you! Thus"
 :MESSAGE "you set out on your quest: To find the last boss and defeat him!"
 
-RMyRoom:MAKE-ROOM "Your room" "This is your room" 0.5;0.5;0.5;0.5
+RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
 ICashCard1:MAKE-CASHCARD "Cashcard1" 2
 :ADD-ITEM RMyRoom ICashCard1
 APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20 100
@@ -24,8 +24,8 @@ RMyBathroom:MAKE-ROOM "Bathroom" "This is the bath room, there's a toilet and a 
 Potion1:MAKE-POTION "Potion1" 2
 :ADD-ITEM RMyBathroom Potion1
 RMyCorridor2:MAKE-ROOM "Corridor2" "This is the end of the corridor" 0;0;0;0
-IMyBoots:MAKE-SHOES "Boots" "Your boots" 40 0;0;0;2;1;0;1
-IMySneakers:MAKE-SHOES "Sneakers" "Your sneakers" 30 0;0;0;0;3;0;2
+IMyBoots:MAKE-SHOES "Boots" "Your boots" 10 0;0;0;2;1;0;1
+IMySneakers:MAKE-SHOES "Sneakers" "Your sneakers" 5 0;0;0;0;3;0;2
 :ADD-ITEM RMyCorridor2 IMyBoots
 :ADD-ITEM RMyCorridor2 IMySneakers
 RMyLivingroom:MAKE-ROOM "Living room" "This is the living room, your mother is standing by the tv" 0;0;0;0
@@ -52,7 +52,7 @@ ROutside:MAKE-ROOM "Outside" "You are outside the house. Your father is standing
 :SET-EXIT ROutside "north" RMyCorridor2
 AMyFather:MAKE-HUMAN "Father" "It's your father" 35;10;6;5;10;4;4 40 "Where are you going my son?"
 :ADD-ACTOR ROutside AMyFather
-RMyStorage:MAKE-ROOM "Storage" "This is a storage room, there's some stuff on the floor" 0;0;0;0
+RMyStorage:MAKE-ROOM "Storage" "This is a storage room, there's some stuff on the floor" 0.2;0;0;0
 :SET-EXIT ROutside "west" RMyStorage
 :SET-EXIT RMyStorage "east" ROutside
 IAxe1:MAKE-SWORD "Axe" "A really heavy axe" 100 0;0;30;0;-5;-5;-5
@@ -69,17 +69,17 @@ RMartinInside:MAKE-ROOM "Inside" "This is inside Martin's house" 0;0;0;0
 RMartinRoom:MAKE-ROOM "Martin's room" "This is Martin's room, there is some useful stuff laying about."
 :SET-EXIT RMartinInside "north" RMartinRoom
 :SET-EXIT RMartinRoom "south" RMartinInside
-IKnife1:MAKE-SWORD "Knife" "Sharp knife" 20 0;0;5;0;0;0;0
-IShield1:MAKE-SHIELD "Shield" "Simple shield" 40 0;0;0;5;0;0;0
+IKnife1:MAKE-SWORD "Knife" "Sharp knife" 10 0;0;5;0;0;0;0
+IShield1:MAKE-SHIELD "Shield" "Simple shield" 15 0;0;0;5;0;0;0
 :ADD-ITEM RMartinRoom IKnife1
 :ADD-ITEM RMartinRoom IShield1
-RStreet3:MAKE-ROOM "Street3" "This is the east end of the street" 0.1;0.05;0;0
+RStreet3:MAKE-ROOM "Street3" "This is the east end of the street" 0.3;0.2;0;0
 :SET-EXIT RMartinOutside "south" RStreet3
 :SET-EXIT RStreet3 "north" RMartinOutside
-RStreet2:MAKE-ROOM "Street2" "This is the street south of your house" 0.1;0;0;0
+RStreet2:MAKE-ROOM "Street2" "This is the street south of your house" 0.2;0;0;0
 :SET-EXIT RStreet3 "west" RStreet2
 :SET-EXIT RStreet2 "east" RStreet3
-RStreet1:MAKE-ROOM "Street1" "This is the west end of the street" 0.1;0.01;0;0
+RStreet1:MAKE-ROOM "Street1" "This is the west end of the street" 0.2;0.05;0;0
 :SET-EXIT RStreet2 "west" RStreet1
 :SET-EXIT RStreet1 "east" RStreet2
 AChild1:MAKE-HUMAN "Child1" "Younger kid" 10;3;2;2;2;2;0 "The streets are filled with trolls, I can't go back home!"
@@ -93,7 +93,7 @@ RAHouse:MAKE-ROOM "A's house" "Outside A's house. The door seems to be locked." 
 RBHouse:MAKE-ROOM "B's house" "Outside B's house. The door seems to be locked." 0;0;0;0
 :SET-EXIT RStreet2 "southwest" RBHouse
 :SET-EXIT RBHouse "northeast" RStreet2
-RStreet4:MAKE-ROOM "Street4" "South of street 2, there's a shop nearby" 0.1;0.01;0;0
+RStreet4:MAKE-ROOM "Street4" "South of street 2, there's a shop nearby" 0.4;0.1;0;0
 :SET-EXIT RStreet2 "south" RStreet4
 :SET-EXIT RStreet4 "north" RStreet2
 
@@ -104,21 +104,21 @@ IPotion3:MAKE-POTION "Good-Potion" 3
 RShop1:MAKE-SHOP "Shop" "The shop, type list to list all items" IArmorB 20 IShieldB 20 ISwordB 20 IPotion3 10
 :SET-EXIT RStreet4 "east" RShop1
 :SET-EXIT RShop1 "exit" RStreet4
-RStreet5:MAKE-ROOM "Street5" "South of street 4" 0.05;0.01;0;0
+RStreet5:MAKE-ROOM "Street5" "South of street 4" 0.2;0.05;0;0
 :SET-EXIT RStreet4 "south" RStreet5
 :SET-EXIT RStreet5 "north" RStreet4
-RStreet6:MAKE-ROOM "Street6" "South of street 5" 0.1;0.01;0;0
+RStreet6:MAKE-ROOM "Street6" "South of street 5" 0.2;0.05;0;0
 :SET-EXIT RStreet5 "south" RStreet6
 :SET-EXIT RStreet6 "north" RStreet5
-RStreet7:MAKE-ROOM "Street7" "South of street 6" 0.1;0.05;0;0.01
+RStreet7:MAKE-ROOM "Street7" "South of street 6" 0.2;0.1;0;0.05
 :SET-EXIT RStreet6 "south" RStreet7
 :SET-EXIT RStreet7 "north" RStreet6
 AForestGuy:MAKE-HUMAN "Lumberjack" "A guy that seems to know a lot about the forest" 30;8;4;4;10;5;5 50 "It's easy to get lost in the forest. Go south, west, north, north, west to get past the forest!"
 :ADD-ACTOR RStreet7 AForestGuy
-RStreet8:MAKE-ROOM "Street8" "West of street 6" 0.05;0.05;0;0.01
+RStreet8:MAKE-ROOM "Street8" "West of street 6" 0.2;0.1;0;0.05
 :SET-EXIT RStreet6 "west" RStreet8
 :SET-EXIT RStreet8 "east" RStreet6
-RStreet9:MAKE-ROOM "Street9" "West of street 8" 0.05;0.05;0;0.01
+RStreet9:MAKE-ROOM "Street9" "West of street 8" 0.2;0.1;0;0.05
 :SET-EXIT RStreet8 "west" RStreet9
 :SET-EXIT RStreet9 "east" RStreet8
 RLake:MAKE-ROOM "Lake" "This is the big lake. There is a sea monster in the lake!" 0;0;0;0
@@ -134,10 +134,10 @@ RPark:MAKE-ROOM "Park" "This is a peaceful park" 0;0;0;0
 :SET-EXIT RPark "north" RStreet8
 ABigTree:MAKE-ACTOR "Big Tree" "This is a big apple tree!" 1000;100;5;1000;10;10;10
 :ADD-ACTOR RPark ABigTree
-IApple1:MAKE-POTION "Apple1" 10
-IApple2:MAKE-POTION "Apple2" 10
-IApple3:MAKE-POTION "Apple3" 10
-IApple4:MAKE-POTION "Apple4" 10
+IApple1:MAKE-POTION "Apple1" 5
+IApple2:MAKE-POTION "Apple2" 5
+IApple3:MAKE-POTION "Apple3" 5
+IApple4:MAKE-POTION "Apple4" 5
 :ADD-ITEM RPark IApple1
 :ADD-ITEM RPark IApple2
 :ADD-ITEM RPark IApple3
@@ -151,10 +151,10 @@ RPrincipalHouse:MAKE-ROOM "Principal's house" "This is your principal's house" 0
 APrincipal:MAKE-CALLBACK-HUMAN "Principal" "Your principal" principal.script
 :ADD-ACTOR RPrincipalHouse APrincipal
 
-RHighSchool:MAKE-ROOM "High school" "This is the school you are going to" 0.1;0.05;0;0
+RHighSchool:MAKE-ROOM "High school" "This is the school you are going to" 0.2;0.1;0;0
 :SET-EXIT RStreet6 "east" RHighSchool
 :SET-EXIT RHighSchool "west" RStreet6
-RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.05;0.02;0.05;0.01
+RInsideSchool:MAKE-ROOM "Inside" "Inside the high school" 0.1;0.04;0.08;0.05
 :SET-EXIT RHighSchool "inside" RInsideSchool
 :SET-EXIT RInsideSchool "exit" RHighSchool
 AMathTeacher:MAKE-HUMAN "Teacher" "Your math teacher" 30;10;4;4;10;4;4 "Hi Nils, it's too dangerous here! You should go home!"
@@ -256,7 +256,7 @@ IRoofKey:MAKE-KEY "PurpleKey" "Key to the roof." 5 RSchoolCorridor5 "roof" RScho
 ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;10;10
 :ADD-ACTOR RSchoolRoof ABoss1
 
-RForest:MAKE-ROOM "Forest" "This is the forest leading to another city." 0.2;0;0;0
+RForest:MAKE-ROOM "Forest" "This is the forest leading to another city." 0.15;0;0;0
 RForest2:MAKE-ROOM "Forest part 1" "There is a troll blocking your way." 0;0;0;0
 :SET-EXIT RForest "west" RForest2
 :SET-EXIT RForest2 "east" RForest
@@ -286,12 +286,12 @@ RForest7:MAKE-ROOM "Forest main" "It's very easy to get lost in this part of the
 :SET-EXIT RForest6 "west" RForest3
 :SET-EXIT RForest6 "south" RForest3
 :SET-EXIT RForest6 "east" RForest2
-RForest8:MAKE-ROOM "Forest end" "You made it through the forest" 0.1;0;0.05;0
+RForest8:MAKE-ROOM "Forest end" "You made it through the forest" 0.05;0;0.03;0
 :SET-EXIT RForest7 "north" RForest3
 :SET-EXIT RForest7 "west" RForest8
 :SET-EXIT RForest7 "south" RForest3
 :SET-EXIT RForest7 "east" RForest2
-RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.1;0;0;0
+RStreet11:MAKE-ROOM "Street 11" "You are on the other part of the city" 0.05;0;0;0
 :REM This leads you directly back to RForest2, skipping the maze
 :SET-EXIT RForest8 "east" RForest2
 :REM To the Street
@@ -311,7 +311,7 @@ IPotion10:MAKE-POTION "Potion10" 10
 REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
 :SET-EXIT RStreet11 "west" REquipmentShop
 :SET-EXIT REquipmentShop "exit" RStreet11
-RStreet12:MAKE-ROOM "Street12" "North of street 11" 0;0.05;0.05;0
+RStreet12:MAKE-ROOM "Street12" "North of street 11" 0;0.02;0.02;0
 :SET-EXIT RStreet11 "north" RStreet12
 :SET-EXIT RStreet12 "south" RStreet11
 RStorageHouse:MAKE-ROOM "Storage house" "Storage house that might contain some useful items" 0;0;0;0
@@ -320,7 +320,7 @@ ILadder:MAKE-CALLBACK-ITEM "Ladder" "A ladder that might be useful somewhere." 7
 :ADD-ITEM RStorageHouse ILadder
 :SET-EXIT RStreet12 "west" RStorageHouse
 :SET-EXIT RStorageHouse "east" RStreet12
-RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.05;0.05;0.05
+RStreet13:MAKE-ROOM "Street13" "North of street 12" 0;0.02;0.02;0.02
 :SET-EXIT RStreet12 "north" RStreet13
 :SET-EXIT RStreet13 "south" RStreet12
 RStreet14:MAKE-ROOM "Street14" "West of street 13" 0;0;0;0
@@ -363,7 +363,7 @@ RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here
 AFinalBoss:MAKE-LAST-BOSS "Mogard" "This is the creature that brings all the monsters to this world." 1000;100;100;100;100;100;100 finalboss.script
 :ADD-ACTOR RMuseumRoom4 AFinalBoss
 
-RStreet15:MAKE-ROOM "Street15" "West of Street14." 0;0;0;0.1
+RStreet15:MAKE-ROOM "Street15" "West of Street14." 0;0;0;0.05
 :SET-EXIT RStreet14 "west" RStreet15
 :SET-EXIT RStreet15 "east" RStreet14
 RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
@@ -371,7 +371,7 @@ RMayorsHouse:MAKE-ROOM "Mayor's house" "This is the mayor's house" 0;0;0;0
 :SET-EXIT RStreet15 "south" RMayorsHouse
 AMayor:MAKE-CALLBACK-HUMAN "The mayor" "The mayor who also owns the museum" mayor.script
 :ADD-ACTOR RMayorsHouse AMayor
-RStreet16:MAKE-ROOM "Street16" "south of Street15" 0;0;0;0.2
+RStreet16:MAKE-ROOM "Street16" "south of Street15" 0;0;0;0.02
 :SET-EXIT RStreet14 "south" RStreet16
 :SET-EXIT RStreet16 "north" RStreet14
 
@@ -386,16 +386,16 @@ IAppleJuice:MAKE-POTION "Apple-juice" 5
 RRestaurant:MAKE-SHOP "Restaurant" "There's plenty of food here." IBeefSteak 50 IFriedChicken 75 ISalmon 100 IRaspberryPie 30 IIceCream 30 ICake 20 IOrangeJuice 20 IAppleJuice 20
 :SET-EXIT RStreet16 "west" RRestaurant
 :SET-EXIT RRestaurant "exit" RStreet16
-RStreet17:MAKE-ROOM "Street17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.2
+RStreet17:MAKE-ROOM "Street17" "This is the end of the street.\nA path leading to the mountain can be seen." 0;0;0;0.04
 :SET-EXIT RStreet16 "south" RStreet17
 :SET-EXIT RStreet17 "north" RStreet16
-RMountainPath1:MAKE-ROOM "Mountain path 1" "Path leading up to the top of the mountain" 0;0;0.1;0.1
+RMountainPath1:MAKE-ROOM "Mountain path 1" "Path leading up to the top of the mountain" 0;0;0.02;0.02
 :SET-EXIT RStreet17 "south" RMountainPath1
 :SET-EXIT RMountainPath1 "north" RStreet17
-RMountainPath2:MAKE-ROOM "Mountain path 2" "Path leading up. A small cave can be seen" 0;0;0.1;0.1
+RMountainPath2:MAKE-ROOM "Mountain path 2" "Path leading up. A small cave can be seen" 0;0;0.02;0.02
 :SET-EXIT RMountainPath1 "up" RMountainPath2
 :SET-EXIT RMountainPath2 "down" RMountainPath1
-RMountainCave:MAKE-ROOM "Mountain cave" "This is a small cave, but there's lots of gold on the floor!" 0;0;0.1;0.1
+RMountainCave:MAKE-ROOM "Mountain cave" "This is a small cave, but there's lots of gold on the floor!" 0;0;0.02;0.02
 :SET-EXIT RMountainPath2 "cave" RMountainCave
 :SET-EXIT RMountainCave "outside" RMountainPath2
 IGoldenLump1:MAKE-CASHCARD "Gold-lump1" 5
@@ -414,18 +414,18 @@ RMountainPath3:MAKE-ROOM "Mountain path 3" "Path leading up. There's a big rock 
 AGolemRock:MAKE-GOLEM "Rock golem" 15
 :SET-NO-WANDER AGolemRock 1
 :ADD-ACTOR RMountainPath3 AGolemRock 
-RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave." 0;0;0;0.10
+RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave." 0;0;0;0.02
 :SET-DEATH-EXIT AGolemRock "up" RMountainPath4
 :SET-DEATH-DESCRIPTION AGolemRock "Path leading up. There was a rock blocking the path here once but not anymore."
 :SET-EXIT RMountainPath4 "down" RMountainPath3
-RMountainCave2:MAKE-ROOM "Mountain cave 2" "There is a small path leading in" 0;0;0.1;0.1
+RMountainCave2:MAKE-ROOM "Mountain cave 2" "There is a small path leading in" 0;0;0.02;0.02
 :SET-EXIT RMountainPath4 "inside" RMountainCave2
 :SET-EXIT RMountainCave2 "outside" RMountainPath4
 RMountainCave2Path1:MAKE-ROOM "Mountain cave path" "There is a hole on the ground. You can't make it to the other side!" 0;0;0;0
 :SET-EXIT RMountainCave2 "north" RMountainCave2Path1
 :SET-EXIT RMountainCave2Path1 "south" RMountainCave2
-RMountainCave2Path2:MAKE-ROOM "Mountain cave path 2" "You see some light which looks like an exit!" 0;0;0.1;0.1
-RMountainPath5:MAKE-ROOM "Mountain path 5" "You are outside and there is not much left to reach the top" 0;0;0.1;0.1
+RMountainCave2Path2:MAKE-ROOM "Mountain cave path 2" "You see some light which looks like an exit!" 0;0;0.02;0.02
+RMountainPath5:MAKE-ROOM "Mountain path 5" "You are outside and there is not much left to reach the top" 0;0;0.02;0.02
 :SET-EXIT RMountainCave2Path2 "exit" RMountainPath5
 :SET-EXIT RMountainPath5 "inside" RMountainCave2Path2
 RMountainPath6:MAKE-ROOM "Mountain path 6" "You're almost at the top. But there's a big dragon in the air that seems to guard the top" 0;0;0;0
