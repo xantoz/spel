@@ -823,7 +823,7 @@ int main(int argc, char** argv)
                 
                 if (opponent != nullptr && opponent->isDead())
                 {
-                    player->addStats((opponent->getStats())*0.5);
+                    player->addStats((opponent->getStats())*0.3);
                     delete opponent;
                     exitBattleMode();
                 }

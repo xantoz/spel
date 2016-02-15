@@ -2,7 +2,7 @@
 #include "Room.hpp"
 #include "exceptions.hpp"
 #include "Serialize.hpp"
-
+#include "CashCard.hpp"
 #include <iostream>
 #include <algorithm>
 #include <cstdlib>
@@ -26,7 +26,7 @@ Actor::Actor(const std::string &name, const std::string &description, const Stat
     stats(_stats), hp(_hp), 
     armor(nullptr), shield(nullptr), sword(nullptr), shoes(nullptr),
     dead(false), noWander(false)
-{
+{   
     actors.push_front(this);
 }
 
@@ -267,7 +267,7 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
 {
     Stats stats = getTotalStats();
     Stats aStats = actor->getTotalStats();
-    double quote = (aStats.acc+1)/(double)(stats.eva+1);
+    double quote = (aStats.acc+1)/(double)(stats.eva/2.0 + 1.0);
     //std::cout << aStats.acc << std::endl;
     //std::cout << stats.eva << std::endl;
     
@@ -278,7 +278,7 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
      {
          if(stats.def != 0)
          {
-             damage = (int) (2*atk/(double)stats.def);
+             damage = (int) (5*atk/((double)stats.def));
              hp -= damage;
          }
          else 

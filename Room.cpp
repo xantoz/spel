@@ -17,12 +17,12 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 EncounterProbability::EncounterProbability() :
-    dragon(0.0), thief(0.0), golem(0.0), troll(0.0)
+    troll(0.0), thief(0.0), golem(0.0), dragon(0.0)
 {
 }
 
-EncounterProbability::EncounterProbability(double dr, double th, double gol, double tr) :
-    dragon(dr), thief(th), golem(gol), troll(tr)
+EncounterProbability::EncounterProbability(double tr, double th, double gol, double dr) :
+    troll(tr), thief(th), golem(gol), dragon(dr)
 {
 }
 
