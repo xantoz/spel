@@ -12,6 +12,7 @@ public:
     Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms);
     virtual ~Shop();
     std::string listInventory() const;
+    const std::list<std::pair<Item*, unsigned>> getInventory() const;
     bool removeShopItem(std::pair<Item*, unsigned> item);
     const std::pair<Item*, unsigned>& getShopItem(const std::string &name) const;
     virtual std::string getDescription() const override;

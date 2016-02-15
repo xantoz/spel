@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <sstream>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 Shop::Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms) : Room(name, description, nullptr), inventory(itms) 
 {
 }
@@ -30,6 +32,11 @@ os << itemPrice.first->getName() << " " << itemPrice.second << "\n";
     return os.str();
 }
 
+const std::list<std::pair<Item*, unsigned>> Shop::getInventory() const
+{
+    return inventory;
+}
+
 bool Shop::removeShopItem(std::pair<Item*, unsigned> item)
 {
     inventory.remove(item);
@@ -42,7 +49,7 @@ const std::pair<Item*, unsigned>& Shop::getShopItem(const std::string &name) con
     auto it =
         std::find_if(inventory.begin(), inventory.end(),
                      [&](const std::pair<Item*,unsigned> &pair) {
-                         return pair.first->getName() == name;
+                         return boost::iequals(pair.first->getName(), name);
                      });
     
     if (it == inventory.end())
