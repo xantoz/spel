@@ -18,9 +18,9 @@
 #include <functional>
 #include <memory>
 #include <vector>
+#include <regex>
 
 #include <boost/algorithm/string/trim_all.hpp>
-#include <boost/algorithm/string/regex.hpp>
 
 #ifdef USE_READLINE
 #include <readline/readline.h>
@@ -134,18 +134,24 @@ static void use_impl(string arg, function<void(void)> callback)
     }
     else 
     {
-        vector<string> words;
-        boost::algorithm::split_regex(words, arg, boost::regex("\\s+on\\s+"));
-        if (words.size() == 1)
-            player->use(words.at(0));
+        std::smatch results;
+        std::string itemname;
+        if (std::regex_match(arg, results, std::regex("(.*?)\\s+on\\s+(.*?)")))
+        {
+            itemname = results[1];
+            player->use(itemname, results[2]);
+        }
         else
-            player->use(words.at(0), words.at(1));
+        {
+            itemname = arg;
+            player->use(itemname);
+        }
 
         if (callback)
             callback();
 
         // always non-null since we'd have triggered an exception with player->use for a non-existant item
-        Item *item = player->getItem(words.at(0));
+        Item *item = player->getItem(itemname);
         if (item->usedUp())
         {
             std::cout << "You used up the " << item->getName() << "." << std::endl;
