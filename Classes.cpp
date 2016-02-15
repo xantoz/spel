@@ -3,7 +3,7 @@
 #include "Room.hpp"
 #include "Shop.hpp"
 #include "main.hpp"
-
+#include "CashCard.hpp"
 #include <cstdlib>
 #include <array>
 #include <algorithm>
@@ -60,6 +60,11 @@ static std::string classAndLevel(const std::string &c, int lvl)
 Troll::Troll(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Troll", lvl), troll_base_stats*lvl + getRandomStats(10))
 {
+    if (std::rand() % 2 == 0)
+    {
+        CashCard* c = new CashCard(lvl);
+        addItem(c);
+    }
 }
 
 Troll::Troll(const std::string &name, const std::string &description, const Stats &stats, int hp) :
@@ -92,6 +97,11 @@ std::string Troll::serialize(std::ostream &os) const
 Dragon::Dragon(const std::string &name, int lvl) :
     Actor(name, classAndLevel("Dragon", lvl), dragon_base_stats*lvl + getRandomStats(10))
 {
+    if (std::rand() % 2 == 0)
+    {
+        CashCard* c = new CashCard(4*lvl);
+        addItem(c);
+    }
 }
 
 Dragon::Dragon(const std::string &name, const std::string &description, const Stats &stats, int hp) :
@@ -124,6 +134,11 @@ std::string Dragon::serialize(std::ostream &os) const
 Thief::Thief(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Thief", lvl), thief_base_stats*lvl + getRandomStats(10))
 {
+    if (std::rand() % 2 == 0)
+    {
+        CashCard* c = new CashCard(lvl*2);
+        addItem(c);
+    }
 }
 
 Thief::Thief(const std::string &name, const std::string &description, const Stats &stats, int hp) :
@@ -155,6 +170,11 @@ std::string Thief::serialize(std::ostream &os) const
 Golem::Golem(const std::string &name,  int lvl) :
     Actor(name, classAndLevel("Golem", lvl), golem_base_stats*lvl + getRandomStats(10))
 {
+    if (std::rand() % 2 == 0)
+    {
+        CashCard* c = new CashCard(lvl*3);
+        addItem(c);
+    }
 }
 
 Golem::Golem(const std::string &name, const std::string &description, const Stats &stats, int hp) :

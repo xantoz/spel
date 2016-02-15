@@ -17,7 +17,7 @@
 RMyRoom:MAKE-ROOM "Your room" "This is your room" 0;0;0;0
 ICashCard1:MAKE-CASHCARD "Cashcard1" 2
 :ADD-ITEM RMyRoom ICashCard1
-APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;20 20 100
+APlayer:MAKE-PLAYER "Nils" "it's you" 20;10;10;10;10;10;10 20 100
 :ADD-ACTOR RMyRoom APlayer
 RMyCorridor:MAKE-ROOM "Corridor" "This is a small corridor" 0;0;0;0
 RMyBathroom:MAKE-ROOM "Bathroom" "This is the bath room, there's a toilet and a shower" 0;0;0;0
@@ -124,7 +124,7 @@ RStreet9:MAKE-ROOM "Street9" "West of street 8" 0.2;0.1;0;0.05
 RLake:MAKE-ROOM "Lake" "This is the big lake. There is a sea monster in the lake!" 0;0;0;0
 :SET-EXIT RStreet8 "north" RLake
 :SET-EXIT RLake "south" RStreet8
-ANessie:MAKE-ACTOR "Nessie" "Big sea monster" 300;20;20;50;20;30;5
+ANessie:MAKE-ACTOR "Nessie" "Big sea monster" 300;20;20;50;20;50;5
 :ADD-ACTOR RLake ANessie
 :SET-DROP ANessie 1
 INessieEgg:MAKE-POTION "Nessie-egg" 100
@@ -132,7 +132,7 @@ INessieEgg:MAKE-POTION "Nessie-egg" 100
 RPark:MAKE-ROOM "Park" "This is a peaceful park" 0;0;0;0
 :SET-EXIT RStreet8 "south" RPark
 :SET-EXIT RPark "north" RStreet8
-ABigTree:MAKE-ACTOR "Big Tree" "This is a big apple tree!" 1000;100;5;1000;10;10;10
+ABigTree:MAKE-ACTOR "Big Tree" "This is a big apple tree!" 1000;100;5;1000;10;50;10
 :ADD-ACTOR RPark ABigTree
 IApple1:MAKE-POTION "Apple1" 5
 IApple2:MAKE-POTION "Apple2" 5
@@ -202,7 +202,8 @@ AStrongTroll:MAKE-TROLL "Strong troll" 6
 RSchoolChemistry:MAKE-ROOM "Chemistry room" "The chemistry room. The window is open" 0.04;0;0;0.04
 :REM :SET-EXIT RSchoolCorridor3 "chemistry room" RSchoolChemistry
 :REM :SET-EXIT RSchoolChemistry "corridor" RSchoolCorridor3
-IStrongAcid:MAKE-CALLBACK-ITEM "Strong acid" "A really strong acid" 20 acid.script
+IStrongAcid:MAKE-CALLBACK-ITEM "StrongAcid" "A really strong acid" 20 acid.script
+:SET-CONSUMABLE IStrongAcid 1
 :ADD-ITEM RSchoolChemistry IStrongAcid
 RSchoolOffice:MAKE-ROOM "Office room" "The office room. There is something on the wall" 0.1;0.1;0.1;0.1
 :SET-EXIT RSchoolCorridor3 "office" RSchoolOffice
@@ -213,6 +214,8 @@ RSchoolCorridor4:MAKE-ROOM "Corridor 2 end" "The end of the corridor on the firs
 RSchoolMusic:MAKE-ROOM "Music room" "This is the music room" 0.2;0.2;0;0
 :REM :SET-EXIT RSchoolCorridor4 "music room" RSchoolMusic
 :REM :SET-EXIT RSchoolMusic "corridor" RSchoolCorridor4
+ISwordS:MAKE-SWORD "Silver-dagger" "A very good dagger" 30 0;0;50;0;0;2;-3
+:ADD-ITEM RSchoolMusic ISwordS
 RSchoolComputer:MAKE-ROOM "Computer room" "This is the computer room. No computer is on" 0.1;0.05;0;0.05
 :SET-EXIT RSchoolCorridor4 "computer room" RSchoolComputer
 :SET-EXIT RSchoolComputer "corridor" RSchoolCorridor4
@@ -253,7 +256,7 @@ RSchoolStairs3:MAKE-ROOM "Staircase 3" "The staircase leading up to the second f
 RSchoolRoof:MAKE-ROOM "Roof" "The roof of the school" 0;0;0;0
 IRoofKey:MAKE-KEY "PurpleKey" "Key to the roof." 5 RSchoolCorridor5 "roof" RSchoolRoof "corridor"
 :ADD-ITEM RSchoolOffice IRoofKey
-ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;10;10
+ABoss1:MAKE-ACTOR "Nonag" "The strongest enemy so far!" 200;40;40;50;50;100;100
 :ADD-ACTOR RSchoolRoof ABoss1
 
 RForest:MAKE-ROOM "Forest" "This is the forest leading to another city." 0.15;0;0;0
@@ -303,9 +306,9 @@ AOldMan:MAKE-HUMAN "Old man" "An old man" 30;8;4;4;10;5;5 50 "Oh, you made it th
 IArmorG:MAKE-ARMOR "Gold armor" "A good armor" 50 5;0;0;30;-2;0;0
 IShieldG:MAKE-SHIELD "Gold shield" "A good shield" 40 0;0;0;45;0;-2;0
 IHeavyShield:MAKE-SHIELD "Heavy shield" "Increase defense but lowers speed" 60 0;0;0;60;-20;0;0
-ISwordG:MAKE-SWORD "Gold dagger" "A good dagger" 40 0;0;30;0;0;1;-2
-ISwordDamocles:MAKE-SWORD "Damocles sword" "Legendary sword" 100 0;0;80;0;0;0;0
-ISpeedSword:MAKE-SWORD "Speed sword" "Sword that increases your speed" 80 0;0;50;0;20;0;0
+ISwordG:MAKE-SWORD "Gold dagger" "A good dagger" 40 0;0;80;0;0;1;-2
+ISwordDamocles:MAKE-SWORD "Damocles sword" "Legendary sword" 100 0;0;100;0;0;0;0
+ISpeedSword:MAKE-SWORD "Speed sword" "Sword that increases your speed" 80 0;0;70;0;20;0;0
 IGoldenAxe:MAKE-SWORD "Gold Axe" "Axe that's made of gold" 200 0;0;200;0;-15;-5;-5
 IPotion10:MAKE-POTION "Potion10" 10
 REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
@@ -347,6 +350,7 @@ ASamurai:MAKE-ACTOR "Samurai" "A non-human samurai" 400;40;80;30;80;40;40
 IMasamune:MAKE-SWORD "Masamune" "Sharp samurai sword" 30 0;0;150;0;0;0;0
 :ADD-ITEM ASamurai IMasamune
 :ADD-ACTOR RMuseumRoom2 ASamurai
+:EQUIP-SWORD ASamurai "Masamune"
 RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a woman with snakes in her hair blocking the door." 0;0;0;0
 :SET-DEATH-EXIT ASamurai "north" RMuseumRoom3
 :SET-DEATH-DESCRIPTION ASamurai "Second room of the museum."
@@ -354,6 +358,7 @@ RMuseumRoom3:MAKE-ROOM "Museum room 3" "Third room of the museum.\nThere's a wom
 AMedusa:MAKE-ACTOR "Medusa" "Woman with snakes in her hair" 500;30;60;80;50;30;80
 ISnakeArmor:MAKE-ARMOR "Snake armor" "An armor that is protected with Medusa's snakes, defense and evasion are increased." 50 0;0;0;40;0;0;40
 :ADD-ITEM AMedusa ISnakeArmor
+:EQUIP-ARMOR AMedusa "Snake armor"
 :SET-DROP AMedusa 1
 :ADD-ACTOR RMuseumRoom3 AMedusa
 RMuseumRoom4:MAKE-ROOM "Museum final room" "There are no rooms leading from here.\nThere are high valued paintings decorated everywhere.\nAn evil demon is sitting in a chair." 0;0;0;0

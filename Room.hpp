@@ -9,12 +9,12 @@
 
 struct EncounterProbability
 {
-    double dragon;
+    double troll;
     double thief;
     double golem;
-    double troll;
+    double dragon;
     EncounterProbability();
-    EncounterProbability(double dragon, double thief, double golem, double troll);
+    EncounterProbability(double troll, double thief, double golem, double dragon);
     std::string serializeString() const;
 };
   
