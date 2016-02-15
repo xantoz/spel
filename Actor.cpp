@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <sstream>
+#include <random>
 
 // IMPORTANT INFORMATION: Before you can delete any Item that Actor has equipped it has to be
 // unequipped. Item's destructor will otherwise explode.
@@ -274,11 +275,18 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
     //std::cout << quote << std::endl;
 
     int damage;
-     if(std::rand()/(double)RAND_MAX <= quote)
-     {
-         if(stats.def != 0)
+    if (std::rand()/(double)RAND_MAX <= quote)
+    {
+         if (stats.def != 0)
          {
-             damage = (int) (5*atk/((double)stats.def));
+             damage = (int) (aStats.atk - (stats.def/3.0));
+             static int n = 20;
+             int val1 = std::rand() % 20;
+             int val2 = std::rand() % 20;
+             int rand = (n-1) - (val1 + val2);
+             double val = 1 + rand/((n-1)*4);
+             damage = damage*val;
+             damage = damage <= 0 ? 0 : damage;
              hp -= damage;
          }
          else 
@@ -293,7 +301,7 @@ void Actor::beAttacked(Actor *actor, unsigned int atk)
          std::cout << actor->getName() << "'s attack missed!" << std::endl;
      }
     
-     if(hp <= 0)
+     if (hp <= 0)
          die();
      else 
      {
