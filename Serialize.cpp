@@ -426,7 +426,7 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
         },
         {"MAKE-ROOM", [&](const std::vector<std::string> &args) {
                 if (args.size() == 2)
-                    return new Room(args.at(0), args.at(1), nullptr);
+                    return new Room(args.at(0), args.at(1));
                 else if (args.size() == 3) {
                     if (args.at(2).find_first_of(';') != std::string::npos) // third argument is an EncounterProbability
                         return new Room(args.at(0), args.at(1), parseEncounterProbs(args.at(2)));
