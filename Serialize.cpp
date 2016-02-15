@@ -616,19 +616,35 @@ void load(std::istream &is, std::initializer_list<std::pair<const std::string, G
                     return new Key(args.at(0), args.at(1), std::stoi(args.at(2)));
                 else if (args.size() == 5)
                 {
-                    Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(3)));
-                    if (fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
+                    GameObject *fromGO = vars.at(args.at(3)); // we have to specially allow for null pointers to be passed
+                    Room *fromRoom = dynamic_cast<Room*>(fromGO);
+                    if (fromGO != nullptr && fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
                     return new Key(args.at(0), args.at(1), std::stoi(args.at(2)), fromRoom, args.at(4));
                 }
                 else if (args.size() == 7)
                 {
-                    Room *fromRoom = dynamic_cast<Room*>(vars.at(args.at(3)));
-                    Room *toRoom = dynamic_cast<Room*>(vars.at(args.at(5)));
-                    if (fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
-                    if (toRoom == nullptr) throw InvalidFileException(row, "Expected 6th arg to be Room.");
+                    GameObject *fromGO = vars.at(args.at(3)); // we have to specially allow for null to be passed
+                    GameObject *toGO = vars.at(args.at(5));
+                    Room *fromRoom = dynamic_cast<Room*>(fromGO);
+                    Room *toRoom = dynamic_cast<Room*>(toGO);
+                    if (fromGO != nullptr && fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
+                    if (toGO != nullptr && toRoom == nullptr) throw InvalidFileException(row, "Expected 6th arg to be Room.");
                     return new Key(args.at(0), args.at(1), std::stoi(args.at(2)),
                                    fromRoom, args.at(4),
                                    toRoom, args.at(6));
+                }
+                else if (args.size() == 8)
+                { // has a setDescription
+                    GameObject *fromGO = vars.at(args.at(3)); // we have to specially allow for null to be passed
+                    GameObject *toGO = vars.at(args.at(5));
+                    Room *fromRoom = dynamic_cast<Room*>(fromGO);
+                    Room *toRoom = dynamic_cast<Room*>(toGO);
+                    if (fromGO != nullptr && fromRoom == nullptr) throw InvalidFileException(row, "Expected 4th arg to be Room.");
+                    if (toGO != nullptr && toRoom == nullptr) throw InvalidFileException(row, "Expected 6th arg to be Room.");
+                    return new Key(args.at(0), args.at(1), std::stoi(args.at(2)),
+                                   fromRoom, args.at(4),
+                                   toRoom, args.at(6),
+                                   args.at(7));
                 }
                 else
                     throw InvalidFileException(row, "Wrong amount of arguments.");
