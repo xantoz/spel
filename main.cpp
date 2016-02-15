@@ -399,9 +399,9 @@ static void sell(string arg)
         {
             player->addMoney(item->getWeight());
             cout << "You sold the item for " << item->getWeight() << endl;
-            player->removeItem(item);
-        }    
-    }       
+            delete item;
+        }
+    }
 }
 
 // cheat cmd for debugging
