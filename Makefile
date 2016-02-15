@@ -12,16 +12,27 @@ CXXFLAGS = -std=c++11 -g -Wall -pedantic
 USE_READLINE = 1
 USE_BOOST_REGEX = 1
 
+ifneq "" "$(findstring 'g++',$(CXX)))"
+# using g++
+GCCVERSION_GTE_4_9 := $(shell expr `$(CXX) -dumpversion | cut -f1,2 -d.` '>=' 4.9)
+ifeq "$(GCCVERSION_GTE_4_9)" "1"
+USE_BOOST_REGEX = 0
+endif
+endif
+
 ifneq ($(USE_READLINE), 0)
+$(info Compiling with readline support.)
 LDFLAGS += -lreadline
 CXXFLAGS += -DUSE_READLINE
 endif
 
 ifneq ($(USE_BOOST_REGEX), 0)
+$(info Using boost for regexes.)
 LDFLAGS += -lboost_regex
 CXXFLAGS += -DUSE_BOOST_REGEX
+else
+$(info Using C++11 regexes.)
 endif
-
 
 # %.o: %.cpp
 # 	g++ -std=c++0x -g -Wall $*.cpp
@@ -40,3 +51,6 @@ wc:
 
 clean:
 	rm -f *.o main
+
+# print any makefile variable (magic)
+print-%  : ; @echo $* = $($*)
