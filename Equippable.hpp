@@ -20,6 +20,8 @@ public:
 
     const Stats &getStats() const;
 
+    virtual void use(Actor *actor) override;
+
     virtual std::string getDescription() const override;
     virtual std::string serialize(std::ostream &os) const override;
 };

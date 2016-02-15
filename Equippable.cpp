@@ -19,6 +19,14 @@ const Stats &Equippable::getStats() const
     return stats;
 }
 
+void Equippable::use(Actor* actor)
+{
+    std::cout
+        << "You have to equip this item using the \"equip\" command."
+        << std::endl;
+    return;
+}
+
 std::string Equippable::getDescription() const
 {
     return Item::getDescription() + "\nSTATS: " + stats.toString();
