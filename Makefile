@@ -22,14 +22,14 @@ endif
 
 ifneq ($(USE_READLINE), 0)
 $(info Compiling with readline support.)
-LDFLAGS += -lreadline
-CXXFLAGS += -DUSE_READLINE
+override LDFLAGS += -lreadline
+override CXXFLAGS += -DUSE_READLINE
 endif
 
 ifneq ($(USE_BOOST_REGEX), 0)
 $(info Using boost for regexes.)
-LDFLAGS += -lboost_regex
-CXXFLAGS += -DUSE_BOOST_REGEX
+override LDFLAGS += -lboost_regex
+override CXXFLAGS += -DUSE_BOOST_REGEX
 else
 $(info Using C++11 regexes.)
 endif
