@@ -178,7 +178,7 @@ static void pickup(string arg)
          return;
      }
      if (player->pickup(arg))
-         cout << "Picked up " << arg << endl;
+         cout << "Picked up " << player->getItem(arg)->getName() << endl;
      else
          cout << "Cannot pick up " << arg << "." << endl;
          // cout << "I don't see any such thing." << endl;
@@ -215,7 +215,12 @@ static void equip(string arg)
     else if (dynamic_cast<Armor*>(item) != nullptr)
         player->equipArmor(arg);
     else
+    {
         cout << "Not equippable." << endl;
+        return;
+    }
+
+    cout << "Equipped " << item->getName() << endl;
 }
 
 static void unequip(string arg)

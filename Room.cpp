@@ -14,6 +14,8 @@
 #include <chrono>
 #include <vector>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 EncounterProbability::EncounterProbability() :
     dragon(0.0), thief(0.0), golem(0.0), troll(0.0)
 {
@@ -180,7 +182,7 @@ void Room::removeActor(Actor *a)
 Actor *Room::getActor(const std::string &actor)
 {
     auto it = std::find_if(actors.begin(), actors.end(),
-                           [&](const Actor *a) { return a->getName() == actor; });
+                           [&](const Actor *a) { return boost::iequals(a->getName(), actor); });
     return (it == actors.end()) ? nullptr : *it;
 }
 

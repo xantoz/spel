@@ -21,7 +21,7 @@ main: main.o ItemOwner.o Room.o Player.o Actor.o GameObject.o Item.o Stats.o Equ
 main.cpp: exceptions.hpp
 
 wc:
-	wc exceptions.hpp ItemOwner.{cpp,hpp} Room.{cpp,hpp} Player.{cpp,hpp} Actor.{cpp,hpp} GameObject.{cpp,hpp} Item.{cpp,hpp} Stats.{cpp,hpp} Equippable.{cpp,hpp} Sword.{cpp,hpp} Shoes.{cpp,hpp} Shield.{cpp,hpp} Armor.{cpp,hpp} Classes.{cpp,hpp} Serialize.{cpp,hpp} Potion.{cpp,hpp} Key.{cpp,hpp} Shop.{cpp,hpp} Callback.{cpp,hpp}
+	wc exceptions.hpp ItemOwner.{cpp,hpp} Room.{cpp,hpp} Player.{cpp,hpp} Actor.{cpp,hpp} GameObject.{cpp,hpp} Item.{cpp,hpp} Stats.{cpp,hpp} Equippable.{cpp,hpp} Sword.{cpp,hpp} Shoes.{cpp,hpp} Shield.{cpp,hpp} Armor.{cpp,hpp} Classes.{cpp,hpp} Serialize.{cpp,hpp} Potion.{cpp,hpp} Key.{cpp,hpp} Shop.{cpp,hpp} Callback.{cpp,hpp} CashCard.{cpp,hpp}
 
 clean:
 	rm -f *.o main

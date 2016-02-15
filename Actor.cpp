@@ -146,7 +146,7 @@ void Actor::use(const std::string &itemName)
 }
 
 void Actor::use(const std::string &itemName,
-                       const std::string &useOn)
+                const std::string &useOn)
 {
     Item *item = this->getItem(itemName);
     if (item == nullptr)

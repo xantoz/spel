@@ -3,6 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <boost/algorithm/string/predicate.hpp>
+
 bool ItemOwner::can_carry(const Item* item) const
 {
     return true;
@@ -58,14 +60,14 @@ void ItemOwner::removeItem(Item *i)
     }
     Item *item = *it;
     items.erase(it);
-    item->owner = nullptr;                                  // this item is no longer owned by anybody
+    item->owner = nullptr; // this item is no longer owned by anybody
 }
 
 Item *ItemOwner::getItem(const std::string &name) const
 {
     auto it = std::find_if(items.begin(), items.end(),
                            [&](const Item *item) {
-                               return item->getName() == name;
+                               return boost::iequals(item->getName(), name);
                            });
     return (it == items.end()) ? nullptr : *it;
 }
