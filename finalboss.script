@@ -1,7 +1,8 @@
-:REM RMuseum:GET-ROOM-BY-NAME "Museum final room"
+RMuseum:GET-ROOM-BY-NAME "Museum final room"
 RMountain:GET-ROOM-BY-NAME "Mountain top"
 :MESSAGE "You have to be strong to kill all my body guards. However, it's not time for us to fight yet.\nI'll leave this museum for now and let's battle in the future when the right time has come."
-:SET-STATS THIS 1000;400;400;400;400;400;400
+:SET-STATS THIS 1000;500;500;500;500;500;500
+:SET-DESCRIPTION RMuseum "There are no rooms leading from here.\nThere are high valued paintings decorated everywhere.\nThere was once an evil demon here."
 :TELEPORT THIS RMountain
 :SET-CALLBACK THIS finalboss2.script
 :STOP
