@@ -27,22 +27,24 @@ static Stats getRandomStats(int tmp2)
 
 static void updateActor(Actor* actor)
 {
-    for(auto &roomDirection : actor->getRoom()->getExits())
+    for(auto &exit : actor->getRoom()->getExits())
     {   
         if (std::rand() % 100 < 5)
         {
-            if(dynamic_cast<Shop*>(roomDirection.second) == nullptr)
+            if (dynamic_cast<Shop*>(exit.second) == nullptr) // don't enter shops
             {
-                // std::cerr << actor->getName() << " moved from " << actor->getRoom()->getName() << " to " << roomDirection.first << std::endl;
-                
-                roomDirection.second->addActor(actor);
-                //std::cout << "not broken" << std::endl;
+                // std::cerr << actor->getName() << " moved from " << actor->getRoom()->getName() << " to " << exit.first << std::endl;
+
+                if (actor->getRoom() == player->getRoom())
+                    std::cout << actor->getName() << " went to the " << exit.first << std::endl;
+                if (exit.second == player->getRoom())
+                    std::cout << actor->getName() << " walked into " << player->getRoom()->getName() << std::endl;
+                exit.second->addActor(actor);
             }
             
             break;
         }
     }
-
 }
 
 static const Stats troll_base_stats = {10, 1, 3, 5, 4, 4, 3};

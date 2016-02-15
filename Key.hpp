@@ -14,6 +14,8 @@ private:
     std::string fromRoomDirection;
     Room *toRoom;
     std::string toRoomDirection;
+
+    std::string setDescription;
     
 public:
     Key(const std::string &name,
@@ -28,6 +30,15 @@ public:
         unsigned weight,
         Room *fromRoom, const std::string &fromRoomDirection,
         Room *toRoom, const std::string &toRoomDirection);
+    // If the last string arg is supplied and non-empty it will set the
+    // description of the room the key is used in to this string, instead of
+    // adding the standard key message.
+    Key(const std::string &name,
+        const std::string &description,
+        unsigned weight,
+        Room *fromRoom, const std::string &fromRoomDirection,
+        Room *toRoom, const std::string &toRoomDirection,
+        const std::string &setDescription);
     virtual ~Key() override;
 
     void setAction(Room *fromRoom, const std::string &fromRoomDirection,

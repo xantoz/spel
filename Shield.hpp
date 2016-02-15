@@ -9,6 +9,6 @@ public:
 
     virtual ~Shield() override;
     
-    virtual std::string serialize(std::ostream &os) const;
+    virtual std::string serialize(std::ostream &os) const override;
 };
 #endif
