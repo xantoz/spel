@@ -218,65 +218,6 @@ static void equip(string arg)
         cout << "Not equippable." << endl;
 }
 
-/*
-void equip(string arg)
-{
-    boost::trim_all(arg);
-    size_t first_space = arg.find_first_of(' ');
-    if (first_space == string::npos)
-    {
-        cout << "What did you want to equip?" << endl;
-        return;
-    }
-    string type = arg.substr(0, first_space);
-    string what = arg.substr(first_space + 1);
-
-    // cerr << "meep meep" << endl;
-    // if (player->getItem(what))
-    //     cerr << "BLOOOORP " << typeid(*player->getItem(what)).name() << endl;
-    
-    if (type == "sword")
-    {
-        if (!player->equipSword(what))
-        {
-            cout << "I don't have any such sword." << endl;
-            return;
-        }
-    }
-    else if ("shield" == type)
-    {
-        if (!player->equipShield(what))
-        {
-            cout << "I don't have any such shield." << endl;
-            return;
-        }
-    }
-    else if ("shoes" == type)
-    {
-        if (!player->equipShoes(what))
-        {
-            cout << "I don't have any such shoes." << endl;
-            return;
-        }
-    }
-    else if ("armor" == type)
-    {
-        if (!player->equipArmor(what))
-        {
-            cout << "I don't have any such armor." << endl;
-            return;
-        }
-    }
-    else
-    {
-        cout << "There's no " << type << " kind of equipment in this world." << endl;
-        return;
-    }
-
-    cout << "Equipped " << what << "." << endl;
-}
-*/
-
 static void unequip(string arg)
 {
     if (arg == "sword")
@@ -371,37 +312,6 @@ static void talk(string arg)
         
     }
 }
-
-/*
-template <typename I>
-I random_element(I begin, I end)
-{
-    const unsigned long n = std::distance(begin, end);
-    const unsigned long divisor = (RAND_MAX + 1) / n;
-
-    unsigned long k;
-    do { k = std::rand() / divisor; } while (k >= n);
-
-    return std::advance(begin, k);
-}
-
-void randomSpawn()
-{
-    static unsigned cntr = 0;
-    if (rand() % 5 == 1)
-    {
-        Actor *act = new Thief("Thief" + std::to_string(++cntr), rand() % 3);
-        auto rooms = Room::getRooms();
-        // (*random_element(rooms.begin(), rooms.end()))->addActor(act);
-                
-        unsigned cnt = rand() % rooms.size();
-        auto it = rooms.begin();
-        for (unsigned i = 0; i < cnt; ++i)
-            ++it;
-        (*it)->addActor(act);
-    }
-}
-*/
 
 static void save(string filename)
 {
