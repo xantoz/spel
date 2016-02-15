@@ -556,9 +556,25 @@ static char const **cmd_rooms()
     return cmd_from_vector(stuff);
 }
 
+static char const **cmd_shop_inventory()
+{
+    if (mode == SHOP && nullptr != shop)
+    {
+        vector<const char*> stuff;
+        for (auto &pair: shop->getInventory())
+            stuff.push_back(pair.first->getName().c_str());
+        return cmd_from_vector(stuff);
+    }
+    else
+    {
+        return new const char*[1]{NULL};
+    }
+}
+
+
 enum generator_mode
 {
-    CMD, LOOK, USE1, USE2, USE3, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO, TALK
+    CMD, LOOK, USE1, USE2, USE3, PICKUP, EQUIP, UNEQUIP, DROP, BATTLECMD, TELEPORT, GO, TALK, SELL, BUY
 };
 
 static inline char *generator_helper(const char* text, int state, enum generator_mode genmode)
@@ -588,6 +604,7 @@ static inline char *generator_helper(const char* text, int state, enum generator
             tmp = cmd_room_exits();
             break;
         case DROP:
+        case SELL:
         case USE1:
             tmp = cmd_player_items();
             break;
@@ -603,6 +620,9 @@ static inline char *generator_helper(const char* text, int state, enum generator
             break;
         case TALK:
             tmp = cmd_room_humans();
+            break;
+        case BUY:
+            tmp = cmd_shop_inventory();
             break;
     }
     if (tmp == nullptr) return nullptr;
@@ -644,6 +664,8 @@ static char *generate_battle(const char* text, int state) { return generator_hel
 static char *generate_teleport(const char* text, int state) { return generator_helper(text, state, TELEPORT); }
 static char *generate_go(const char* text, int state) { return generator_helper(text, state, GO); }
 static char *generate_talk(const char* text, int state) { return generator_helper(text, state, TALK); }
+static char *generate_buy(const char* text, int state) { return generator_helper(text, state, BUY); }
+static char *generate_sell(const char* text, int state) { return generator_helper(text, state, SELL); }
 
 static bool first_word_eq(const char *a, const char *b)
 {
@@ -744,7 +766,13 @@ static char **my_completion(const char *text , int start,  int end)
         matches = rl_completion_matches((char*)text, &generate_go);
     else if (wc == 1 && first_word_eq(rl_line_buffer, "talk"))
         matches = rl_completion_matches((char*)text, &generate_talk);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "buy"))
+        matches = rl_completion_matches((char*)text, &generate_buy);
+    else if (wc == 1 && first_word_eq(rl_line_buffer, "sell"))
+        matches = rl_completion_matches((char*)text, &generate_sell);
     else if (!(wc == 1 && (first_word_eq(rl_line_buffer, "load") || first_word_eq(rl_line_buffer, "save"))))
+        rl_bind_key('\t',rl_abort);
+    else
         rl_bind_key('\t',rl_abort);
     
     return matches;
@@ -799,19 +827,18 @@ int main(int argc, char** argv)
     while (!cin.eof())
     #endif
     {
+        #ifdef USE_READLINE
+        rl_bind_key('\t', rl_complete);
+        add_history(inpt);
+        str = inpt;
+        free(inpt);
+        inpt = nullptr;
+        #else
+        cout << "\n> ";
+        getline(cin, str);
+        #endif
         try
         {
-            #ifdef USE_READLINE
-            rl_bind_key('\t', rl_complete);
-            add_history(inpt);
-            str = inpt;
-            free(inpt);
-            inpt = nullptr;
-            #else
-            cout << "\n> ";
-            getline(cin, str);
-            #endif
-            
             boost::trim_all(str);
             size_t first_space = str.find_first_of(' ');
             string command = str.substr(0, first_space);

@@ -421,7 +421,7 @@ RMountainPath4:MAKE-ROOM "Mountain path 4" "End of the path, but there is a cave
 RMountainCave2:MAKE-ROOM "Mountain cave 2" "There is a small path leading in" 0;0;0.02;0.02
 :SET-EXIT RMountainPath4 "inside" RMountainCave2
 :SET-EXIT RMountainCave2 "outside" RMountainPath4
-RMountainCave2Path1:MAKE-ROOM "Mountain cave path" "There is a hole on the ground. You can't make it to the other side!" 0;0;0;0
+RMountainCave2Path1:MAKE-ROOM "Mountain cave path" "There is a big crevice in the ground. You can't jump far enough to get to the other side!" 0;0;0;0
 :SET-EXIT RMountainCave2 "north" RMountainCave2Path1
 :SET-EXIT RMountainCave2Path1 "south" RMountainCave2
 RMountainCave2Path2:MAKE-ROOM "Mountain cave path 2" "You see some light which looks like an exit!" 0;0;0.02;0.02
