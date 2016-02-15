@@ -31,7 +31,6 @@ CashCard::~CashCard()
 
 void CashCard::use(Actor* actor)
 {
-    
     Player* p = dynamic_cast<Player*>(actor);
     if(p == nullptr)
     {
@@ -41,8 +40,8 @@ void CashCard::use(Actor* actor)
     {
         std::cout << "You earned " << level*10 << " gold" << std::endl;
         p->addMoney(level*10);
+        used = true;
     }
-    used = true;
     return;
 }
 
