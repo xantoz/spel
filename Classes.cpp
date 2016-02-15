@@ -39,6 +39,7 @@ static void updateActor(Actor* actor)
                     std::cout << actor->getName() << " went to the " << exit.first << std::endl;
                 if (exit.second == player->getRoom())
                     std::cout << actor->getName() << " walked into " << player->getRoom()->getName() << std::endl;
+                
                 exit.second->addActor(actor);
             }
             

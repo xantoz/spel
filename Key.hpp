@@ -24,10 +24,6 @@ public:
     Key(const std::string &name,
         const std::string &description,
         unsigned weight,
-        Room *fromRoom, const std::string &fromRoomDirection);
-    Key(const std::string &name,
-        const std::string &description,
-        unsigned weight,
         Room *fromRoom, const std::string &fromRoomDirection,
         Room *toRoom, const std::string &toRoomDirection);
     // If the last string arg is supplied and non-empty it will set the

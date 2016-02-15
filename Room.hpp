@@ -30,7 +30,7 @@ private:
     
 public:
     // Room(const std::string &name, const std::string &description);
-    Room(const std::string &name, const std::string &description, ...);
+    Room(const std::string &name, const std::string &description);
     Room(const std::string &name, const std::string &description, const EncounterProbability &encounters);
     Room(const std::string &name, const std::string &description, int lvl);
     virtual ~Room() override;

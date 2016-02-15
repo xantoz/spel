@@ -33,53 +33,22 @@ std::string EncounterProbability::serializeString() const
     return ss.str();
 }
 
-// Room::Room(const std::string &name, const std::string &description) :
-//     ItemOwner(name, description)
-// {
-// }
 
-Room::Room(const std::string &name, const std::string &description, ...) :
-    ItemOwner(name, description) 
+Room::Room(const std::string &name, const std::string &description) :
+    Room(name, description, {}) 
 {
-    va_list list;
-
-    va_start(list, description);
-
-    char *exit_str;
-    Room *exit_room;
-    exit_str  = va_arg(list, char*);
-    exit_room = va_arg(list, Room*);
-    while(exit_str != NULL)
-    {
-        exits[std::string(exit_str)] = exit_room;
-        exit_str  = va_arg(list, char*);
-        exit_room = va_arg(list, Room*);
-    }
-
-    // Add ourselves to the list of rooms
-    rooms.push_front(this);
 }
 
 Room::Room(const std::string &name, const std::string &description, const EncounterProbability &enc) :
     ItemOwner(name, description), encounters(enc)
 {
-	//printf("%s: %f;%f;%f;%f\n", name.c_str(), enc.dragon, enc.thief, enc.golem, enc.troll);
-
     // Add ourselves to the list of rooms
     rooms.push_front(this);
 }
 
 Room::Room(const std::string &name, const std::string &description, int lvl) :
-    ItemOwner(name, description)
+    Room(name, description, EncounterProbability(lvl*0.1, lvl*0.2, lvl*0.05, lvl*0.01))
 {
-    // TODO: make me better, somehow (Kai?)
-    encounters.dragon = lvl*0.01;
-    encounters.thief = lvl*0.2;
-    encounters.golem = lvl*0.05;
-    encounters.troll = lvl*0.1;
-
-    // Add ourselves to the list of rooms
-    rooms.push_front(this);
 }
 
 Room::~Room()

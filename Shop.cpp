@@ -8,7 +8,8 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 
-Shop::Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms) : Room(name, description, nullptr), inventory(itms) 
+Shop::Shop(const std::string &name, const std::string &description, std::list<std::pair<Item*, unsigned>> &itms) :
+    Room(name, description), inventory(itms) 
 {
 }
 
