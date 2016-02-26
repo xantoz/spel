@@ -322,7 +322,7 @@ IHeavyShield:MAKE-SHIELD "Heavy-shield" "Increase defense but lowers speed" 60 0
 ISwordG:MAKE-SWORD "Gold-dagger" "A good dagger" 40 0;0;80;0;0;1;-2
 ISwordDamocles:MAKE-SWORD "Damocles-sword" "Legendary sword" 100 0;0;100;0;0;0;0
 ISpeedSword:MAKE-SWORD "Speed-sword" "Sword that increases your speed" 80 0;0;70;0;20;0;0
-IGoldenAxe:MAKE-SWORD "Gold-Axe" "Axe that's made of gold" 200 0;0;200;0;-60;-150;-75
+IGoldenAxe:MAKE-SWORD "Gold-Axe" "Axe that's made of gold" 200 0;0;200;0;-80;-250;-100
 IPotion10:MAKE-POTION "Potion10" 10
 REquipmentShop:MAKE-SHOP "Equipment Shop" "The shop, type list to list all items" IArmorG 50 IShieldG 50 IHeavyShield 100 ISwordG 40 ISwordDamocles 100 ISpeedSword 150 IGoldenAxe 150 IPotion10 20
 :SET-EXIT RStreet11 "west" REquipmentShop

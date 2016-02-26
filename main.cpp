@@ -288,9 +288,12 @@ static void run(string arg)
     if (opponent->getTotalStats().spd > player->getTotalStats().spd)
     {
         double rval = std::rand()/(double)RAND_MAX;
-        cout << rval << endl;
-        
-        if (rval < 0.8)
+        //cout << rval << endl;
+
+        double fleeDifficulty = 10.0/(opponent->getTotalStats().spd - player->getTotalStats().spd);
+        fleeDifficulty = (fleeDifficulty > 0.7) ? 0.7 : fleeDifficulty;
+        //cout << fleeDifficulty << endl;
+        if (rval < fleeDifficulty)
         {
             exitBattleMode();
         }
