@@ -900,7 +900,8 @@ int main(int argc, char** argv)
                 break;
             }
 
-            if (command != "look" && command != "battle") // don't update on a look or battle command
+            // don't update on a look or when battling
+            if (command != "look" && mode != BATTLE)
             {
                 for (Room *room: Room::getRooms())
                     room->update();
