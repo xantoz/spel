@@ -867,7 +867,11 @@ int main(int argc, char** argv)
                 
                 if (opponent != nullptr && opponent->isDead())
                 {
-                    player->addStats((opponent->getStats())*0.25);
+                    player->addStats((opponent->getStats())*0.35);
+                    // player->setHP(player->getHP() + player->getStats().maxhp*0.25);
+                    int healHP = (player->getStats().maxhp - player->getHP())*0.5;
+                    player->setHP(player->getHP() + healHP);
+                    cout << "You rest for a minute and recover " << healHP << " HP." << endl;
                     delete opponent;
                     exitBattleMode();
                 }

@@ -71,7 +71,7 @@ public:
 
     int getHP() const;
     void setHP(int); // Sets HP constrained by stats.maxhp
-
+    
     // If we set this to true we drop our items and equipment on death instead of deleting them
     void setDrop(bool drop);
     void setNoWander(bool noWander);
